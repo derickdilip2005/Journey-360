@@ -1,0 +1,329 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FaRobot, FaTimes, FaPaperPlane, FaGlobeAsia, FaUser, FaSpinner } from 'react-icons/fa';
+
+// Types
+type Language = 'en' | 'hi' | 'bn' | 'sa' | 'ja' | 'fr' | 'de' | 'es';
+
+interface Message {
+  id: string;
+  text: string;
+  sender: 'user' | 'bot';
+  timestamp: Date;
+}
+
+interface LanguageOption {
+  code: Language;
+  name: string;
+  nativeName: string;
+}
+
+const MultilingualChatbot: React.FC = () => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [currentLanguage, setCurrentLanguage] = useState<Language>('en');
+  const [isTyping, setIsTyping] = useState<boolean>(false);
+  const [showLanguageSelector, setShowLanguageSelector] = useState<boolean>(false);
+  
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Language options
+  const languages: LanguageOption[] = [
+    { code: 'en', name: 'English', nativeName: 'English' },
+    { code: 'hi', name: 'Hindi', nativeName: 'हिन्दी' },
+    { code: 'bn', name: 'Bengali', nativeName: 'বাংলা' },
+    { code: 'sa', name: 'Sanskrit', nativeName: 'संस्कृतम्' },
+    { code: 'ja', name: 'Japanese', nativeName: '日本語' },
+    { code: 'fr', name: 'French', nativeName: 'Français' },
+    { code: 'de', name: 'German', nativeName: 'Deutsch' },
+    { code: 'es', name: 'Spanish', nativeName: 'Español' },
+  ];
+
+  // Welcome messages in different languages
+  const welcomeMessages: Record<Language, string> = {
+    en: 'Hello! I am your Jharkhand Tourism assistant. How can I help you today?',
+    hi: 'नमस्ते! मैं आपका झारखंड पर्यटन सहायक हूं। आज मैं आपकी कैसे मदद कर सकता हूं?',
+    bn: 'হ্যালো! আমি আপনার ঝাড়খণ্ড পর্যটন সহকারী। আজ আমি আপনাকে কীভাবে সাহায্য করতে পারি?',
+    sa: 'नमस्ते! अहं भवतः झारखण्ड-पर्यटन-सहायकः अस्मि। अद्य अहं भवतः कथं साहाय्यं कर्तुं शक्नोमि?',
+    ja: 'こんにちは！私はジャールカンド観光アシスタントです。今日はどのようにお手伝いできますか？',
+    fr: 'Bonjour! Je suis votre assistant touristique du Jharkhand. Comment puis-je vous aider aujourd\'hui?',
+    de: 'Hallo! Ich bin Ihr Jharkhand-Tourismus-Assistent. Wie kann ich Ihnen heute helfen?',
+    es: '¡Hola! Soy su asistente de turismo de Jharkhand. ¿Cómo puedo ayudarle hoy?',
+  };
+
+  // Add welcome message when language changes
+  useEffect(() => {
+    if (messages.length === 0 || messages[messages.length - 1].sender !== 'bot') {
+      const welcomeMessage: Message = {
+        id: Date.now().toString(),
+        text: welcomeMessages[currentLanguage],
+        sender: 'bot',
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, welcomeMessage]);
+    }
+  }, [currentLanguage]);
+
+  // Scroll to bottom when messages change
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  // Focus input when chat opens
+  useEffect(() => {
+    if (isOpen) {
+      inputRef.current?.focus();
+    }
+  }, [isOpen]);
+
+  const toggleChat = () => {
+    setIsOpen(prev => !prev);
+    if (messages.length === 0) {
+      const welcomeMessage: Message = {
+        id: Date.now().toString(),
+        text: welcomeMessages[currentLanguage],
+        sender: 'bot',
+        timestamp: new Date(),
+      };
+      setMessages([welcomeMessage]);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (inputValue.trim() === '') return;
+
+    // Add user message
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      text: inputValue,
+      sender: 'user',
+      timestamp: new Date(),
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setInputValue('');
+    setIsTyping(true);
+
+    // Simulate bot response after a delay
+    setTimeout(() => {
+      const botResponse = generateBotResponse(inputValue, currentLanguage);
+      const botMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: botResponse,
+        sender: 'bot',
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, botMessage]);
+      setIsTyping(false);
+    }, 1500);
+  };
+
+  const handleLanguageChange = (language: Language) => {
+    setCurrentLanguage(language);
+    setShowLanguageSelector(false);
+  };
+
+  // Simple response generation based on keywords and selected language
+  const generateBotResponse = (input: string, language: Language): string => {
+    const lowerInput = input.toLowerCase();
+    
+    // English responses
+    let response = '';
+    if (language === 'en') {
+      if (lowerInput.includes('hello') || lowerInput.includes('hi')) {
+        response = 'Hello! How can I assist you with your Jharkhand trip?';
+      } else if (lowerInput.includes('waterfall') || lowerInput.includes('falls')) {
+        response = 'Jharkhand is famous for its beautiful waterfalls! Some popular ones include Hundru Falls, Dassam Falls, and Jonha Falls. Would you like specific information about any of these?';
+      } else if (lowerInput.includes('hotel') || lowerInput.includes('stay') || lowerInput.includes('accommodation')) {
+        response = 'There are various accommodation options in Jharkhand ranging from luxury hotels to budget stays. Major cities like Ranchi, Jamshedpur, and Dhanbad have good hotels. Would you like recommendations for a specific area?';
+      } else if (lowerInput.includes('food') || lowerInput.includes('cuisine') || lowerInput.includes('eat')) {
+        response = 'Jharkhand cuisine is delicious! You must try local dishes like Dhuska, Pittha, Handia (rice beer), and Rugra (mushroom). Would you like to know about popular restaurants?';
+      } else if (lowerInput.includes('travel') || lowerInput.includes('transport') || lowerInput.includes('how to reach')) {
+        response = 'You can reach Jharkhand by air (Ranchi Airport), train (major stations in Ranchi, Jamshedpur, Dhanbad), or road. Within the state, you can use taxis, buses, or rent vehicles. What specific travel information do you need?';
+      } else if (lowerInput.includes('tribal') || lowerInput.includes('tribe') || lowerInput.includes('culture')) {
+        response = 'Jharkhand has a rich tribal heritage with communities like Santhal, Munda, Ho, and Oraon. You can experience their culture through tribal museums, village tours, and cultural festivals. Would you like to know more about specific tribal experiences?';
+      } else if (lowerInput.includes('weather') || lowerInput.includes('climate') || lowerInput.includes('best time')) {
+        response = 'The best time to visit Jharkhand is from October to March when the weather is pleasant. Summers (April-June) can be hot, and monsoon (July-September) brings heavy rainfall but makes the waterfalls spectacular. What season are you planning to visit?';
+      } else {
+        response = 'Thank you for your question. I can provide information about Jharkhand\'s tourist spots, accommodation, food, transportation, tribal culture, and travel tips. Could you please be more specific about what you\'d like to know?';
+      }
+    }
+    // Hindi responses
+    else if (language === 'hi') {
+      if (lowerInput.includes('hello') || lowerInput.includes('hi') || lowerInput.includes('नमस्ते')) {
+        response = 'नमस्ते! मैं आपकी झारखंड यात्रा में कैसे मदद कर सकता हूं?';
+      } else if (lowerInput.includes('waterfall') || lowerInput.includes('falls') || lowerInput.includes('झरना')) {
+        response = 'झारखंड अपने सुंदर झरनों के लिए प्रसिद्ध है! कुछ लोकप्रिय झरने हैं हुंडरू फॉल्स, दशम फॉल्स और जोन्हा फॉल्स। क्या आप इनमें से किसी के बारे में विशेष जानकारी चाहते हैं?';
+      } else if (lowerInput.includes('hotel') || lowerInput.includes('stay') || lowerInput.includes('accommodation') || lowerInput.includes('होटल') || lowerInput.includes('ठहरने')) {
+        response = 'झारखंड में लक्जरी होटल से लेकर बजट स्टे तक विभिन्न आवास विकल्प हैं। रांची, जमशेदपुर और धनबाद जैसे प्रमुख शहरों में अच्छे होटल हैं। क्या आप किसी विशेष क्षेत्र के लिए सिफारिशें चाहते हैं?';
+      } else {
+        response = 'आपके प्रश्न के लिए धन्यवाद। मैं झारखंड के पर्यटन स्थलों, आवास, भोजन, परिवहन, जनजातीय संस्कृति और यात्रा युक्तियों के बारे में जानकारी प्रदान कर सकता हूं। कृपया बताएं कि आप क्या जानना चाहते हैं?';
+      }
+    }
+    // Bengali responses
+    else if (language === 'bn') {
+      if (lowerInput.includes('hello') || lowerInput.includes('hi') || lowerInput.includes('হ্যালো')) {
+        response = 'হ্যালো! আমি আপনার ঝাড়খণ্ড ভ্রমণে কীভাবে সাহায্য করতে পারি?';
+      } else {
+        response = 'আপনার প্রশ্নের জন্য ধন্যবাদ। আমি ঝাড়খণ্ডের পর্যটন স্থান, আবাসন, খাবার, পরিবহন, আদিবাসী সংস্কৃতি এবং ভ্রমণ টিপস সম্পর্কে তথ্য প্রদান করতে পারি। আপনি কী জানতে চান তা অনুগ্রহ করে আরও নির্দিষ্টভাবে বলুন।';
+      }
+    }
+    // For other languages, provide a simpler response set
+    else {
+      // Default to English if specific language implementation is not available
+      response = welcomeMessages[language] + ' (Translation services are being improved for more detailed responses in this language.)';
+    }
+    
+    return response;
+  };
+
+  return (
+    <>
+      {/* Chat button */}
+      <motion.button
+        className="fixed bottom-6 right-6 bg-primary text-white p-4 rounded-full shadow-lg z-50 flex items-center justify-center"
+        onClick={toggleChat}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        {isOpen ? <FaTimes size={24} /> : <FaRobot size={24} />}
+      </motion.button>
+
+      {/* Chat window */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className="fixed bottom-24 right-6 w-80 md:w-96 bg-white rounded-lg shadow-xl z-50 overflow-hidden flex flex-col"
+            initial={{ opacity: 0, y: 50, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 50, scale: 0.9 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* Chat header */}
+            <div className="bg-primary text-white p-4 flex justify-between items-center">
+              <div className="flex items-center">
+                <FaRobot className="mr-2" size={20} />
+                <h3 className="font-bold">Jharkhand Tourism Assistant</h3>
+              </div>
+              <div className="flex items-center">
+                <button 
+                  onClick={() => setShowLanguageSelector(prev => !prev)}
+                  className="text-white hover:text-gray-200 mr-2"
+                  title="Change language"
+                >
+                  <FaGlobeAsia size={18} />
+                </button>
+                <button 
+                  onClick={toggleChat}
+                  className="text-white hover:text-gray-200"
+                  title="Close chat"
+                >
+                  <FaTimes size={18} />
+                </button>
+              </div>
+            </div>
+
+            {/* Language selector dropdown */}
+            <AnimatePresence>
+              {showLanguageSelector && (
+                <motion.div 
+                  className="absolute top-14 right-0 bg-white shadow-md rounded-bl-lg overflow-hidden z-10"
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <div className="max-h-60 overflow-y-auto">
+                    {languages.map((lang) => (
+                      <button
+                        key={lang.code}
+                        className={`w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center justify-between ${currentLanguage === lang.code ? 'bg-primary bg-opacity-10 text-primary font-medium' : ''}`}
+                        onClick={() => handleLanguageChange(lang.code)}
+                      >
+                        <span>{lang.name}</span>
+                        <span className="text-sm text-gray-500">{lang.nativeName}</span>
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Messages container */}
+            <div className="flex-1 p-4 overflow-y-auto max-h-96">
+              {messages.map((message) => (
+                <div 
+                  key={message.id} 
+                  className={`mb-4 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div 
+                    className={`max-w-3/4 rounded-lg p-3 ${message.sender === 'user' ? 'bg-primary text-white rounded-tr-none' : 'bg-gray-100 text-gray-800 rounded-tl-none'}`}
+                  >
+                    <div className="flex items-start mb-1">
+                      <span className="mr-2">
+                        {message.sender === 'user' ? <FaUser size={14} /> : <FaRobot size={14} />}
+                      </span>
+                      <span className="font-medium">
+                        {message.sender === 'user' ? 'You' : 'Assistant'}
+                      </span>
+                    </div>
+                    <p>{message.text}</p>
+                    <p className="text-xs opacity-70 text-right mt-1">
+                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </p>
+                  </div>
+                </div>
+              ))}
+              {isTyping && (
+                <div className="flex justify-start mb-4">
+                  <div className="bg-gray-100 text-gray-800 rounded-lg rounded-tl-none p-3">
+                    <div className="flex items-center">
+                      <FaSpinner className="animate-spin mr-2" />
+                      <span>Typing...</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Input form */}
+            <form onSubmit={handleSubmit} className="border-t border-gray-200 p-4">
+              <div className="flex">
+                <input
+                  type="text"
+                  ref={inputRef}
+                  value={inputValue}
+                  onChange={handleInputChange}
+                  placeholder={currentLanguage === 'en' ? 'Type your message...' : 'Type your message (in any language)...'}
+                  className="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                />
+                <button
+                  type="submit"
+                  className="bg-primary text-white px-4 py-2 rounded-r-lg hover:bg-primary-dark transition-colors"
+                  disabled={inputValue.trim() === ''}
+                >
+                  <FaPaperPlane />
+                </button>
+              </div>
+              <p className="text-xs text-gray-500 mt-2 text-center">
+                {currentLanguage === 'en' 
+                  ? 'You can type in any language. Our assistant will try to understand and respond accordingly.'
+                  : 'You can type in any language. Our assistant will try to understand and respond accordingly.'}
+              </p>
+            </form>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+};
+
+export default MultilingualChatbot;
