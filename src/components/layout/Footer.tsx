@@ -8,9 +8,9 @@ const Footer: React.FC = () => {
       <div className="container-custom py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-xl font-display font-bold mb-4">Jharkhand Tourism</h3>
+            <h3 className="text-xl font-display font-bold mb-4">Journey 360</h3>
             <p className="text-gray-300 mb-4">
-              Discover the beauty, culture, and adventure that Jharkhand has to offer.
+              Discover the beauty, culture, and adventure that India has to offer.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-300 hover:text-white">
@@ -40,9 +40,7 @@ const Footer: React.FC = () => {
               <li>
                 <Link to="/itinerary" className="text-gray-300 hover:text-white">Itinerary Planner</Link>
               </li>
-              <li>
-                <Link to="/cultural" className="text-gray-300 hover:text-white">Cultural Experiences</Link>
-              </li>
+
               <li>
                 <Link to="/community" className="text-gray-300 hover:text-white">Community</Link>
               </li>
@@ -73,18 +71,18 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Contact</h3>
             <address className="not-italic text-gray-300">
-              <p>Tourism Department</p>
-              <p>Government of Jharkhand</p>
-              <p>MDI Building, Dhurwa</p>
-              <p>Ranchi, Jharkhand 834004</p>
-              <p className="mt-2">Email: info@jharkhandtourism.gov.in</p>
-              <p>Phone: +91 651 2400981</p>
+              <p>Ministry of Tourism</p>
+              <p>Government of India</p>
+              <p>Transport Bhawan, Parliament Street</p>
+              <p>New Delhi, India 110001</p>
+              <p className="mt-2">Email: info@incredibleindia.org</p>
+              <p>Phone: +91 11 2371 4000</p>
             </address>
           </div>
         </div>
         
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
-          <p>&copy; {new Date().getFullYear()} Jharkhand Tourism. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Journey 360. All rights reserved.</p>
         </div>
       </div>
       

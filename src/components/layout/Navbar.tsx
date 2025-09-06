@@ -8,7 +8,6 @@ const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Explore', href: '/explore' },
   { name: 'Itinerary', href: '/itinerary' },
-  { name: 'Experiences', href: '/cultural' },
   { name: 'Community', href: '/community' },
   { name: 'Contact', href: '/contact' },
 ];
@@ -41,7 +40,7 @@ const Navbar: React.FC = () => {
               <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex-shrink-0 flex items-center">
                   <Link to="/">
-                    <span className="text-2xl font-display font-bold text-primary">Jharkhand Tourism</span>
+                    <span className="text-2xl font-display font-bold text-primary">Journey 360</span>
                   </Link>
                 </div>
                 <div className="hidden sm:block sm:ml-6">

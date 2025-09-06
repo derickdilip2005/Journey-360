@@ -22,24 +22,17 @@ interface GeneratedItinerary {
 }
 
 const ItineraryPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'chatbot' | 'manual'>('chatbot');
+  const [activeTab, setActiveTab] = useState<'chatbot'>('chatbot');
   const [chatInput, setChatInput] = useState('');
   const [chatMessages, setChatMessages] = useState<{text: string, sender: 'user' | 'bot'}[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedItinerary, setGeneratedItinerary] = useState<GeneratedItinerary | null>(null);
   
-  // Form state for manual itinerary creation
-  const [manualForm, setManualForm] = useState({
-    duration: '2',
-    budget: 'medium',
-    interests: [] as string[],
-    startLocation: '',
-    travelMode: 'public',
-  });
+
 
   // Sample itinerary data (would come from backend in real app)
   const sampleItinerary: GeneratedItinerary = {
-    title: "Weekend Getaway in Ranchi",
+    title: "Weekend Getaway in Delhi",
     days: [
       {
         day: 1,
@@ -47,15 +40,15 @@ const ItineraryPage: React.FC = () => {
           {
             time: "08:00 AM",
             activity: "Breakfast",
-            location: "Cafe Nirvana, Ranchi",
-            description: "Start your day with a traditional Jharkhand breakfast.",
+            location: "Cafe Lota, Delhi",
+            description: "Start your day with a traditional Indian breakfast.",
             image: "https://images.unsplash.com/photo-1533089860892-a7c6f0a88666"
           },
           {
             time: "10:00 AM",
-            activity: "Visit Hundru Falls",
-            location: "Hundru Falls, 45km from Ranchi",
-            description: "Explore one of the highest waterfalls in Jharkhand with a 98-meter drop.",
+            activity: "Visit Red Fort",
+            location: "Red Fort, Old Delhi",
+            description: "Explore this UNESCO World Heritage site and symbol of India's rich history.",
             image: "https://images.unsplash.com/photo-1623058324456-686d39200145"
           },
           {
@@ -100,37 +93,37 @@ const ItineraryPage: React.FC = () => {
           },
           {
             time: "09:30 AM",
-            activity: "Visit Tagore Hill",
-            location: "Morabadi, Ranchi",
-            description: "Explore this historical site where Rabindranath Tagore wrote some of his works.",
+            activity: "Visit India Gate",
+            location: "Rajpath, New Delhi",
+            description: "Visit this iconic war memorial and one of Delhi's most famous landmarks.",
             image: "https://images.unsplash.com/photo-1518890569493-668df9a00266"
           },
           {
             time: "12:00 PM",
             activity: "Lunch",
-            location: "Firayalal Market Area",
-            description: "Try local street food at this bustling market area.",
+            location: "Chandni Chowk, Old Delhi",
+            description: "Try authentic Delhi street food at this historic market area.",
             image: "https://images.unsplash.com/photo-1513639776629-7b61b0ac49cb"
           },
           {
             time: "02:00 PM",
-            activity: "Rock Garden",
-            location: "Kanke Road, Ranchi",
-            description: "Visit this beautiful garden made from waste materials with waterfalls and sculptures.",
+            activity: "Lotus Temple",
+            location: "Kalkaji, New Delhi",
+            description: "Visit this architectural marvel known for its flower-like shape and peaceful atmosphere.",
             image: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae"
           },
           {
             time: "04:30 PM",
-            activity: "Shopping at Tribal Handicraft Market",
-            location: "Main Road, Ranchi",
-            description: "Buy authentic tribal handicrafts, jewelry, and souvenirs.",
+            activity: "Shopping at Connaught Place",
+            location: "Connaught Place, New Delhi",
+            description: "Shop for handicrafts, textiles, and souvenirs at this iconic shopping destination.",
             image: "https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d"
           },
           {
             time: "07:00 PM",
             activity: "Cultural Performance",
-            location: "Tribal Cultural Center, Ranchi",
-            description: "Experience traditional Jharkhand dance and music performances.",
+            location: "Kingdom of Dreams, Gurgaon",
+            description: "Experience traditional Indian dance and music performances showcasing diverse cultures.",
             image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7"
           }
         ]
@@ -170,29 +163,9 @@ const ItineraryPage: React.FC = () => {
     }, 1000);
   };
 
-  // Handle manual form submission
-  const handleManualSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsGenerating(true);
-    
-    // Simulate generating itinerary after delay
-    setTimeout(() => {
-      setGeneratedItinerary(sampleItinerary);
-      setIsGenerating(false);
-    }, 2000);
-  };
 
-  // Handle interest selection in manual form
-  const toggleInterest = (interest: string) => {
-    setManualForm(prev => {
-      const interests = [...prev.interests];
-      if (interests.includes(interest)) {
-        return { ...prev, interests: interests.filter(i => i !== interest) };
-      } else {
-        return { ...prev, interests: [...interests, interest] };
-      }
-    });
-  };
+
+
 
   return (
     <div className="min-h-screen bg-gray-50 pb-16">
@@ -206,7 +179,7 @@ const ItineraryPage: React.FC = () => {
         
         <div className="container-custom relative z-20 h-full flex flex-col justify-center items-center text-center text-white">
           <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">Plan Your Perfect Trip</h1>
-          <p className="text-xl max-w-3xl">Create a personalized itinerary for your Jharkhand adventure</p>
+          <p className="text-xl max-w-3xl">Create a personalized itinerary for your India adventure</p>
         </div>
       </section>
 
@@ -215,22 +188,14 @@ const ItineraryPage: React.FC = () => {
         <div className="bg-white rounded-lg shadow-md p-6 -mt-8 relative z-20 mb-8">
           <div className="flex border-b border-gray-200">
             <button
-              className={`py-2 px-4 font-medium ${activeTab === 'chatbot' ? 'text-primary border-b-2 border-primary' : 'text-gray-500 hover:text-gray-700'}`}
-              onClick={() => setActiveTab('chatbot')}
+              className="py-2 px-4 font-medium text-primary border-b-2 border-primary"
             >
               <FaIcons.FaRobot className="inline mr-2" /> AI Chatbot Planner
-            </button>
-            <button
-              className={`py-2 px-4 font-medium ${activeTab === 'manual' ? 'text-primary border-b-2 border-primary' : 'text-gray-500 hover:text-gray-700'}`}
-              onClick={() => setActiveTab('manual')}
-            >
-              <FaIcons.FaUser className="inline mr-2" /> Manual Planner
             </button>
           </div>
 
           <div className="mt-6">
-            {activeTab === 'chatbot' ? (
-              <div>
+            <div>
                 <div className="bg-gray-50 rounded-lg p-4 mb-4 h-64 overflow-y-auto">
                   {chatMessages.length === 0 ? (
                     <div className="text-center text-gray-500 py-8">
@@ -238,8 +203,8 @@ const ItineraryPage: React.FC = () => {
                       <p className="font-medium">Chat with our AI to create your perfect itinerary</p>
                       <p className="text-sm mt-2">Try saying:</p>
                       <div className="mt-3 space-y-2">
-                        <p className="bg-gray-100 p-2 rounded-lg inline-block text-sm">"Plan a 2-day trip to Ranchi with waterfalls and tribal markets"</p>
-                        <p className="bg-gray-100 p-2 rounded-lg inline-block text-sm">"Weekend getaway in Jharkhand with adventure activities"</p>
+                        <p className="bg-gray-100 p-2 rounded-lg inline-block text-sm">"Plan a 2-day trip to Delhi with historical sites and markets"</p>
+                        <p className="bg-gray-100 p-2 rounded-lg inline-block text-sm">"Weekend getaway in Rajasthan with cultural experiences"</p>
                       </div>
                     </div>
                   ) : (
@@ -273,7 +238,7 @@ const ItineraryPage: React.FC = () => {
                 <form onSubmit={handleChatSubmit} className="flex gap-2">
                   <input
                     type="text"
-                    placeholder="Describe your ideal trip (e.g., '3 days in Ranchi with family')..."
+                    placeholder="Describe your ideal trip (e.g., '3 days in Delhi with family')..."
                     className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     value={chatInput}
                     onChange={(e) => setChatInput(e.target.value)}
@@ -286,117 +251,7 @@ const ItineraryPage: React.FC = () => {
                     Send
                   </button>
                 </form>
-              </div>
-            ) : (
-              <form onSubmit={handleManualSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label className="block text-gray-700 font-medium mb-2">Trip Duration (Days)</label>
-                    <select
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                      value={manualForm.duration}
-                      onChange={(e) => setManualForm({...manualForm, duration: e.target.value})}
-                    >
-                      <option value="1">1 Day</option>
-                      <option value="2">2 Days</option>
-                      <option value="3">3 Days</option>
-                      <option value="4">4 Days</option>
-                      <option value="5">5 Days</option>
-                      <option value="7">1 Week</option>
-                    </select>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-gray-700 font-medium mb-2">Budget</label>
-                    <select
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                      value={manualForm.budget}
-                      onChange={(e) => setManualForm({...manualForm, budget: e.target.value})}
-                    >
-                      <option value="budget">Budget Friendly</option>
-                      <option value="medium">Medium Range</option>
-                      <option value="luxury">Luxury Experience</option>
-                    </select>
-                  </div>
-                </div>
-                
-                <div>
-                  <label className="block text-gray-700 font-medium mb-2">Starting Location</label>
-                  <input
-                    type="text"
-                    placeholder="Where will you start your journey from?"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    value={manualForm.startLocation}
-                    onChange={(e) => setManualForm({...manualForm, startLocation: e.target.value})}
-                  />
-                </div>
-                
-                <div>
-                  <label className="block text-gray-700 font-medium mb-2">Interests</label>
-                  <div className="flex flex-wrap gap-2">
-                    {['Nature', 'Adventure', 'Heritage', 'Spiritual', 'Food', 'Culture', 'Wildlife', 'Photography'].map((interest) => (
-                      <button
-                        key={interest}
-                        type="button"
-                        className={`px-4 py-2 rounded-md ${manualForm.interests.includes(interest) ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-                        onClick={() => toggleInterest(interest)}
-                      >
-                        {interest}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-                
-                <div>
-                  <label className="block text-gray-700 font-medium mb-2">Preferred Travel Mode</label>
-                  <div className="flex flex-wrap gap-2">
-                    <label className="inline-flex items-center">
-                      <input
-                        type="radio"
-                        className="form-radio text-primary"
-                        name="travelMode"
-                        value="public"
-                        checked={manualForm.travelMode === 'public'}
-                        onChange={() => setManualForm({...manualForm, travelMode: 'public'})}
-                      />
-                      <span className="ml-2">Public Transport</span>
-                    </label>
-                    <label className="inline-flex items-center ml-6">
-                      <input
-                        type="radio"
-                        className="form-radio text-primary"
-                        name="travelMode"
-                        value="private"
-                        checked={manualForm.travelMode === 'private'}
-                        onChange={() => setManualForm({...manualForm, travelMode: 'private'})}
-                      />
-                      <span className="ml-2">Private Vehicle</span>
-                    </label>
-                    <label className="inline-flex items-center ml-6">
-                      <input
-                        type="radio"
-                        className="form-radio text-primary"
-                        name="travelMode"
-                        value="taxi"
-                        checked={manualForm.travelMode === 'taxi'}
-                        onChange={() => setManualForm({...manualForm, travelMode: 'taxi'})}
-                      />
-                      <span className="ml-2">Taxi/Cab</span>
-                    </label>
-                  </div>
-                </div>
-                
-                <div className="text-center">
-                  <button
-                    type="submit"
-                    className="bg-primary text-white px-6 py-3 rounded-md hover:bg-primary-dark transition-colors font-medium"
-                    disabled={isGenerating}
-                  >
-                    {isGenerating ? 'Generating Itinerary...' : 'Generate Itinerary'}
-                  </button>
-                </div>
-              </form>
-            )}
+            </div>
           </div>
         </div>
 

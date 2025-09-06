@@ -8,7 +8,7 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 const HomePage = React.lazy(() => import('./pages/home/HomePage'));
 const ExplorePage = React.lazy(() => import('./pages/explore/ExplorePage'));
 const ItineraryPage = React.lazy(() => import('./pages/itinerary/ItineraryPage'));
-const CulturalPage = React.lazy(() => import('./pages/cultural/CulturalPage'));
+
 const CommunityPage = React.lazy(() => import('./pages/community/CommunityPage'));
 const SafetyPage = React.lazy(() => import('./pages/safety/SafetyPage'));
 const ContactPage = React.lazy(() => import('./pages/admin/ContactPage'));
@@ -26,7 +26,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/explore" element={<ExplorePage />} />
             <Route path="/itinerary" element={<ItineraryPage />} />
-            <Route path="/cultural" element={<CulturalPage />} />
+
             <Route path="/community" element={<CommunityPage />} />
             <Route path="/safety" element={<SafetyPage />} />
             <Route path="/contact" element={<ContactPage />} />

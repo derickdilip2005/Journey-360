@@ -28,7 +28,7 @@ const LoginPage: React.FC = () => {
         throw new Error('Please fill in all fields');
       }
       
-      if (email === 'admin@jhar-tourism.com' && password === 'admin123') {
+      if (email === 'admin@ind-tourism.com' && password === 'admin123') {
         // Store auth token in localStorage or sessionStorage
         if (rememberMe) {
           localStorage.setItem('adminAuthToken', 'sample-admin-auth-token');

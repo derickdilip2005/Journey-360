@@ -54,51 +54,51 @@ const localGuides: LocalGuide[] = [
     id: 1,
     name: 'Rajesh Kumar',
     photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
-    location: 'Ranchi',
-    languages: ['English', 'Hindi', 'Santhali'],
+    location: 'Delhi',
+    languages: ['English', 'Hindi', 'Punjabi'],
     rating: 4.9,
     reviewCount: 127,
-    specialties: ['Waterfalls', 'Tribal Villages', 'Wildlife'],
-    price: '₹1,500/day',
+    specialties: ['Historical Sites', 'Street Food', 'Cultural Tours'],
+    price: '₹2,000/day',
     verified: true,
     impactScore: 92,
   },
   {
     id: 2,
-    name: 'Sunita Murmu',
+    name: 'Priya Sharma',
     photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80',
-    location: 'Dumka',
-    languages: ['English', 'Hindi', 'Santhali'],
+    location: 'Jaipur, Rajasthan',
+    languages: ['English', 'Hindi', 'Rajasthani'],
     rating: 4.8,
     reviewCount: 93,
-    specialties: ['Cultural Tours', 'Tribal Art', 'Local Cuisine'],
-    price: '₹1,200/day',
+    specialties: ['Palace Tours', 'Local Crafts', 'Desert Safari'],
+    price: '₹1,800/day',
     verified: true,
     impactScore: 88,
   },
   {
     id: 3,
-    name: 'Manoj Singh',
+    name: 'Arjun Nair',
     photo: 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
-    location: 'Jamshedpur',
-    languages: ['English', 'Hindi', 'Bengali'],
+    location: 'Kerala',
+    languages: ['English', 'Hindi', 'Malayalam'],
     rating: 4.7,
     reviewCount: 78,
-    specialties: ['City Tours', 'Industrial Heritage', 'Local History'],
-    price: '₹1,300/day',
+    specialties: ['Backwater Tours', 'Spice Gardens', 'Ayurveda'],
+    price: '₹1,600/day',
     verified: true,
     impactScore: 85,
   },
   {
     id: 4,
-    name: 'Priya Lakra',
+    name: 'Meera Patel',
     photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=761&q=80',
-    location: 'Hazaribagh',
-    languages: ['English', 'Hindi', 'Nagpuri'],
+    location: 'Goa',
+    languages: ['English', 'Hindi', 'Konkani'],
     rating: 4.9,
     reviewCount: 112,
-    specialties: ['Wildlife', 'Nature Trails', 'Photography'],
-    price: '₹1,400/day',
+    specialties: ['Beach Tours', 'Portuguese Heritage', 'Water Sports'],
+    price: '₹1,500/day',
     verified: true,
     impactScore: 94,
   },
@@ -107,90 +107,90 @@ const localGuides: LocalGuide[] = [
 const experiences: Experience[] = [
   {
     id: 1,
-    title: 'Tribal Village Immersion & Craft Workshop',
-    location: 'Khunti District',
+    title: 'Rajasthani Village & Craft Workshop',
+    location: 'Jaipur, Rajasthan',
     duration: '1 Day',
-    price: '₹2,500/person',
+    price: '₹2,800/person',
     rating: 4.9,
     reviewCount: 48,
     image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1484&q=80',
     guide: {
-      name: 'Sunita Murmu',
+      name: 'Priya Sharma',
       photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=688&q=80',
     },
-    impactDescription: '80% of your payment goes directly to the tribal community and local artisans',
+    impactDescription: '80% of your payment goes directly to local artisans and village community',
   },
   {
     id: 2,
-    title: 'Waterfall Trek & Picnic Experience',
-    location: 'Ranchi',
-    duration: '1 Day',
-    price: '₹1,800/person',
+    title: 'Kerala Backwater & Spice Garden Tour',
+    location: 'Alleppey, Kerala',
+    duration: '2 Days',
+    price: '₹4,200/person',
     rating: 4.8,
     reviewCount: 72,
     image: 'https://images.unsplash.com/photo-1623058324456-686d39200145?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
     guide: {
-      name: 'Rajesh Kumar',
-      photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
+      name: 'Arjun Nair',
+      photo: 'https://images.unsplash.com/photo-1566492031773-4f4e44671857?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
     },
-    impactDescription: 'Supports local food vendors and environmental conservation efforts',
+    impactDescription: 'Supports local fishermen families and sustainable tourism practices',
   },
   {
     id: 3,
-    title: 'Wildlife Safari & Birdwatching Tour',
-    location: 'Hazaribagh',
-    duration: '2 Days',
-    price: '₹3,500/person',
+    title: 'Goa Heritage & Beach Experience',
+    location: 'Old Goa',
+    duration: '1 Day',
+    price: '₹2,200/person',
     rating: 4.9,
     reviewCount: 36,
     image: 'https://images.unsplash.com/photo-1583997052103-b4a1cb974ce3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
     guide: {
-      name: 'Priya Lakra',
+      name: 'Meera Patel',
       photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=761&q=80',
     },
-    impactDescription: '15% of proceeds go to wildlife conservation projects in Jharkhand',
+    impactDescription: '20% of proceeds support local heritage preservation projects',
   },
 ];
 
 const travelStories: TravelStory[] = [
   {
     id: 1,
-    title: "My Unforgettable Week Exploring Jharkhand's Hidden Gems",
+    title: "My Incredible Journey Across India's Golden Triangle",
     author: {
       name: 'Amit Sharma',
       photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
     },
     date: 'June 15, 2023',
-    location: 'Multiple locations',
-    content: 'What started as a spontaneous trip turned into the most memorable week of my life. From the majestic waterfalls of Ranchi to the serene forests of Netarhat, Jharkhand surprised me at every turn...',
+    location: 'Delhi, Agra, Jaipur',
+    content: 'What started as a classic tourist route turned into the most enriching cultural experience of my life. From the bustling streets of Delhi to the majestic Taj Mahal and the royal palaces of Jaipur, India surprised me at every turn...',
     image: 'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
     likes: 248,
     comments: 42,
   },
   {
     id: 2,
-    title: 'Living With a Tribal Family: What I Learned About Sustainability',
+    title: 'Kerala Backwaters: A Journey of Serenity and Spices',
     author: {
       name: 'Meera Patel',
       photo: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
     },
     date: 'May 3, 2023',
-    location: 'Khunti District',
-    content: 'My three-day homestay with a Munda tribal family changed my perspective on sustainable living. Their harmonious relationship with nature, zero-waste lifestyle, and community-based approach to solving problems was eye-opening...',
+    location: 'Alleppey, Kerala',
+    content: 'My week-long houseboat journey through Kerala\'s backwaters was a perfect blend of tranquility and cultural immersion. From spice plantation tours to traditional Ayurvedic treatments, Kerala offered a unique perspective on India\'s diverse heritage...',
     image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1484&q=80',
     likes: 312,
     comments: 57,
   },
   {
     id: 3,
-    title: "A Photographer's Guide to Capturing Jharkhand's Natural Beauty",
+    title: "A Photographer's Guide to Capturing India's Diverse Landscapes",
     author: {
       name: 'Vikram Mehta',
       photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
     },
     date: 'April 22, 2023',
-    location: 'Various locations',
-    content: 'As a landscape photographer, Jharkhand offered me countless opportunities to capture breathtaking scenes. From the golden hour at Hundru Falls to the misty mornings at Netarhat, here are my tips for photographing this beautiful state...',
+    location: 'Various locations across India',
+    content: 'As a landscape photographer, India offered me countless opportunities to capture breathtaking scenes. From the snow-capped Himalayas to the golden deserts of Rajasthan, here are my tips for photographing this incredible country...',
     image: 'https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
     likes: 189,
     comments: 31,
@@ -206,17 +206,17 @@ const CommunityPage: React.FC = () => {
   // For testimonial carousel
   const testimonials = [
     {
-      text: "Our guide Rajesh made our trip to Jharkhand unforgettable. His knowledge of local culture and hidden spots gave us experiences we couldn't have found on our own.",
+      text: "Our guide Rajesh made our trip to India unforgettable. His knowledge of Delhi's history and hidden gems gave us experiences we couldn't have found on our own.",
       author: "Sarah Johnson",
       location: "United Kingdom"
     },
     {
-      text: "The tribal village tour was the highlight of our India trip. Authentic, respectful, and eye-opening. Highly recommend booking with local guides through this platform.",
+      text: "The Rajasthani village tour was the highlight of our India trip. Authentic, respectful, and eye-opening. Highly recommend booking with local guides through this platform.",
       author: "Michael Chen",
       location: "Singapore"
     },
     {
-      text: "As a solo female traveler, I felt completely safe and welcomed. My guide Sunita was knowledgeable and helped me connect with local communities in a meaningful way.",
+      text: "As a solo female traveler, I felt completely safe and welcomed. My guide Priya was knowledgeable and helped me connect with local communities in a meaningful way.",
       author: "Emma Rodriguez",
       location: "Spain"
     }
@@ -478,12 +478,12 @@ const CommunityPage: React.FC = () => {
         {/* Impact Section */}
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
           <h2 className="text-2xl font-bold mb-4">Our Impact</h2>
-          <p className="text-gray-700 mb-6">When you book experiences through our platform, you're directly contributing to the local economy and supporting sustainable tourism in Jharkhand.</p>
+          <p className="text-gray-700 mb-6">When you book experiences through our platform, you're directly contributing to the local economy and supporting sustainable tourism in India.</p>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-green-50 rounded-lg p-4 border border-green-100">
               <h3 className="text-lg font-semibold text-green-800 mb-2">Economic Impact</h3>
-              <p className="text-gray-700">80% of all booking fees go directly to local guides and communities, helping to create sustainable livelihoods.</p>
+              <p className="text-gray-700">40% of all booking fees go directly to local guides and communities, helping to create sustainable livelihoods.</p>
             </div>
             <div className="bg-green-50 rounded-lg p-4 border border-green-100">
               <h3 className="text-lg font-semibold text-green-800 mb-2">Cultural Preservation</h3>
@@ -491,7 +491,7 @@ const CommunityPage: React.FC = () => {
             </div>
             <div className="bg-green-50 rounded-lg p-4 border border-green-100">
               <h3 className="text-lg font-semibold text-green-800 mb-2">Environmental Conservation</h3>
-              <p className="text-gray-700">5% of our profits support local conservation initiatives protecting Jharkhand's natural beauty.</p>
+              <p className="text-gray-700">5% of our profits support local conservation initiatives protecting India's natural beauty.</p>
             </div>
           </div>
         </div>

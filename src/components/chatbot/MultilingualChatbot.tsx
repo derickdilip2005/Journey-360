@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaRobot, FaTimes, FaPaperPlane, FaGlobeAsia, FaUser, FaSpinner } from 'react-icons/fa';
+import { geminiService } from '../../services/geminiService';
 
 // Types
 type Language = 'en' | 'hi' | 'bn' | 'sa' | 'ja' | 'fr' | 'de' | 'es';
@@ -43,14 +44,14 @@ const MultilingualChatbot: React.FC = () => {
 
   // Welcome messages in different languages
   const welcomeMessages: Record<Language, string> = {
-    en: 'Hello! I am your Jharkhand Tourism assistant. How can I help you today?',
-    hi: 'नमस्ते! मैं आपका झारखंड पर्यटन सहायक हूं। आज मैं आपकी कैसे मदद कर सकता हूं?',
-    bn: 'হ্যালো! আমি আপনার ঝাড়খণ্ড পর্যটন সহকারী। আজ আমি আপনাকে কীভাবে সাহায্য করতে পারি?',
-    sa: 'नमस्ते! अहं भवतः झारखण्ड-पर्यटन-सहायकः अस्मि। अद्य अहं भवतः कथं साहाय्यं कर्तुं शक्नोमि?',
-    ja: 'こんにちは！私はジャールカンド観光アシスタントです。今日はどのようにお手伝いできますか？',
-    fr: 'Bonjour! Je suis votre assistant touristique du Jharkhand. Comment puis-je vous aider aujourd\'hui?',
-    de: 'Hallo! Ich bin Ihr Jharkhand-Tourismus-Assistent. Wie kann ich Ihnen heute helfen?',
-    es: '¡Hola! Soy su asistente de turismo de Jharkhand. ¿Cómo puedo ayudarle hoy?',
+    en: 'Hello! I am your Journey 360 assistant. How can I help you today?',
+    hi: 'नमस्ते! मैं आपका भारत पर्यटन सहायक हूं। आज मैं आपकी कैसे मदद कर सकता हूं?',
+    bn: 'হ্যালো! আমি আপনার ভারত পর্যটন সহকারী। আজ আমি আপনাকে কীভাবে সাহায্য করতে পারি?',
+    sa: 'नमस्ते! अहं भवतः भारत-पर्यटन-सहायकः अस्मि। अद्य अहं भवतः कथं साहाय्यं कर्तुं शक्नोमि?',
+    ja: 'こんにちは！私はインド観光アシスタントです。今日はどのようにお手伝いできますか？',
+    fr: 'Bonjour! Je suis votre assistant touristique de l\'Inde. Comment puis-je vous aider aujourd\'hui?',
+    de: 'Hallo! Ich bin Ihr Indien-Tourismus-Assistent. Wie kann ich Ihnen heute helfen?',
+    es: '¡Hola! Soy su asistente de turismo de India. ¿Cómo puedo ayudarle hoy?',
   };
 
   // Add welcome message when language changes
@@ -95,14 +96,16 @@ const MultilingualChatbot: React.FC = () => {
     setInputValue(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (inputValue.trim() === '') return;
 
+    const userMessageText = inputValue;
+    
     // Add user message
     const userMessage: Message = {
       id: Date.now().toString(),
-      text: inputValue,
+      text: userMessageText,
       sender: 'user',
       timestamp: new Date(),
     };
@@ -111,9 +114,9 @@ const MultilingualChatbot: React.FC = () => {
     setInputValue('');
     setIsTyping(true);
 
-    // Simulate bot response after a delay
-    setTimeout(() => {
-      const botResponse = generateBotResponse(inputValue, currentLanguage);
+    try {
+      // Get response from Gemini API
+      const botResponse = await geminiService.sendMessage(userMessageText, currentLanguage);
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
         text: botResponse,
@@ -121,8 +124,19 @@ const MultilingualChatbot: React.FC = () => {
         timestamp: new Date(),
       };
       setMessages(prev => [...prev, botMessage]);
+    } catch (error) {
+      console.error('Error getting bot response:', error);
+      // Fallback message
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: 'I apologize, but I\'m having trouble responding right now. Please try again.',
+        sender: 'bot',
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
   const handleLanguageChange = (language: Language) => {
@@ -130,59 +144,7 @@ const MultilingualChatbot: React.FC = () => {
     setShowLanguageSelector(false);
   };
 
-  // Simple response generation based on keywords and selected language
-  const generateBotResponse = (input: string, language: Language): string => {
-    const lowerInput = input.toLowerCase();
-    
-    // English responses
-    let response = '';
-    if (language === 'en') {
-      if (lowerInput.includes('hello') || lowerInput.includes('hi')) {
-        response = 'Hello! How can I assist you with your Jharkhand trip?';
-      } else if (lowerInput.includes('waterfall') || lowerInput.includes('falls')) {
-        response = 'Jharkhand is famous for its beautiful waterfalls! Some popular ones include Hundru Falls, Dassam Falls, and Jonha Falls. Would you like specific information about any of these?';
-      } else if (lowerInput.includes('hotel') || lowerInput.includes('stay') || lowerInput.includes('accommodation')) {
-        response = 'There are various accommodation options in Jharkhand ranging from luxury hotels to budget stays. Major cities like Ranchi, Jamshedpur, and Dhanbad have good hotels. Would you like recommendations for a specific area?';
-      } else if (lowerInput.includes('food') || lowerInput.includes('cuisine') || lowerInput.includes('eat')) {
-        response = 'Jharkhand cuisine is delicious! You must try local dishes like Dhuska, Pittha, Handia (rice beer), and Rugra (mushroom). Would you like to know about popular restaurants?';
-      } else if (lowerInput.includes('travel') || lowerInput.includes('transport') || lowerInput.includes('how to reach')) {
-        response = 'You can reach Jharkhand by air (Ranchi Airport), train (major stations in Ranchi, Jamshedpur, Dhanbad), or road. Within the state, you can use taxis, buses, or rent vehicles. What specific travel information do you need?';
-      } else if (lowerInput.includes('tribal') || lowerInput.includes('tribe') || lowerInput.includes('culture')) {
-        response = 'Jharkhand has a rich tribal heritage with communities like Santhal, Munda, Ho, and Oraon. You can experience their culture through tribal museums, village tours, and cultural festivals. Would you like to know more about specific tribal experiences?';
-      } else if (lowerInput.includes('weather') || lowerInput.includes('climate') || lowerInput.includes('best time')) {
-        response = 'The best time to visit Jharkhand is from October to March when the weather is pleasant. Summers (April-June) can be hot, and monsoon (July-September) brings heavy rainfall but makes the waterfalls spectacular. What season are you planning to visit?';
-      } else {
-        response = 'Thank you for your question. I can provide information about Jharkhand\'s tourist spots, accommodation, food, transportation, tribal culture, and travel tips. Could you please be more specific about what you\'d like to know?';
-      }
-    }
-    // Hindi responses
-    else if (language === 'hi') {
-      if (lowerInput.includes('hello') || lowerInput.includes('hi') || lowerInput.includes('नमस्ते')) {
-        response = 'नमस्ते! मैं आपकी झारखंड यात्रा में कैसे मदद कर सकता हूं?';
-      } else if (lowerInput.includes('waterfall') || lowerInput.includes('falls') || lowerInput.includes('झरना')) {
-        response = 'झारखंड अपने सुंदर झरनों के लिए प्रसिद्ध है! कुछ लोकप्रिय झरने हैं हुंडरू फॉल्स, दशम फॉल्स और जोन्हा फॉल्स। क्या आप इनमें से किसी के बारे में विशेष जानकारी चाहते हैं?';
-      } else if (lowerInput.includes('hotel') || lowerInput.includes('stay') || lowerInput.includes('accommodation') || lowerInput.includes('होटल') || lowerInput.includes('ठहरने')) {
-        response = 'झारखंड में लक्जरी होटल से लेकर बजट स्टे तक विभिन्न आवास विकल्प हैं। रांची, जमशेदपुर और धनबाद जैसे प्रमुख शहरों में अच्छे होटल हैं। क्या आप किसी विशेष क्षेत्र के लिए सिफारिशें चाहते हैं?';
-      } else {
-        response = 'आपके प्रश्न के लिए धन्यवाद। मैं झारखंड के पर्यटन स्थलों, आवास, भोजन, परिवहन, जनजातीय संस्कृति और यात्रा युक्तियों के बारे में जानकारी प्रदान कर सकता हूं। कृपया बताएं कि आप क्या जानना चाहते हैं?';
-      }
-    }
-    // Bengali responses
-    else if (language === 'bn') {
-      if (lowerInput.includes('hello') || lowerInput.includes('hi') || lowerInput.includes('হ্যালো')) {
-        response = 'হ্যালো! আমি আপনার ঝাড়খণ্ড ভ্রমণে কীভাবে সাহায্য করতে পারি?';
-      } else {
-        response = 'আপনার প্রশ্নের জন্য ধন্যবাদ। আমি ঝাড়খণ্ডের পর্যটন স্থান, আবাসন, খাবার, পরিবহন, আদিবাসী সংস্কৃতি এবং ভ্রমণ টিপস সম্পর্কে তথ্য প্রদান করতে পারি। আপনি কী জানতে চান তা অনুগ্রহ করে আরও নির্দিষ্টভাবে বলুন।';
-      }
-    }
-    // For other languages, provide a simpler response set
-    else {
-      // Default to English if specific language implementation is not available
-      response = welcomeMessages[language] + ' (Translation services are being improved for more detailed responses in this language.)';
-    }
-    
-    return response;
-  };
+
 
   return (
     <>
@@ -210,7 +172,7 @@ const MultilingualChatbot: React.FC = () => {
             <div className="bg-primary text-white p-4 flex justify-between items-center">
               <div className="flex items-center">
                 <FaRobot className="mr-2" size={20} />
-                <h3 className="font-bold">Jharkhand Tourism Assistant</h3>
+                <h3 className="font-bold">Journey 360 Assistant</h3>
               </div>
               <div className="flex items-center">
                 <button 
