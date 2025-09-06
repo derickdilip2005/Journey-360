@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import * as FaIcons from 'react-icons/fa';
+import LeafletMap from '../../components/LeafletMap';
 
 // Types
 interface IndianState {
@@ -712,7 +713,7 @@ const ExplorePage: React.FC = () => {
   const [selectedState, setSelectedState] = useState<IndianState | null>(null);
   const [selectedSpot, setSelectedSpot] = useState<TouristSpot | null>(null);
   const [showMap, setShowMap] = useState(false);
-  const [mapUrl, setMapUrl] = useState('');
+  const [selectedDestination, setSelectedDestination] = useState<{ name: string; coords: { lat: number; lng: number } } | null>(null);
 
   // Google Maps API Key
   const GOOGLE_MAPS_API_KEY = 'AIzaSyDuQKRddXVyEs3lzMj4wSFmZz_B1Vt7qwA';
@@ -853,7 +854,7 @@ const ExplorePage: React.FC = () => {
     }
   };
 
-  // Function to get user's current location and show embedded directions
+  // Function to show directions using Leaflet map
   const openDirections = (spotName: string) => {
     const coords = locationCoordinates[spotName];
     if (!coords) {
@@ -861,29 +862,8 @@ const ExplorePage: React.FC = () => {
       return;
     }
 
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const userLat = position.coords.latitude;
-          const userLng = position.coords.longitude;
-          const embedUrl = `https://www.google.com/maps/embed/v1/directions?key=AIzaSyDuQKRddXVyEs3lzMj4wSFmZz_B1Vt7qwA-osjH4dEU&origin=${userLat},${userLng}&destination=${coords.lat},${coords.lng}&mode=driving`;
-          setMapUrl(embedUrl);
-          setShowMap(true);
-        },
-        (error) => {
-          console.error('Error getting location:', error);
-          // Fallback: show map centered on destination
-          const embedUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyDuQKRddXVyEs3lzMj4wSFmZz_B1Vt7qwA-osjH4dEU&q=${coords.lat},${coords.lng}&zoom=15`;
-          setMapUrl(embedUrl);
-          setShowMap(true);
-        }
-      );
-    } else {
-      // Geolocation not supported, show map centered on destination
-      const embedUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyDuQKRddXVyEs3lzMj4wSFmZz_B1Vt7qwA-osjH4dEU&q=${coords.lat},${coords.lng}&zoom=15`;
-      setMapUrl(embedUrl);
-      setShowMap(true);
-    }
+    setSelectedDestination({ name: spotName, coords });
+    setShowMap(true);
   };
 
   // Function to redirect to Uber with current location and destination
@@ -1179,7 +1159,7 @@ const ExplorePage: React.FC = () => {
                 onClick={() => {
                   setSelectedSpot(null);
                   setShowMap(false);
-                  setMapUrl('');
+                  setSelectedDestination(null);
                 }}
                 className="absolute top-4 right-4 z-20 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors"
               >
@@ -1310,62 +1290,34 @@ const ExplorePage: React.FC = () => {
                     Get Directions
                   </button>
                 </div>
+
                 
-                {/* Embedded Google Maps */}
-                {showMap && (
-                  <div className="mb-6">
-                    <div className="flex justify-between items-center mb-3">
-                      <h3 className="text-xl font-semibold flex items-center">
-                        <FaIcons.FaMapMarkerAlt className="mr-2 text-primary" />
-                        Directions to {selectedSpot.name}
-                      </h3>
-                      <button 
-                        onClick={() => setShowMap(false)}
-                        className="text-gray-500 hover:text-gray-700 transition-colors"
-                      >
-                        <FaIcons.FaTimes className="text-xl" />
-                      </button>
-                    </div>
-                    <div className="w-full h-96 rounded-lg overflow-hidden border border-gray-300">
-                      <iframe
-                        src={mapUrl}
-                        width="100%"
-                        height="100%"
-                        style={{ border: 0 }}
-                        allowFullScreen
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
-                        title={`Directions to ${selectedSpot.name}`}
-                      ></iframe>
-                    </div>
-                    <div className="mt-4">
-                      <button 
-                        onClick={() => showCabFare(selectedSpot.name)}
-                        className="border border-green-500 text-green-600 px-6 py-3 rounded-lg font-medium hover:bg-green-500 hover:text-white transition-colors flex items-center"
-                      >
-                        <FaIcons.FaTaxi className="mr-2" />
-                        Show Cab Fare
-                      </button>
-                    </div>
-                  </div>
-                )}
-                
-                {/* Show cab fare button when map is not displayed */}
-                {!showMap && (
-                  <div className="mt-4">
-                    <button 
-                      onClick={() => showCabFare(selectedSpot.name)}
-                      className="border border-green-500 text-green-600 px-6 py-3 rounded-lg font-medium hover:bg-green-500 hover:text-white transition-colors flex items-center"
-                    >
-                      <FaIcons.FaTaxi className="mr-2" />
-                      Show Cab Fare
-                    </button>
-                  </div>
-                )}
+                {/* Show cab fare button */}
+                <div className="mt-4">
+                  <button 
+                    onClick={() => showCabFare(selectedSpot.name)}
+                    className="border border-green-500 text-green-600 px-6 py-3 rounded-lg font-medium hover:bg-green-500 hover:text-white transition-colors flex items-center"
+                  >
+                    <FaIcons.FaTaxi className="mr-2" />
+                    Show Cab Fare
+                  </button>
+                </div>
               </div>
             </div>
           </motion.div>
         </div>
+      )}
+      
+      {/* Leaflet Map Component */}
+      {showMap && selectedDestination && (
+        <LeafletMap
+          destinationName={selectedDestination.name}
+          destinationCoords={selectedDestination.coords}
+          onClose={() => {
+            setShowMap(false);
+            setSelectedDestination(null);
+          }}
+        />
       )}
     </div>
   );
