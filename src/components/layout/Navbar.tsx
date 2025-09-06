@@ -9,6 +9,7 @@ const navigation = [
   { name: 'Explore', href: '/explore' },
   { name: 'Itinerary', href: '/itinerary' },
   { name: 'Community', href: '/community' },
+  { name: 'VISA Assist', href: '/visa-assist' },
   { name: 'Contact', href: '/contact' },
 ];
 
