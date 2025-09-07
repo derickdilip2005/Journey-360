@@ -7,6 +7,7 @@ import * as FaIcons from 'react-icons/fa';
 const navigation = [
   { name: 'Home', href: '/' },
   { name: 'Explore', href: '/explore' },
+  { name: 'Hotels', href: '/hotels' },
   { name: 'Itinerary', href: '/itinerary' },
   { name: 'Community', href: '/community' },
   { name: 'VISA Assist', href: '/visa-assist' },

@@ -7,6 +7,7 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 // Lazy load pages for better performance
 const HomePage = React.lazy(() => import('./pages/home/HomePage'));
 const ExplorePage = React.lazy(() => import('./pages/explore/ExplorePage'));
+const HotelsPage = React.lazy(() => import('./pages/hotels/HotelsPage'));
 const ItineraryPage = React.lazy(() => import('./pages/itinerary/ItineraryPage'));
 const VisaAssistPage = React.lazy(() => import('./pages/visa/VisaAssistPage'));
 
@@ -26,6 +27,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/explore" element={<ExplorePage />} />
+            <Route path="/hotels" element={<HotelsPage />} />
             <Route path="/itinerary" element={<ItineraryPage />} />
             <Route path="/visa-assist" element={<VisaAssistPage />} />
 

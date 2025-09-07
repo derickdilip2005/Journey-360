@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import * as FaIcons from 'react-icons/fa';
 import LeafletMap from '../../components/LeafletMap';
 
@@ -708,6 +709,7 @@ const indianStates: IndianState[] = [
 ];
 
 const ExplorePage: React.FC = () => {
+  const navigate = useNavigate();
   const [selectedRegion, setSelectedRegion] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedState, setSelectedState] = useState<IndianState | null>(null);
@@ -941,6 +943,11 @@ const ExplorePage: React.FC = () => {
       
       window.open(uberUrl, '_blank');
     }
+  };
+
+  // Function to navigate to Hotels page with pre-filled location
+  const viewHotels = (spotName: string) => {
+    navigate(`/hotels?location=${encodeURIComponent(spotName)}`);
   };
 
   // Filter states based on region and search query
@@ -1288,6 +1295,13 @@ const ExplorePage: React.FC = () => {
                   >
                     <FaIcons.FaDirections className="mr-2" />
                     Get Directions
+                  </button>
+                  <button 
+                    onClick={() => viewHotels(selectedSpot.name)}
+                    className="bg-blue-500 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-600 transition-colors flex items-center"
+                  >
+                    <FaIcons.FaHotel className="mr-2" />
+                    View Hotels
                   </button>
                 </div>
 
