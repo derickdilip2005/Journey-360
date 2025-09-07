@@ -1,171 +1,308 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import * as FaIcons from 'react-icons/fa';
+import { FaMicrophone, FaMicrophoneSlash, FaVolumeUp, FaDownload, FaGlobe } from 'react-icons/fa';
+import { geminiService, ItineraryTable } from '../../services/geminiService';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
-// Types
-interface ItineraryDay {
-  day: number;
-  activities: {
-    time: string;
-    activity: string;
-    location: string;
-    description: string;
-    image?: string;
-  }[];
+// Web Speech API type declarations
+declare global {
+  interface Window {
+    SpeechRecognition: any;
+    webkitSpeechRecognition: any;
+  }
 }
 
-interface GeneratedItinerary {
-  title: string;
-  days: ItineraryDay[];
-  budget: string;
-  travelMode: string;
+// Types
+interface Message {
+  id: string;
+  text: string;
+  sender: 'user' | 'bot';
+  timestamp: Date;
+  itinerary?: ItineraryTable;
+}
+
+interface Language {
+  code: string;
+  name: string;
+  flag: string;
 }
 
 const ItineraryPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'chatbot'>('chatbot');
   const [chatInput, setChatInput] = useState('');
-  const [chatMessages, setChatMessages] = useState<{text: string, sender: 'user' | 'bot'}[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [generatedItinerary, setGeneratedItinerary] = useState<GeneratedItinerary | null>(null);
+  const [currentLanguage, setCurrentLanguage] = useState('en');
+  const [isListening, setIsListening] = useState(false);
+  const [speechRecognition, setSpeechRecognition] = useState<any>(null);
+  const [speechSynthesis, setSpeechSynthesis] = useState<SpeechSynthesis | null>(null);
+  const [showLanguageSelector, setShowLanguageSelector] = useState(false);
   
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
+  const languages: Language[] = [
+    { code: 'en', name: 'English', flag: '🇺🇸' },
+    { code: 'hi', name: 'हिंदी', flag: '🇮🇳' },
+    { code: 'bn', name: 'বাংলা', flag: '🇧🇩' },
+    { code: 'sa', name: 'संस्कृत', flag: '🕉️' },
+    { code: 'ja', name: '日本語', flag: '🇯🇵' },
+    { code: 'fr', name: 'Français', flag: '🇫🇷' },
+    { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+    { code: 'es', name: 'Español', flag: '🇪🇸' }
+  ];
 
-  // Sample itinerary data (would come from backend in real app)
-  const sampleItinerary: GeneratedItinerary = {
-    title: "Weekend Getaway in Delhi",
-    days: [
-      {
-        day: 1,
-        activities: [
-          {
-            time: "08:00 AM",
-            activity: "Breakfast",
-            location: "Cafe Lota, Delhi",
-            description: "Start your day with a traditional Indian breakfast.",
-            image: "https://images.unsplash.com/photo-1533089860892-a7c6f0a88666"
-          },
-          {
-            time: "10:00 AM",
-            activity: "Visit Red Fort",
-            location: "Red Fort, Old Delhi",
-            description: "Explore this UNESCO World Heritage site and symbol of India's rich history.",
-            image: "https://images.unsplash.com/photo-1623058324456-686d39200145"
-          },
-          {
-            time: "01:00 PM",
-            activity: "Lunch",
-            location: "Local restaurant near Hundru Falls",
-            description: "Enjoy local Jharkhand cuisine with specialties like Dhuska and Pittha.",
-            image: "https://images.unsplash.com/photo-1606491956689-2ea866880c84"
-          },
-          {
-            time: "03:00 PM",
-            activity: "Visit Tribal Research Institute Museum",
-            location: "Morabadi, Ranchi",
-            description: "Learn about the rich tribal heritage and culture of Jharkhand.",
-            image: "https://images.unsplash.com/photo-1594122230689-45899d9e6f69"
-          },
-          {
-            time: "06:00 PM",
-            activity: "Evening at Pahari Mandir",
-            location: "Ranchi Hill, Ranchi",
-            description: "Visit this hilltop temple for panoramic views of Ranchi city at sunset.",
-            image: "https://images.unsplash.com/photo-1518241353330-0f7941c2d9b5"
-          },
-          {
-            time: "08:00 PM",
-            activity: "Dinner",
-            location: "The Urban Spice, Ranchi",
-            description: "End your day with a delightful dinner at one of Ranchi's popular restaurants.",
-            image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4"
-          }
-        ]
-      },
-      {
-        day: 2,
-        activities: [
-          {
-            time: "08:00 AM",
-            activity: "Breakfast",
-            location: "Hotel/Accommodation",
-            description: "Start your day with a hearty breakfast.",
-            image: "https://images.unsplash.com/photo-1533089860892-a7c6f0a88666"
-          },
-          {
-            time: "09:30 AM",
-            activity: "Visit India Gate",
-            location: "Rajpath, New Delhi",
-            description: "Visit this iconic war memorial and one of Delhi's most famous landmarks.",
-            image: "https://images.unsplash.com/photo-1518890569493-668df9a00266"
-          },
-          {
-            time: "12:00 PM",
-            activity: "Lunch",
-            location: "Chandni Chowk, Old Delhi",
-            description: "Try authentic Delhi street food at this historic market area.",
-            image: "https://images.unsplash.com/photo-1513639776629-7b61b0ac49cb"
-          },
-          {
-            time: "02:00 PM",
-            activity: "Lotus Temple",
-            location: "Kalkaji, New Delhi",
-            description: "Visit this architectural marvel known for its flower-like shape and peaceful atmosphere.",
-            image: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae"
-          },
-          {
-            time: "04:30 PM",
-            activity: "Shopping at Connaught Place",
-            location: "Connaught Place, New Delhi",
-            description: "Shop for handicrafts, textiles, and souvenirs at this iconic shopping destination.",
-            image: "https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d"
-          },
-          {
-            time: "07:00 PM",
-            activity: "Cultural Performance",
-            location: "Kingdom of Dreams, Gurgaon",
-            description: "Experience traditional Indian dance and music performances showcasing diverse cultures.",
-            image: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7"
-          }
-        ]
-      }
-    ],
-    budget: "₹5,000 - ₹7,000 per person",
-    travelMode: "Local transport and taxis"
+  const welcomeMessages: { [key: string]: string } = {
+    'en': 'Hello! I\'m your AI travel planner. Tell me about your dream trip and I\'ll create a detailed itinerary for you.',
+    'hi': 'नमस्ते! मैं आपका AI यात्रा योजनाकार हूं। अपनी सपनों की यात्रा के बारे में बताएं और मैं आपके लिए विस्तृत यात्रा कार्यक्रम बनाऊंगा।',
+    'bn': 'হ্যালো! আমি আপনার AI ভ্রমণ পরিকল্পনাকারী। আপনার স্বপ্নের ভ্রমণ সম্পর্কে বলুন এবং আমি আপনার জন্য বিস্তারিত ভ্রমণসূচী তৈরি করব।',
+    'sa': 'नमस्कारः! अहं भवतः AI यात्रा योजकः अस्मि। स्वप्नयात्रायाः विषये कथयतु, अहं भवतः कृते विस्तृतं यात्राक्रमं निर्मास्यामि।',
+    'ja': 'こんにちは！私はあなたのAI旅行プランナーです。夢の旅行について教えてください。詳細な旅程を作成いたします。',
+    'fr': 'Bonjour ! Je suis votre planificateur de voyage IA. Parlez-moi de votre voyage de rêve et je créerai un itinéraire détaillé pour vous.',
+    'de': 'Hallo! Ich bin Ihr KI-Reiseplaner. Erzählen Sie mir von Ihrer Traumreise und ich erstelle einen detaillierten Reiseplan für Sie.',
+    'es': '¡Hola! Soy tu planificador de viajes con IA. Cuéntame sobre tu viaje soñado y crearé un itinerario detallado para ti.'
   };
 
-  // Handle chat submission
-  const handleChatSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!chatInput.trim()) return;
-
-    // Add user message to chat
-    const newMessage = { text: chatInput, sender: 'user' as const };
-    setChatMessages([...chatMessages, newMessage]);
-    setChatInput('');
-
-    // Simulate bot thinking
-    setIsGenerating(true);
-    
-    // Simulate bot response after delay
-    setTimeout(() => {
-      // Add bot response
-      const botResponse = { 
-        text: "I'll create an itinerary based on your request. Give me a moment...", 
-        sender: 'bot' as const 
-      };
-      setChatMessages(prev => [...prev, botResponse]);
+  const initializeSpeechServices = useCallback(() => {
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
       
-      // Simulate generating itinerary after another delay
-      setTimeout(() => {
-        setGeneratedItinerary(sampleItinerary);
-        setIsGenerating(false);
-      }, 2000);
-    }, 1000);
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = getLanguageCode(currentLanguage);
+      
+      recognition.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        setChatInput(transcript);
+        setIsListening(false);
+      };
+      
+      recognition.onerror = () => {
+        setIsListening(false);
+      };
+      
+      recognition.onend = () => {
+        setIsListening(false);
+      };
+      
+      setSpeechRecognition(recognition);
+    }
+    
+    if ('speechSynthesis' in window) {
+      setSpeechSynthesis(window.speechSynthesis);
+    }
+  }, [currentLanguage]);
+
+  useEffect(() => {
+    // Initialize with welcome message
+    const welcomeMessage: Message = {
+      id: Date.now().toString(),
+      text: welcomeMessages[currentLanguage],
+      sender: 'bot',
+      timestamp: new Date()
+    };
+    setMessages([welcomeMessage]);
+    
+    // Initialize speech services
+    initializeSpeechServices();
+  }, [currentLanguage, welcomeMessages, initializeSpeechServices]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const getLanguageCode = (lang: string): string => {
+    const codes: { [key: string]: string } = {
+      'en': 'en-US',
+      'hi': 'hi-IN',
+      'bn': 'bn-IN',
+      'sa': 'hi-IN', // Sanskrit uses Hindi recognition
+      'ja': 'ja-JP',
+      'fr': 'fr-FR',
+      'de': 'de-DE',
+      'es': 'es-ES'
+    };
+    return codes[lang] || 'en-US';
   };
 
+  const startListening = () => {
+    if (speechRecognition && !isListening) {
+      speechRecognition.lang = getLanguageCode(currentLanguage);
+      speechRecognition.start();
+      setIsListening(true);
+    }
+  };
 
+  const stopListening = () => {
+    if (speechRecognition && isListening) {
+      speechRecognition.stop();
+      setIsListening(false);
+    }
+  };
 
+  const speakText = (text: string) => {
+    if (speechSynthesis) {
+      speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = getLanguageCode(currentLanguage);
+      utterance.rate = 0.9;
+      speechSynthesis.speak(utterance);
+    }
+  };
 
+  const scrollToBottom = () => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setChatInput(e.target.value);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!chatInput.trim() || isGenerating) return;
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      text: chatInput,
+      sender: 'user',
+      timestamp: new Date()
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setChatInput('');
+    setIsGenerating(true);
+
+    try {
+      const response = await geminiService.generateItinerary(chatInput, currentLanguage);
+      
+      let botMessage: Message;
+      
+      if (typeof response === 'object' && response.planTable) {
+        // Structured itinerary response
+        botMessage = {
+          id: (Date.now() + 1).toString(),
+          text: 'Here\'s your personalized itinerary:',
+          sender: 'bot',
+          timestamp: new Date(),
+          itinerary: response
+        };
+      } else {
+        // Text response
+        botMessage = {
+          id: (Date.now() + 1).toString(),
+          text: typeof response === 'string' ? response : 'I\'ve created your itinerary!',
+          sender: 'bot',
+          timestamp: new Date()
+        };
+      }
+
+      setMessages(prev => [...prev, botMessage]);
+    } catch (error) {
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        text: 'Sorry, I encountered an error while creating your itinerary. Please try again.',
+        sender: 'bot',
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleLanguageChange = (langCode: string) => {
+    setCurrentLanguage(langCode);
+    setShowLanguageSelector(false);
+    geminiService.resetChat();
+  };
+
+  const downloadItineraryAsPDF = (itinerary: ItineraryTable) => {
+    const doc = new jsPDF();
+    
+    // Title
+    doc.setFontSize(20);
+    doc.text('Travel Itinerary', 20, 20);
+    
+    // Date
+    doc.setFontSize(12);
+    doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 20, 35);
+    
+    // Table data
+    const tableData = itinerary.planTable.map(item => [
+      item.day || '',
+      item.date || '',
+      item.time || '',
+      item.activity || '',
+      item.location || '',
+      item.notes || ''
+    ]);
+    
+    // Add table
+    (doc as any).autoTable({
+      head: [['Day', 'Date', 'Time', 'Activity', 'Location', 'Notes']],
+      body: tableData,
+      startY: 45,
+      styles: { fontSize: 8 },
+      headStyles: { fillColor: [41, 128, 185] }
+    });
+    
+    doc.save('travel-itinerary.pdf');
+  };
+
+  const renderMessage = (message: Message) => {
+    if (message.itinerary) {
+      return (
+        <div>
+          <p className="mb-4">{message.text}</p>
+          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+            <div className="bg-primary text-white p-3 flex justify-between items-center">
+              <h3 className="font-bold">Your Itinerary</h3>
+              <button
+                onClick={() => downloadItineraryAsPDF(message.itinerary!)}
+                className="bg-white bg-opacity-20 p-1 rounded hover:bg-opacity-30 transition-colors"
+                title="Download PDF"
+              >
+                <FaDownload size={14} />
+              </button>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="min-w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Day</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Time</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Activity</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Location</th>
+                    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Notes</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {message.itinerary.planTable.map((item, index) => (
+                    <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                      <td className="px-3 py-2 text-sm font-medium text-gray-900">{item.day}</td>
+                      <td className="px-3 py-2 text-sm text-gray-700">{item.date}</td>
+                      <td className="px-3 py-2 text-sm text-gray-700">{item.time}</td>
+                      <td className="px-3 py-2 text-sm text-gray-900">{item.activity}</td>
+                      <td className="px-3 py-2 text-sm text-gray-700">{item.location}</td>
+                      <td className="px-3 py-2 text-sm text-gray-600">{item.notes}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    return <p>{message.text}</p>;
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 pb-16">
@@ -178,195 +315,152 @@ const ItineraryPage: React.FC = () => {
         ></div>
         
         <div className="container-custom relative z-20 h-full flex flex-col justify-center items-center text-center text-white">
-          <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">Plan Your Perfect Trip</h1>
-          <p className="text-xl max-w-3xl">Create a personalized itinerary for your India adventure</p>
+          <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">AI Itinerary Planner</h1>
+          <p className="text-xl max-w-3xl">Create personalized travel itineraries with voice commands and multilingual support</p>
         </div>
       </section>
 
       {/* Main Content */}
       <section className="container-custom py-8">
         <div className="bg-white rounded-lg shadow-md p-6 -mt-8 relative z-20 mb-8">
-          <div className="flex border-b border-gray-200">
-            <button
-              className="py-2 px-4 font-medium text-primary border-b-2 border-primary"
-            >
-              <FaIcons.FaRobot className="inline mr-2" /> AI Chatbot Planner
-            </button>
-          </div>
-
-          <div className="mt-6">
-            <div>
-                <div className="bg-gray-50 rounded-lg p-4 mb-4 h-64 overflow-y-auto">
-                  {chatMessages.length === 0 ? (
-                    <div className="text-center text-gray-500 py-8">
-                      <FaIcons.FaRobot className="text-4xl mx-auto mb-3 text-primary" />
-                      <p className="font-medium">Chat with our AI to create your perfect itinerary</p>
-                      <p className="text-sm mt-2">Try saying:</p>
-                      <div className="mt-3 space-y-2">
-                        <p className="bg-gray-100 p-2 rounded-lg inline-block text-sm">"Plan a 2-day trip to Delhi with historical sites and markets"</p>
-                        <p className="bg-gray-100 p-2 rounded-lg inline-block text-sm">"Weekend getaway in Rajasthan with cultural experiences"</p>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      {chatMessages.map((message, index) => (
-                        <div 
-                          key={index} 
-                          className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                        >
-                          <div 
-                            className={`max-w-3/4 rounded-lg p-3 ${message.sender === 'user' ? 'bg-primary text-white' : 'bg-gray-200 text-gray-800'}`}
-                          >
-                            {message.text}
-                          </div>
-                        </div>
-                      ))}
-                      {isGenerating && (
-                        <div className="flex justify-start">
-                          <div className="bg-gray-200 text-gray-800 rounded-lg p-3 max-w-3/4">
-                            <div className="flex space-x-2">
-                              <div className="w-2 h-2 rounded-full bg-gray-500 animate-bounce"></div>
-                              <div className="w-2 h-2 rounded-full bg-gray-500 animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                              <div className="w-2 h-2 rounded-full bg-gray-500 animate-bounce" style={{ animationDelay: '0.4s' }}></div>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-                </div>
-                <form onSubmit={handleChatSubmit} className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="Describe your ideal trip (e.g., '3 days in Delhi with family')..."
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                    value={chatInput}
-                    onChange={(e) => setChatInput(e.target.value)}
-                  />
-                  <button
-                    type="submit"
-                    className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-dark transition-colors"
-                    disabled={isGenerating}
-                  >
-                    Send
-                  </button>
-                </form>
-            </div>
-          </div>
-        </div>
-
-        {/* Generated Itinerary */}
-        {generatedItinerary && (
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="bg-white rounded-lg shadow-md overflow-hidden mb-8"
-          >
-            <div className="bg-primary text-white p-6">
-              <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold">{generatedItinerary.title}</h2>
-                <div className="flex space-x-2">
-                  <button className="bg-white bg-opacity-20 p-2 rounded-full hover:bg-opacity-30 transition-colors">
-                    <FaIcons.FaDownload className="text-white" />
-                  </button>
-                  <button className="bg-white bg-opacity-20 p-2 rounded-full hover:bg-opacity-30 transition-colors">
-                    <FaIcons.FaShare className="text-white" />
-                  </button>
-                </div>
-              </div>
-              <div className="flex flex-wrap gap-4 mt-4 text-sm">
-                <div className="flex items-center">
-                  <FaIcons.FaCalendarAlt className="mr-2" />
-                  <span>{generatedItinerary.days.length} Days</span>
-                </div>
-                <div className="flex items-center">
-                  <FaIcons.FaWallet className="mr-2" />
-                  <span>{generatedItinerary.budget}</span>
-                </div>
-                <div className="flex items-center">
-                  <FaIcons.FaMapMarkerAlt className="mr-2" />
-                  <span>{generatedItinerary.travelMode}</span>
-                </div>
-              </div>
+          {/* Header with Language Selector */}
+          <div className="flex justify-between items-center border-b border-gray-200 pb-4 mb-6">
+            <div className="flex items-center">
+              <FaIcons.FaRobot className="text-primary mr-2" size={24} />
+              <h2 className="text-xl font-bold text-gray-800">AI Travel Planner</h2>
             </div>
             
-            <div className="p-6">
-              {generatedItinerary.days.map((day) => (
-                <div key={day.day} className="mb-8 last:mb-0">
-                  <h3 className="text-xl font-bold mb-4 pb-2 border-b border-gray-200">
-                    Day {day.day}
-                  </h3>
-                  <div className="space-y-6">
-                    {day.activities.map((activity, index) => (
-                      <div key={index} className="flex">
-                        <div className="w-24 flex-shrink-0 text-right pr-4">
-                          <div className="font-medium text-primary">{activity.time}</div>
-                        </div>
-                        <div className="relative pl-6 border-l-2 border-gray-200 pb-6 last:border-transparent last:pb-0">
-                          <div className="absolute w-4 h-4 bg-primary rounded-full -left-[9px] top-0"></div>
-                          <div className="bg-gray-50 rounded-lg p-4">
-                            <h4 className="font-bold text-lg">{activity.activity}</h4>
-                            <div className="flex items-center text-gray-600 text-sm mb-2">
-                              <FaIcons.FaMapMarkerAlt className="mr-1" />
-                              <span>{activity.location}</span>
-                            </div>
-                            <p className="text-gray-700 mb-3">{activity.description}</p>
-                            {activity.image && (
-                              <img 
-                                src={activity.image} 
-                                alt={activity.activity} 
-                                className="w-full h-40 object-cover rounded-md"
-                              />
-                            )}
-                          </div>
-                        </div>
+            <div className="relative">
+              <button
+                onClick={() => setShowLanguageSelector(!showLanguageSelector)}
+                className="flex items-center space-x-2 px-3 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                <FaGlobe className="text-primary" />
+                <span className="text-sm font-medium">
+                  {languages.find(lang => lang.code === currentLanguage)?.flag} {languages.find(lang => lang.code === currentLanguage)?.name}
+                </span>
+              </button>
+              
+              {showLanguageSelector && (
+                <div className="absolute right-0 top-full mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-30 min-w-48">
+                  {languages.map((language) => (
+                    <button
+                      key={language.code}
+                      onClick={() => handleLanguageChange(language.code)}
+                      className={`w-full text-left px-4 py-2 hover:bg-gray-100 flex items-center space-x-2 ${
+                        currentLanguage === language.code ? 'bg-primary text-white hover:bg-primary-dark' : ''
+                      }`}
+                    >
+                      <span>{language.flag}</span>
+                      <span className="text-sm">{language.name}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Chat Interface */}
+          <div className="space-y-4">
+            {/* Messages */}
+            <div ref={messagesContainerRef} className="bg-gray-50 rounded-lg p-4 h-96 overflow-y-auto">
+              {messages.map((message) => (
+                <div 
+                  key={message.id} 
+                  className={`mb-4 flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div 
+                    className={`max-w-4/5 rounded-lg p-3 ${message.sender === 'user' ? 'bg-primary text-white rounded-tr-none' : 'bg-white text-gray-800 rounded-tl-none shadow-sm'}`}
+                  >
+                    <div className="flex items-start mb-1">
+                      <span className="mr-2">
+                        {message.sender === 'user' ? <FaIcons.FaUser size={14} /> : <FaIcons.FaRobot size={14} />}
+                      </span>
+                      <span className="font-medium text-sm">
+                        {message.sender === 'user' ? 'You' : 'AI Planner'}
+                      </span>
+                    </div>
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        {renderMessage(message)}
                       </div>
-                    ))}
+                      {message.sender === 'bot' && speechSynthesis && message.text && (
+                        <button
+                          onClick={() => speakText(message.text!)}
+                          className="ml-2 text-gray-500 hover:text-primary flex-shrink-0"
+                          title="Read aloud"
+                        >
+                          <FaVolumeUp size={14} />
+                        </button>
+                      )}
+                    </div>
+                    <p className="text-xs opacity-70 text-right mt-2">
+                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </p>
                   </div>
                 </div>
               ))}
-            </div>
-            
-            <div className="bg-gray-50 p-6 border-t border-gray-200">
-              <h3 className="text-lg font-bold mb-4">Trip Summary</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-white p-4 rounded-lg shadow-sm">
-                  <div className="flex items-center text-primary mb-2">
-                    <FaIcons.FaCalendarAlt className="mr-2" />
-                    <h4 className="font-medium">Duration</h4>
-                  </div>
-                  <p>{generatedItinerary.days.length} Days</p>
-                </div>
-                <div className="bg-white p-4 rounded-lg shadow-sm">
-                  <div className="flex items-center text-primary mb-2">
-                    <FaIcons.FaWallet className="mr-2" />
-                    <h4 className="font-medium">Estimated Budget</h4>
-                  </div>
-                  <p>{generatedItinerary.budget}</p>
-                </div>
-                <div className="bg-white p-4 rounded-lg shadow-sm">
-                  <div className="flex items-center text-primary mb-2">
-                    <FaIcons.FaHiking className="mr-2" />
-                    <h4 className="font-medium">Activities</h4>
-                  </div>
-                  <p>Nature, Culture, Sightseeing</p>
-                </div>
-              </div>
               
-              <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="flex-1 bg-primary text-white font-medium py-2 px-6 rounded-md hover:bg-primary-dark transition-colors flex items-center justify-center">
-                  <FaIcons.FaDownload className="mr-2" />
-                  Download as PDF
-                </button>
-                <button className="flex-1 border border-primary text-primary font-medium py-2 px-6 rounded-md hover:bg-primary hover:text-white transition-colors flex items-center justify-center">
-                  <FaIcons.FaShare className="mr-2" />
-                  Share Itinerary
-                </button>
-              </div>
+              {isGenerating && (
+                <div className="flex justify-start mb-4">
+                  <div className="bg-white text-gray-800 rounded-lg p-3 max-w-4/5 shadow-sm">
+                    <div className="flex items-center space-x-2">
+                      <FaIcons.FaRobot size={14} />
+                      <span className="font-medium text-sm">AI Planner</span>
+                    </div>
+                    <div className="flex space-x-2 mt-2">
+                      <div className="w-2 h-2 rounded-full bg-primary animate-bounce"></div>
+                      <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                      <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              <div ref={messagesEndRef} />
             </div>
-          </motion.div>
-        )}
+
+            {/* Input Form */}
+            <form onSubmit={handleSubmit} className="flex gap-2">
+              <div className="flex-1 relative">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  placeholder={currentLanguage === 'en' ? "Describe your trip: '3 days in Goa, adventurous, low budget, family friendly'" : "अपनी यात्रा का वर्णन करें..."}
+                  className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  value={chatInput}
+                  onChange={handleInputChange}
+                  disabled={isGenerating}
+                />
+                {speechRecognition && (
+                  <button
+                    type="button"
+                    onClick={isListening ? stopListening : startListening}
+                    className={`absolute right-3 top-1/2 transform -translate-y-1/2 p-1 rounded-full transition-colors ${
+                      isListening ? 'text-red-500 hover:text-red-600' : 'text-gray-400 hover:text-primary'
+                    }`}
+                    title={isListening ? 'Stop listening' : 'Start voice input'}
+                  >
+                    {isListening ? <FaMicrophoneSlash size={16} /> : <FaMicrophone size={16} />}
+                  </button>
+                )}
+              </div>
+              <button
+                type="submit"
+                className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                disabled={isGenerating || !chatInput.trim()}
+              >
+                <FaIcons.FaPaperPlane className="mr-2" size={14} />
+                {isGenerating ? 'Creating...' : 'Send'}
+              </button>
+            </form>
+            
+            <p className="text-xs text-gray-500 text-center">
+              {currentLanguage === 'en' 
+                ? 'Try: "3 day trip to Goa, adventurous, low budget, family friendly" or use voice input'
+                : 'उदाहरण: "गोवा की 3 दिन की यात्रा, रोमांचक, कम बजट, पारिवारिक" या वॉयस इनपुट का उपयोग करें'}
+            </p>
+          </div>
+        </div>
       </section>
     </div>
   );

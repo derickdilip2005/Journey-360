@@ -780,8 +780,21 @@ const ExplorePage: React.FC = () => {
 
   // Function to open VR view using panorama image
   const openVRView = (spotName: string) => {
-    // Use the provided Taj Mahal panorama image for all locations
-    const panoramaImage = 'https://images.pexels.com/photos/33777273/pexels-photo-33777273.jpeg';
+    // Mapping of location names to their specific panoramic images
+    const panoramaImages: { [key: string]: string } = {
+      'Jaipur City Palace': 'https://images.pexels.com/photos/30276059/pexels-photo-30276059.png',
+      'Meenakshi Temple': 'https://www.maduraimeenakshitemple.com/article/id/8497/madurai-meenakshi-temple',
+      'Mahabalipuram': 'https://images.pexels.com/photos/7365981/pexels-photo-7365981.jpeg',
+      'Gateway of India': 'https://cloudflare1.360gigapixels.com/pano/anilerayil/00939802_GOI_anil.jpg/equirect_crop_3_1/6.jpg',
+      'Red Fort': 'https://upload.wikimedia.org/wikipedia/commons/0/01/Red_Fort_in_panorama.jpg',
+      'Lotus Temple': 'https://preview.redd.it/x4f0vu93dri31.jpg?width=640&crop=smart&auto=webp&s=e42e73572f60a5090b1fe3e13fddec2f6cbbf660',
+      'Fatehpur Sikri': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQp-Ei5LD5Oc5OgULmhmU-8DZma54HGVybvhA&s',
+      'Khajuraho Temples': 'https://img.freepik.com/premium-photo/khajuraho-temple-panoramic-india_494619-3391.jpg',
+      'Sanchi Stupa': 'https://rustiktravel.com/allindiaroadtrip/wp-content/uploads/2021/11/11-3.jpg'
+    };
+    
+    // Get the specific panorama image for this location, fallback to default if not found
+    const panoramaImage = panoramaImages[spotName] || 'https://images.pexels.com/photos/33777273/pexels-photo-33777273.jpeg';
     
     // Open in a new window with specific dimensions for VR experience
     const vrWindow = window.open('', '_blank', 'width=1200,height=800,scrollbars=no,resizable=yes');

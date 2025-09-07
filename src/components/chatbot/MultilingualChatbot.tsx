@@ -1,14 +1,25 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaRobot, FaTimes, FaPaperPlane, FaGlobeAsia, FaUser, FaSpinner } from 'react-icons/fa';
-import { geminiService } from '../../services/geminiService';
+import { FaRobot, FaTimes, FaPaperPlane, FaGlobeAsia, FaUser, FaSpinner, FaMicrophone, FaMicrophoneSlash, FaVolumeUp, FaMapMarkerAlt, FaDirections } from 'react-icons/fa';
+import { chatbotService, ChatbotResponse } from '../../services/chatbotService';
+import { LocationPlace } from '../../services/locationService';
+
+// Type declarations for Web Speech API
+declare global {
+  interface Window {
+    SpeechRecognition: any;
+    webkitSpeechRecognition: any;
+  }
+}
 
 // Types
 type Language = 'en' | 'hi' | 'bn' | 'sa' | 'ja' | 'fr' | 'de' | 'es';
 
 interface Message {
   id: string;
-  text: string;
+  text?: string;
+  structured?: any;
+  places?: LocationPlace[];
   sender: 'user' | 'bot';
   timestamp: Date;
 }
@@ -26,6 +37,11 @@ const MultilingualChatbot: React.FC = () => {
   const [currentLanguage, setCurrentLanguage] = useState<Language>('en');
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const [showLanguageSelector, setShowLanguageSelector] = useState<boolean>(false);
+  const [locationPermission, setLocationPermission] = useState<string>('prompt');
+
+  const [isListening, setIsListening] = useState(false);
+  const [speechRecognition, setSpeechRecognition] = useState<any>(null);
+  const [speechSynthesis, setSpeechSynthesis] = useState<SpeechSynthesis | null>(null);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -56,6 +72,7 @@ const MultilingualChatbot: React.FC = () => {
 
   // Add welcome message when language changes
   useEffect(() => {
+    // Add welcome message when language changes
     if (messages.length === 0 || messages[messages.length - 1].sender !== 'bot') {
       const welcomeMessage: Message = {
         id: Date.now().toString(),
@@ -65,7 +82,108 @@ const MultilingualChatbot: React.FC = () => {
       };
       setMessages(prev => [...prev, welcomeMessage]);
     }
+    
+    // Initialize speech recognition and synthesis
+    initializeSpeechServices();
   }, [currentLanguage]);
+
+
+
+  const initializeSpeechServices = useCallback(() => {
+    // Initialize Speech Recognition
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      try {
+        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = getLanguageCode(currentLanguage);
+        
+        recognition.onstart = () => {
+          setIsListening(true);
+        };
+        
+        recognition.onresult = (event: any) => {
+          if (event.results && event.results[0] && event.results[0][0]) {
+            const transcript = event.results[0][0].transcript;
+            setInputValue(transcript);
+          }
+          setIsListening(false);
+        };
+        
+        recognition.onerror = (event: any) => {
+          console.error('Speech recognition error:', event.error);
+          setIsListening(false);
+        };
+        
+        recognition.onend = () => {
+          setIsListening(false);
+        };
+        
+        setSpeechRecognition(recognition);
+      } catch (error) {
+        console.error('Failed to initialize speech recognition:', error);
+      }
+    }
+    
+    // Initialize Speech Synthesis
+    if ('speechSynthesis' in window) {
+      setSpeechSynthesis(window.speechSynthesis);
+    }
+  }, [currentLanguage]);
+
+  const getLanguageCode = (lang: string): string => {
+    const languageCodes: { [key: string]: string } = {
+      'en': 'en-US',
+      'hi': 'hi-IN',
+      'bn': 'bn-IN',
+      'sa': 'sa-IN',
+      'ja': 'ja-JP',
+      'fr': 'fr-FR',
+      'de': 'de-DE',
+      'es': 'es-ES',
+      'ta': 'ta-IN',
+      'gu': 'gu-IN',
+      'kn': 'kn-IN',
+      'mr': 'mr-IN'
+    };
+    return languageCodes[lang] || 'en-US';
+  };
+
+  const startListening = () => {
+    if (speechRecognition && !isListening) {
+      speechRecognition.lang = getLanguageCode(currentLanguage);
+      speechRecognition.start();
+    }
+  };
+
+  const stopListening = () => {
+    if (speechRecognition && isListening) {
+      speechRecognition.stop();
+    }
+  };
+
+  const speakText = (text: string) => {
+    if (speechSynthesis) {
+      // Cancel any ongoing speech
+      speechSynthesis.cancel();
+      
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = getLanguageCode(currentLanguage);
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
+      
+      // Try to find a voice for the current language
+      const voices = speechSynthesis.getVoices();
+      const preferredVoice = voices.find(voice => voice.lang.startsWith(getLanguageCode(currentLanguage).split('-')[0]));
+      if (preferredVoice) {
+        utterance.voice = preferredVoice;
+      }
+      
+      speechSynthesis.speak(utterance);
+    }
+  };
 
   // Scroll to bottom when messages change
   useEffect(() => {
@@ -115,11 +233,17 @@ const MultilingualChatbot: React.FC = () => {
     setIsTyping(true);
 
     try {
-      // Get response from Gemini API
-      const botResponse = await geminiService.sendMessage(userMessageText, currentLanguage);
+      // Get response from enhanced chatbot service
+      const botResponse: ChatbotResponse = await chatbotService.sendMessage(
+        userMessageText, 
+        currentLanguage
+      );
+      
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: botResponse,
+        text: botResponse.text,
+        structured: botResponse.structured,
+        places: botResponse.places,
         sender: 'bot',
         timestamp: new Date(),
       };
@@ -142,7 +266,61 @@ const MultilingualChatbot: React.FC = () => {
   const handleLanguageChange = (language: Language) => {
     setCurrentLanguage(language);
     setShowLanguageSelector(false);
+    chatbotService.resetChat();
   };
+
+  const handleLocationClick = (place: LocationPlace) => {
+    const directionsUrl = chatbotService.getDirectionsUrl(place);
+    window.open(directionsUrl, '_blank');
+  };
+
+  const requestLocationPermission = async () => {
+    try {
+      await chatbotService.getUserLocation();
+      setLocationPermission('granted');
+    } catch (error) {
+      setLocationPermission('denied');
+      console.error('Location permission denied:', error);
+    }
+  };
+
+  const renderMessage = (message: Message) => {
+    if (message.structured && message.places) {
+      return (
+        <div className="space-y-2">
+          <h4 className="font-semibold text-sm">{message.structured.title}</h4>
+          <div className="space-y-2">
+            {message.structured.items.map((item: any, index: number) => {
+              const place = message.places![index];
+              return (
+                <div key={index} className="bg-white bg-opacity-50 rounded p-2 border border-gray-200">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div dangerouslySetInnerHTML={{ __html: item.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+                    </div>
+                    <div className="flex space-x-1 ml-2">
+                      <button
+                        onClick={() => handleLocationClick(place)}
+                        className="text-blue-600 hover:text-blue-800 p-1"
+                        title="Get directions"
+                      >
+                        <FaDirections size={12} />
+                      </button>
+                      <FaMapMarkerAlt className="text-red-500" size={12} />
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+    
+    return <p>{message.text}</p>;
+  };
+
+
 
 
 
@@ -220,6 +398,22 @@ const MultilingualChatbot: React.FC = () => {
 
             {/* Messages container */}
             <div className="flex-1 p-4 overflow-y-auto max-h-96">
+              {locationPermission === 'prompt' && (
+                <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <FaMapMarkerAlt className="text-blue-600 mr-2" />
+                      <span className="text-sm text-blue-800">Enable location for nearby places</span>
+                    </div>
+                    <button
+                      onClick={requestLocationPermission}
+                      className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
+                    >
+                      Allow
+                    </button>
+                  </div>
+                </div>
+              )}
               {messages.map((message) => (
                 <div 
                   key={message.id} 
@@ -236,7 +430,20 @@ const MultilingualChatbot: React.FC = () => {
                         {message.sender === 'user' ? 'You' : 'Assistant'}
                       </span>
                     </div>
-                    <p>{message.text}</p>
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        {renderMessage(message)}
+                      </div>
+                      {message.sender === 'bot' && speechSynthesis && message.text && (
+                        <button
+                          onClick={() => speakText(message.text!)}
+                          className="ml-2 text-gray-500 hover:text-blue-600 flex-shrink-0"
+                          title="Read aloud"
+                        >
+                          <FaVolumeUp size={14} />
+                        </button>
+                      )}
+                    </div>
                     <p className="text-xs opacity-70 text-right mt-1">
                       {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
@@ -267,6 +474,16 @@ const MultilingualChatbot: React.FC = () => {
                   placeholder={currentLanguage === 'en' ? 'Type your message...' : 'Type your message (in any language)...'}
                   className="flex-1 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
+                {speechRecognition && (
+                  <button
+                    type="button"
+                    onClick={isListening ? stopListening : startListening}
+                    className={`px-3 py-2 border-t border-b border-gray-300 ${isListening ? 'bg-red-100 text-red-600' : 'bg-gray-50 text-gray-600'} hover:bg-gray-100 flex items-center`}
+                    title={isListening ? 'Stop listening' : 'Start voice input'}
+                  >
+                    {isListening ? <FaMicrophoneSlash /> : <FaMicrophone />}
+                  </button>
+                )}
                 <button
                   type="submit"
                   className="bg-primary text-white px-4 py-2 rounded-r-lg hover:bg-primary-dark transition-colors"
@@ -277,8 +494,8 @@ const MultilingualChatbot: React.FC = () => {
               </div>
               <p className="text-xs text-gray-500 mt-2 text-center">
                 {currentLanguage === 'en' 
-                  ? 'You can type in any language. Our assistant will try to understand and respond accordingly.'
-                  : 'You can type in any language. Our assistant will try to understand and respond accordingly.'}
+                  ? 'Ask about nearby places: "Find ATMs", "Show restaurants", "Petrol pumps near me"'
+                  : 'Ask about nearby places or type in any language for travel assistance.'}
               </p>
             </form>
           </motion.div>
