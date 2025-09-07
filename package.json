@@ -18,6 +18,7 @@
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.9",
     "axios": "^1.11.0",
+    "firebase": "^12.2.1",
     "framer-motion": "^12.23.12",
     "leaflet": "^1.9.4",
     "pannellum": "^2.5.6",

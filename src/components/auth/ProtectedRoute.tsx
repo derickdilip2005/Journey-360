@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -7,21 +8,19 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const location = useLocation();
+  const { currentUser, loading } = useAuth();
 
-  // Check if user is authenticated
-  const isAuthenticated = () => {
-    // Check for auth token in localStorage or sessionStorage
-    // We check for both 'adminAuthToken' and 'authToken' since there are two login pages
+  // Show loading spinner while checking authentication
+  if (loading) {
     return (
-      localStorage.getItem('adminAuthToken') !== null ||
-      sessionStorage.getItem('adminAuthToken') !== null ||
-      localStorage.getItem('authToken') !== null ||
-      sessionStorage.getItem('authToken') !== null
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
     );
-  };
+  }
 
   // If not authenticated, redirect to login page
-  if (!isAuthenticated()) {
+  if (!currentUser) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 

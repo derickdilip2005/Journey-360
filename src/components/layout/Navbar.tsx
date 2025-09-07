@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Disclosure } from '@headlessui/react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon as MenuIcon, XMarkIcon as XIcon } from '@heroicons/react/24/outline';
 import * as FaIcons from 'react-icons/fa';
+import { useAuth } from '../../contexts/AuthContext';
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -21,6 +22,17 @@ function classNames(...classes: string[]) {
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { currentUser, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      navigate('/');
+    } catch (error) {
+      console.error('Failed to sign out:', error);
+    }
+  };
 
   return (
     <Disclosure as="nav" className="bg-white shadow-md sticky top-0 z-50">
@@ -73,14 +85,65 @@ const Navbar: React.FC = () => {
                   <span className="sr-only">Change language</span>
                   <FaIcons.FaLanguage className="h-6 w-6" aria-hidden="true" />
                 </button>
-                <div className="ml-3">
-                  <Link
-                    to="/login"
-                    className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-                  >
-                    Login
-                  </Link>
-                </div>
+                
+                {currentUser ? (
+                  <Menu as="div" className="ml-3 relative">
+                    <div>
+                      <Menu.Button className="bg-white flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                        <span className="sr-only">Open user menu</span>
+                        <div className="h-8 w-8 rounded-full bg-primary flex items-center justify-center">
+                          <span className="text-white text-sm font-medium">
+                            {currentUser.displayName ? currentUser.displayName.charAt(0).toUpperCase() : currentUser.email?.charAt(0).toUpperCase()}
+                          </span>
+                        </div>
+                      </Menu.Button>
+                    </div>
+                    <Transition
+                      as={React.Fragment}
+                      enter="transition ease-out duration-100"
+                      enterFrom="transform opacity-0 scale-95"
+                      enterTo="transform opacity-100 scale-100"
+                      leave="transition ease-in duration-75"
+                      leaveFrom="transform opacity-100 scale-100"
+                      leaveTo="transform opacity-0 scale-95"
+                    >
+                      <Menu.Items className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <div className="px-4 py-2 text-sm text-gray-700 border-b">
+                          <div className="font-medium">{currentUser.displayName || 'User'}</div>
+                          <div className="text-gray-500">{currentUser.email}</div>
+                        </div>
+                        <Menu.Item>
+                          {({ active }) => (
+                            <button
+                              onClick={handleSignOut}
+                              className={classNames(
+                                active ? 'bg-gray-100' : '',
+                                'block w-full text-left px-4 py-2 text-sm text-gray-700'
+                              )}
+                            >
+                              Sign out
+                            </button>
+                          )}
+                        </Menu.Item>
+                      </Menu.Items>
+                    </Transition>
+                  </Menu>
+                ) : (
+                  <div className="ml-3 flex space-x-2">
+                    <Link
+                      to="/login"
+                      className="inline-flex items-center px-3 py-2 border border-primary text-sm font-medium rounded-md text-primary bg-white hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors"
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      to="/signup"
+                      className="inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+                    >
+                      Sign Up
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
           </div>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import * as FaIcons from 'react-icons/fa';
+import { useAuth } from '../../contexts/AuthContext';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -10,37 +11,57 @@ const LoginPage: React.FC = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   
   const navigate = useNavigate();
+  const { signIn, resetPassword } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setMessage('');
     setIsLoading(true);
     
-    // Simulate API call
     try {
-      // In a real app, this would be an API call to your authentication service
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
       // Simple validation
       if (!email || !password) {
         throw new Error('Please fill in all fields');
       }
       
-      if (email === 'admin@jhar-tourism.com' && password === 'admin123') {
-        // Store auth token in localStorage or sessionStorage
-        if (rememberMe) {
-          localStorage.setItem('authToken', 'sample-auth-token');
-        } else {
-          sessionStorage.setItem('authToken', 'sample-auth-token');
-        }
-        
-        // Redirect to admin dashboard
-        navigate('/admin');
+      // Sign in with Firebase
+      await signIn(email, password);
+      
+      // Store auth preference
+      if (rememberMe) {
+        localStorage.setItem('rememberMe', 'true');
       } else {
-        throw new Error('Invalid email or password');
+        sessionStorage.setItem('sessionActive', 'true');
       }
+      
+      // Redirect to home page or dashboard
+      navigate('/');
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setMessage('');
+    setIsLoading(true);
+    
+    try {
+      if (!email) {
+        throw new Error('Please enter your email address');
+      }
+      
+      await resetPassword(email);
+      setMessage('Password reset email sent! Check your inbox.');
+      setShowForgotPassword(false);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -66,9 +87,9 @@ const LoginPage: React.FC = () => {
           </Link>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
           <p className="mt-2 text-center text-sm text-gray-600">
-            Or{' '}
-            <Link to="/" className="font-medium text-primary hover:text-primary-dark">
-              return to homepage
+            Don't have an account?{' '}
+            <Link to="/signup" className="font-medium text-primary hover:text-primary-dark">
+              Sign up
             </Link>
           </p>
         </div>
@@ -92,7 +113,69 @@ const LoginPage: React.FC = () => {
           </motion.div>
         )}
         
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        {message && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="bg-green-50 border-l-4 border-green-500 p-4 rounded"
+          >
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <svg className="h-5 w-5 text-green-500" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <p className="text-sm text-green-700">{message}</p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+        
+        {showForgotPassword ? (
+          <form className="mt-8 space-y-6" onSubmit={handleForgotPassword}>
+            <div>
+              <h3 className="text-lg font-medium text-gray-900 mb-4">Reset your password</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Enter your email address and we'll send you a link to reset your password.
+              </p>
+              <div className="relative">
+                <label htmlFor="reset-email" className="sr-only">Email address</label>
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <FaIcons.FaEnvelope className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  id="reset-email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="appearance-none rounded-md relative block w-full px-3 py-3 pl-10 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
+                  placeholder="Email address"
+                />
+              </div>
+            </div>
+            <div className="flex space-x-3">
+              <button
+                type="submit"
+                disabled={isLoading}
+                className={`flex-1 flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+              >
+                {isLoading ? 'Sending...' : 'Send Reset Email'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowForgotPassword(false)}
+                className="flex-1 flex justify-center py-3 px-4 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+        ) : (
+          <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm -space-y-px">
             <div className="relative mb-4">
               <label htmlFor="email-address" className="sr-only">Email address</label>
@@ -159,9 +242,13 @@ const LoginPage: React.FC = () => {
             </div>
 
             <div className="text-sm">
-              <a href="#" className="font-medium text-primary hover:text-primary-dark">
+              <button
+                type="button"
+                onClick={() => setShowForgotPassword(true)}
+                className="font-medium text-primary hover:text-primary-dark"
+              >
                 Forgot your password?
-              </a>
+              </button>
             </div>
           </div>
 
@@ -184,13 +271,14 @@ const LoginPage: React.FC = () => {
               )}
             </button>
           </div>
-        </form>
+          </form>
+        )}
         
         <div className="text-center mt-4">
           <p className="text-sm text-gray-600">
             Don't have an account?{' '}
-            <Link to="/" className="font-medium text-primary hover:text-primary-dark">
-              Contact administrator
+            <Link to="/signup" className="font-medium text-primary hover:text-primary-dark">
+              Sign up
             </Link>
           </p>
         </div>
