@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 import { 
   DocumentTextIcon, 
-  ClockIcon, 
   GlobeAltIcon,
   CheckCircleIcon,
-  QuestionMarkCircleIcon,
-  CurrencyDollarIcon,
-  PhoneIcon
+  QuestionMarkCircleIcon
 } from '@heroicons/react/24/outline';
 import Step1VisaSelection from './components/Step1VisaSelection';
 import Step2RecommendationQuiz from './components/Step2RecommendationQuiz';

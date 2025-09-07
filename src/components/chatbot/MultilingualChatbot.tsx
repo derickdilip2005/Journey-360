@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaRobot, FaTimes, FaPaperPlane, FaGlobeAsia, FaUser, FaSpinner, FaMicrophone, FaMicrophoneSlash, FaVolumeUp, FaMapMarkerAlt, FaDirections } from 'react-icons/fa';
 import { chatbotService, ChatbotResponse } from '../../services/chatbotService';
@@ -59,7 +59,7 @@ const MultilingualChatbot: React.FC = () => {
   ];
 
   // Welcome messages in different languages
-  const welcomeMessages: Record<Language, string> = {
+  const welcomeMessages: Record<Language, string> = useMemo(() => ({
     en: 'Hello! I am your Journey 360 assistant. How can I help you today?',
     hi: 'नमस्ते! मैं आपका भारत पर्यटन सहायक हूं। आज मैं आपकी कैसे मदद कर सकता हूं?',
     bn: 'হ্যালো! আমি আপনার ভারত পর্যটন সহকারী। আজ আমি আপনাকে কীভাবে সাহায্য করতে পারি?',
@@ -68,26 +68,7 @@ const MultilingualChatbot: React.FC = () => {
     fr: 'Bonjour! Je suis votre assistant touristique de l\'Inde. Comment puis-je vous aider aujourd\'hui?',
     de: 'Hallo! Ich bin Ihr Indien-Tourismus-Assistent. Wie kann ich Ihnen heute helfen?',
     es: '¡Hola! Soy su asistente de turismo de India. ¿Cómo puedo ayudarle hoy?',
-  };
-
-  // Add welcome message when language changes
-  useEffect(() => {
-    // Add welcome message when language changes
-    if (messages.length === 0 || messages[messages.length - 1].sender !== 'bot') {
-      const welcomeMessage: Message = {
-        id: Date.now().toString(),
-        text: welcomeMessages[currentLanguage],
-        sender: 'bot',
-        timestamp: new Date(),
-      };
-      setMessages(prev => [...prev, welcomeMessage]);
-    }
-    
-    // Initialize speech recognition and synthesis
-    initializeSpeechServices();
-  }, [currentLanguage]);
-
-
+  }), []);
 
   const initializeSpeechServices = useCallback(() => {
     // Initialize Speech Recognition
@@ -132,6 +113,23 @@ const MultilingualChatbot: React.FC = () => {
       setSpeechSynthesis(window.speechSynthesis);
     }
   }, [currentLanguage]);
+
+  // Add welcome message when language changes
+  useEffect(() => {
+    // Add welcome message when language changes
+    if (messages.length === 0 || messages[messages.length - 1].sender !== 'bot') {
+      const welcomeMessage: Message = {
+        id: Date.now().toString(),
+        text: welcomeMessages[currentLanguage],
+        sender: 'bot',
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, welcomeMessage]);
+    }
+    
+    // Initialize speech recognition and synthesis
+    initializeSpeechServices();
+  }, [currentLanguage, welcomeMessages, initializeSpeechServices]);
 
   const getLanguageCode = (lang: string): string => {
     const languageCodes: { [key: string]: string } = {

@@ -181,9 +181,7 @@ const Step4ExtraHelp: React.FC<Step4Props> = ({
     }
   };
 
-  const filteredFAQs = (category?: string) => {
-    return category ? faqs.filter(faq => faq.category === category) : faqs;
-  };
+
 
   return (
     <motion.div

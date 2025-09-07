@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { 
   FaShieldAlt, FaAmbulance, FaInfoCircle, FaPhone, FaExclamationTriangle,
   FaCompass, FaTemperatureHigh, FaMapMarkedAlt, FaWater, FaTree, FaMountain,
-  FaChevronUp, FaChevronDown, FaSearch
+  FaChevronUp, FaChevronDown
 } from 'react-icons/fa';
 
 // Define icon components
@@ -64,9 +64,7 @@ const IconChevronDown: React.FC<IconProps> = ({ className }) => (
   <>{<FaChevronDown className={className} />}</>
 );
 
-const IconSearch: React.FC<IconProps> = ({ className }) => (
-  <>{<FaSearch className={className} />}</>
-);
+
 
 // Types
 interface EmergencyContact {

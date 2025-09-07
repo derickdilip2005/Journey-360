@@ -13,16 +13,16 @@ const Footer: React.FC = () => {
               Discover the beauty, culture, and adventure that India has to offer.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-300 hover:text-white">
+              <a href="https://facebook.com/incredibleindia" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white">
                 <FaIcons.FaFacebook className="h-6 w-6" />
               </a>
-              <a href="#" className="text-gray-300 hover:text-white">
+              <a href="https://twitter.com/incredibleindia" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white">
                 <FaIcons.FaTwitter className="h-6 w-6" />
               </a>
-              <a href="#" className="text-gray-300 hover:text-white">
+              <a href="https://instagram.com/incredibleindia" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white">
                 <FaIcons.FaInstagram className="h-6 w-6" />
               </a>
-              <a href="#" className="text-gray-300 hover:text-white">
+              <a href="https://youtube.com/incredibleindia" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white">
                 <FaIcons.FaYoutube className="h-6 w-6" />
               </a>
             </div>

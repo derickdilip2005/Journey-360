@@ -20,7 +20,6 @@ function classNames(...classes: string[]) {
 }
 
 const Navbar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { currentUser, signOut } = useAuth();
