@@ -4,6 +4,15 @@
 
 Journey 360 is a comprehensive travel platform designed to help tourists explore the incredible diversity of India. From AI-powered itinerary planning to multilingual chatbot assistance, we provide everything you need for an unforgettable Indian adventure.
 
+**App link**
+
+
+**ChatBot Link**
+https://explore360-chatbot.vercel.app/
+
+**AR/VR Files**
+https://drive.google.com/drive/folders/1kObnEjpTblSAJUmv1vVZ9xyz1f98Y9si?usp=sharing
+
 ## ✨ Features
 
 ### 🤖 AI-Powered Travel Assistant
