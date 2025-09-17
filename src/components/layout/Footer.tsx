@@ -40,10 +40,11 @@ const Footer: React.FC = () => {
               <li>
                 <Link to="/itinerary" className="text-gray-300 hover:text-white">Itinerary Planner</Link>
               </li>
-
               <li>
-                <Link to="/community" className="text-gray-300 hover:text-white">Community</Link>
+                <Link to="/marketplace" className="text-gray-300 hover:text-white">Marketplace</Link>
               </li>
+
+
             </ul>
           </div>
           

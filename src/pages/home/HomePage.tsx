@@ -11,7 +11,7 @@ const HomePage: React.FC = () => {
         <div className="absolute inset-0 bg-black opacity-40 z-10"></div>
         <div 
           className="absolute inset-0 bg-cover bg-center z-0" 
-          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1524492412937-b28074a5d7da?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80')" }}
+          style={{ backgroundImage: "url('https://images.unsplash.com/photo-1619500765355-8ba767d6e261?q=80&w=1297&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')" }}
         ></div>
         
         <div className="container-custom relative z-20 h-full flex flex-col justify-center items-center text-center text-white">
@@ -21,7 +21,7 @@ const HomePage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            Discover India
+            Discover Jharkhand
           </motion.h1>
           <motion.p 
             className="text-xl md:text-2xl mb-8 max-w-3xl"
@@ -63,63 +63,63 @@ const HomePage: React.FC = () => {
       {/* Highlights Carousel */}
       <section id="highlights" className="py-16 bg-gray-50">
         <div className="container-custom">
-          <h2 className="text-3xl font-display font-bold text-center mb-12">Highlights of India</h2>
+          <h2 className="text-3xl font-display font-bold text-center mb-12">Highlights of Jharkhand</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Highlight 1 */}
+            {/* Highlight 1 - Hundru Falls */}
             <motion.div 
               className="bg-white rounded-lg shadow-md overflow-hidden"
               whileHover={{ y: -10, transition: { duration: 0.3 } }}
             >
               <div className="h-48 overflow-hidden">
                 <img 
-                  src="https://images.unsplash.com/photo-1564507592333-c60657eea523?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80" 
-                  alt="Taj Mahal" 
+                  src="https://images.unsplash.com/photo-1558451701-4662b9367fc7?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                  alt="Hundru Falls" 
                   className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                 />
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Taj Mahal</h3>
-                <p className="text-gray-600 mb-4">Experience the iconic symbol of love and one of the Seven Wonders of the World in Agra.</p>
+                <h3 className="text-xl font-bold mb-2">Hundru Falls</h3>
+                <p className="text-gray-600 mb-4">One of the highest waterfalls in Jharkhand, offering spectacular views and natural beauty perfect for photography and trekking.</p>
                 <Link to="/explore" className="text-primary font-medium hover:underline">Discover More</Link>
               </div>
             </motion.div>
             
-            {/* Highlight 2 */}
+            {/* Highlight 2 - Betla National Park */}
             <motion.div 
               className="bg-white rounded-lg shadow-md overflow-hidden"
               whileHover={{ y: -10, transition: { duration: 0.3 } }}
             >
               <div className="h-48 overflow-hidden">
                 <img 
-                  src="https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1472&q=80" 
-                  alt="Kerala Backwaters" 
+                  src="https://www.hindfirst.in/sortd-service/imaginary/v22-01/webp/medium/high?url=b3R0aW5kaWEtYXBwLXByb2Qtc29ydGQvbWVkaWE4M2FiNmFkMC04MDAwLTExZjAtODQ5Yi1kMTFjM2YzYjI1ZTcucG5n" 
+                  alt="Betla National Park" 
                   className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                 />
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Kerala Backwaters</h3>
-                <p className="text-gray-600 mb-4">Explore the serene backwaters and lush landscapes of God's Own Country.</p>
+                <h3 className="text-xl font-bold mb-2">Betla National Park</h3>
+                <p className="text-gray-600 mb-4">Experience wildlife safaris and discover diverse flora and fauna in one of Jharkhand's premier national parks.</p>
                 <Link to="/explore" className="text-primary font-medium hover:underline">Discover More</Link>
               </div>
             </motion.div>
             
-            {/* Highlight 3 */}
+            {/* Highlight 3 - Jagannath Temple Ranchi */}
             <motion.div 
               className="bg-white rounded-lg shadow-md overflow-hidden"
               whileHover={{ y: -10, transition: { duration: 0.3 } }}
             >
               <div className="h-48 overflow-hidden">
                 <img 
-                  src="https://images.unsplash.com/photo-1477587458883-47145ed94245?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
-                  alt="Rajasthan Culture" 
+                  src="https://xplro.com/wp-content/uploads/2024/06/Untitled-design-73.jpg.webp" 
+                  alt="Jagannath Temple Ranchi" 
                   className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                 />
               </div>
               <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Rajasthan Culture</h3>
-                <p className="text-gray-600 mb-4">Immerse yourself in the royal heritage and vibrant culture of the Land of Kings.</p>
-                <Link to="/cultural" className="text-primary font-medium hover:underline">Discover More</Link>
+                <h3 className="text-xl font-bold mb-2">Jagannath Temple Ranchi</h3>
+                <p className="text-gray-600 mb-4">A replica of the famous Puri Jagannath Temple, significant for Hindu pilgrims and showcasing beautiful architecture.</p>
+                <Link to="/explore" className="text-primary font-medium hover:underline">Discover More</Link>
               </div>
             </motion.div>
           </div>
@@ -146,14 +146,14 @@ const HomePage: React.FC = () => {
             
 
             {/* Tile 2 */}
-            <Link to="/community">
+            <Link to="/marketplace">
               <motion.div 
                 className="bg-tertiary text-white rounded-lg p-8 text-center h-full flex flex-col items-center justify-center"
                 whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
               >
-                <FaIcons.FaUserFriends className="text-4xl mb-4" />
-                <h3 className="text-xl font-bold mb-2">Book Local Guides</h3>
-                <p>Connect with experienced local guides for authentic experiences</p>
+                <FaIcons.FaStore className="text-4xl mb-4" />
+                <h3 className="text-xl font-bold mb-2">Marketplace</h3>
+                <p>Discover local handicrafts, homestays, events, and hire guides</p>
               </motion.div>
             </Link>
             
@@ -211,7 +211,7 @@ const HomePage: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <p className="text-gray-600 italic">"The itinerary planner made our trip so much easier! We discovered hidden gems we would have missed otherwise. The diversity of India is truly spectacular."</p>
+              <p className="text-gray-600 italic">"The itinerary planner made our trip so much easier! We discovered hidden gems we would have missed otherwise. The diversity of Jharkhand is truly spectacular."</p>
             </div>
             
             {/* Testimonial 3 */}
@@ -241,7 +241,7 @@ const HomePage: React.FC = () => {
       {/* CTA Section */}
       <section className="py-20 bg-primary text-white">
         <div className="container-custom text-center">
-          <h2 className="text-3xl md:text-4xl font-display font-bold mb-6">Ready to Explore India?</h2>
+          <h2 className="text-3xl md:text-4xl font-display font-bold mb-6">Ready to Explore Jharkhand?</h2>
           <p className="text-xl mb-8 max-w-3xl mx-auto">Start planning your adventure today and discover the incredible diversity of this beautiful country.</p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link to="/explore" className="bg-white text-primary font-bold py-3 px-8 rounded-md hover:bg-gray-100 transition-colors">

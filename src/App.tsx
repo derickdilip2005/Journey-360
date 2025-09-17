@@ -8,11 +8,12 @@ import { AuthProvider } from './contexts/AuthContext';
 // Lazy load pages for better performance
 const HomePage = React.lazy(() => import('./pages/home/HomePage'));
 const ExplorePage = React.lazy(() => import('./pages/explore/ExplorePage'));
-const HotelsPage = React.lazy(() => import('./pages/hotels/HotelsPage'));
+
 const ItineraryPage = React.lazy(() => import('./pages/itinerary/ItineraryPage'));
 const VisaAssistPage = React.lazy(() => import('./pages/visa/VisaAssistPage'));
+const MarketplacePage = React.lazy(() => import('./pages/marketplace/MarketplacePage'));
 
-const CommunityPage = React.lazy(() => import('./pages/community/CommunityPage'));
+
 const SafetyPage = React.lazy(() => import('./pages/safety/SafetyPage'));
 const ContactPage = React.lazy(() => import('./pages/admin/ContactPage'));
 const LoginPage = React.lazy(() => import('./pages/login/LoginPage'));
@@ -30,11 +31,12 @@ function App() {
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/explore" element={<ExplorePage />} />
-              <Route path="/hotels" element={<HotelsPage />} />
+    
               <Route path="/itinerary" element={<ItineraryPage />} />
               <Route path="/visa-assist" element={<VisaAssistPage />} />
+              <Route path="/marketplace/*" element={<MarketplacePage />} />
 
-              <Route path="/community" element={<CommunityPage />} />
+
               <Route path="/safety" element={<SafetyPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/login" element={<LoginPage />} />
