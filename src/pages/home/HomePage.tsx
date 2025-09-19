@@ -40,9 +40,6 @@ const HomePage: React.FC = () => {
             <Link to="/explore" className="btn-primary text-lg px-8 py-3">
               Explore Now
             </Link>
-            <Link to="/itinerary" className="btn-outline border-white text-white hover:bg-white hover:text-primary text-lg px-8 py-3">
-              Plan Your Trip
-            </Link>
           </motion.div>
         </div>
         
@@ -132,32 +129,31 @@ const HomePage: React.FC = () => {
           <h2 className="text-3xl font-display font-bold text-center mb-12">Plan Your Perfect Trip</h2>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Tile 1 */}
+            {/* Tile 1 - Itinerary */}
             <Link to="/itinerary">
+              <motion.div 
+                className="bg-gradient-to-br from-blue-600 to-purple-600 text-white rounded-lg p-8 text-center h-full flex flex-col items-center justify-center"
+                whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
+              >
+                <FaIcons.FaRoute className="text-4xl mb-4" />
+                <h3 className="text-xl font-bold mb-2">Plan Itinerary</h3>
+                <p>Create personalized trip plans with AI assistance</p>
+              </motion.div>
+            </Link>
+
+            {/* Tile 2 - Marketplace */}
+            <Link to="/marketplace">
               <motion.div 
                 className="bg-primary text-white rounded-lg p-8 text-center h-full flex flex-col items-center justify-center"
                 whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
               >
-                <FaIcons.FaMapMarkedAlt className="text-4xl mb-4" />
-                <h3 className="text-xl font-bold mb-2">Itinerary Planner</h3>
-                <p>Create your custom travel plan with our AI-powered assistant</p>
-              </motion.div>
-            </Link>
-            
-
-            {/* Tile 2 */}
-            <Link to="/marketplace">
-              <motion.div 
-                className="bg-tertiary text-white rounded-lg p-8 text-center h-full flex flex-col items-center justify-center"
-                whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
-              >
-                <FaIcons.FaStore className="text-4xl mb-4" />
+                <FaIcons.FaShoppingCart className="text-4xl mb-4" />
                 <h3 className="text-xl font-bold mb-2">Marketplace</h3>
-                <p>Discover local handicrafts, homestays, events, and hire guides</p>
+                <p>Book accommodations, tours, and local experiences</p>
               </motion.div>
             </Link>
-            
-            {/* Tile 3 */}
+
+            {/* Tile 3 - VR Explore */}
             <Link to="/explore">
               <motion.div 
                 className="bg-gray-800 text-white rounded-lg p-8 text-center h-full flex flex-col items-center justify-center"
@@ -211,7 +207,7 @@ const HomePage: React.FC = () => {
                   </div>
                 </div>
               </div>
-              <p className="text-gray-600 italic">"The itinerary planner made our trip so much easier! We discovered hidden gems we would have missed otherwise. The diversity of Jharkhand is truly spectacular."</p>
+              <p className="text-gray-600 italic">"Journey 360 helped us discover amazing destinations and connect with local guides. The virtual tours were incredibly helpful for planning our trip!"</p>
             </div>
             
             {/* Testimonial 3 */}
@@ -247,8 +243,8 @@ const HomePage: React.FC = () => {
             <Link to="/explore" className="bg-white text-primary font-bold py-3 px-8 rounded-md hover:bg-gray-100 transition-colors">
               Browse Destinations
             </Link>
-            <Link to="/itinerary" className="border-2 border-white text-white font-bold py-3 px-8 rounded-md hover:bg-white hover:text-primary transition-colors">
-              Create Itinerary
+            <Link to="/itinerary" className="bg-transparent border-2 border-white text-white font-bold py-3 px-8 rounded-md hover:bg-white hover:text-primary transition-colors">
+              Plan Your Trip
             </Link>
           </div>
         </div>

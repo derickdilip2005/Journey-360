@@ -37,7 +37,7 @@ const LoginPage: React.FC = () => {
         }
         
         // Redirect to admin dashboard
-        navigate('/admin');
+        navigate('/admin/dashboard');
       } else {
         throw new Error('Invalid admin credentials');
       }

@@ -326,7 +326,7 @@ const MultilingualChatbot: React.FC = () => {
     <>
       {/* Chat button */}
       <motion.button
-        className="fixed bottom-6 right-6 bg-primary text-white p-4 rounded-full shadow-lg z-50 flex items-center justify-center"
+        className="fixed bottom-6 right-6 bg-primary text-white p-4 rounded-full shadow-lg z-[9999] flex items-center justify-center"
         onClick={toggleChat}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
@@ -338,7 +338,7 @@ const MultilingualChatbot: React.FC = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed bottom-24 right-6 w-80 md:w-96 bg-white rounded-lg shadow-xl z-50 overflow-hidden flex flex-col"
+            className="fixed bottom-24 right-6 w-80 md:w-96 bg-white rounded-lg shadow-xl z-[9998] overflow-hidden flex flex-col"
             initial={{ opacity: 0, y: 50, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 50, scale: 0.9 }}

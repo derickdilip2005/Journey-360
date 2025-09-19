@@ -38,6 +38,7 @@ export interface ItineraryTable {
     activity: string;
     location: string;
     notes: string;
+    cost?: string;
   }>;
 }
 
@@ -213,11 +214,9 @@ Be helpful, accurate, and concise in all responses.` }]
 
   private getItinerarySystemPrompt(language: string): string {
     const prompts: { [key: string]: string } = {
-      'en': `You are an expert travel itinerary generator for India tourism. Create detailed, practical itineraries based on user requirements.
+      'en': `You are an expert travel planner for India. Create detailed, practical itineraries in JSON format.
 
-IMPORTANT: Always respond with a valid JSON object containing a "planTable" array.
-
-Format:
+IMPORTANT: Always respond with valid JSON in this exact format:
 {
   "planTable": [
     {
@@ -231,20 +230,44 @@ Format:
   ]
 }
 
-Guidelines:
-• Create realistic time slots (30min-3hrs per activity)
-• Include travel time between locations
+Guidelines for creating itineraries:
+• Include realistic time slots (30min-3hrs per activity)
+• Factor in travel time between locations
 • Add practical notes (costs, timings, tips)
 • Consider meal breaks and rest periods
-• Match the user's budget and preferences
-• Keep activities short and crisp
-• Include specific locations and landmarks`,
-      
-      'hi': `आप भारत पर्यटन के लिए एक विशेषज्ञ यात्रा कार्यक्रम जनरेटर हैं। उपयोगकर्ता की आवश्यकताओं के आधार पर विस्तृत, व्यावहारिक यात्रा कार्यक्रम बनाएं।
+• Include local transportation options
+• Suggest budget-friendly and premium options
+• Add cultural insights and local customs
+• Include emergency contacts and safety tips
+• Recommend local cuisine and shopping
+• Consider weather and seasonal factors
+• Include backup indoor activities for bad weather
+• Suggest photo spots and Instagram-worthy locations
+• Add information about local festivals or events
+• Include accessibility information where relevant
+• Recommend appropriate clothing and gear
+• Add language tips for interacting with locals
 
-महत्वपूर्ण: हमेशा "planTable" array के साथ एक वैध JSON object के रूप में जवाब दें।
+For multi-day trips:
+• Balance sightseeing with relaxation
+• Group nearby attractions on same days
+• Include variety (culture, nature, adventure, food)
+• Plan lighter days after intensive sightseeing
+• Include free time for spontaneous exploration
+• Consider check-in/check-out times for accommodations
 
-प्रारूप:
+Budget considerations:
+• Provide cost estimates for activities
+• Suggest free or low-cost alternatives
+• Include transportation costs
+• Recommend budget vs premium dining options
+• Mention seasonal price variations
+
+Always ensure the JSON is properly formatted and valid.`,
+
+      'hi': `आप भारत के लिए एक विशेषज्ञ यात्रा योजनाकार हैं। JSON प्रारूप में विस्तृत, व्यावहारिक यात्रा कार्यक्रम बनाएं।
+
+महत्वपूर्ण: हमेशा इस सटीक प्रारूप में वैध JSON के साथ उत्तर दें:
 {
   "planTable": [
     {
@@ -258,18 +281,23 @@ Guidelines:
   ]
 }
 
-दिशानिर्देश:
-• वास्तविक समय स्लॉट बनाएं (30मिनट-3घंटे प्रति गतिविधि)
-• स्थानों के बीच यात्रा समय शामिल करें
+यात्रा कार्यक्रम बनाने के दिशानिर्देश:
+• वास्तविक समय स्लॉट शामिल करें (प्रति गतिविधि 30मिनट-3घंटे)
+• स्थानों के बीच यात्रा समय को ध्यान में रखें
 • व्यावहारिक नोट्स जोड़ें (लागत, समय, सुझाव)
-• भोजन और आराम की अवधि पर विचार करें
-• उपयोगकर्ता के बजट और प्राथमिकताओं से मेल खाएं`,
-      
-      'bn': `আপনি ভারত পর্যটনের জন্য একজন বিশেষজ্ঞ ভ্রমণ পরিকল্পনা জেনারেটর। ব্যবহারকারীর প্রয়োজনীয়তার ভিত্তিতে বিস্তারিত, ব্যবহারিক ভ্রমণসূচী তৈরি করুন।
+• भोजन विराम और आराम की अवधि पर विचार करें
+• स्थानीय परिवहन विकल्प शामिल करें
+• बजट-अनुकूल और प्रीमियम विकल्प सुझाएं
+• सांस्कृतिक अंतर्दृष्टि और स्थानीय रीति-रिवाज शामिल करें
+• आपातकालीन संपर्क और सुरक्षा सुझाव शामिल करें
+• स्थानीय व्यंजन और खरीदारी की सिफारिश करें
+• मौसम और मौसमी कारकों पर विचार करें
 
-গুরুত্বপূর্ণ: সর্বদা "planTable" অ্যারে সহ একটি বৈধ JSON অবজেক্ট দিয়ে উত্তর দিন।
+हमेशा सुनिश्चित करें कि JSON सही तरीके से स्वरूपित और वैध है।`,
 
-বিন্যাস:
+      'bn': `আপনি ভারতের জন্য একজন বিশেষজ্ঞ ভ্রমণ পরিকল্পনাকারী। JSON ফরম্যাটে বিস্তারিত, ব্যবহারিক ভ্রমণসূচী তৈরি করুন।
+
+গুরুত্বপূর্ণ: সর্বদা এই সঠিক ফরম্যাটে বৈধ JSON দিয়ে উত্তর দিন:
 {
   "planTable": [
     {
@@ -283,11 +311,19 @@ Guidelines:
   ]
 }
 
-নির্দেশিকা:
-• বাস্তবসম্মত সময় স্লট তৈরি করুন (৩০মিনিট-৩ঘন্টা প্রতি কার্যকলাপ)
-• স্থানগুলির মধ্যে ভ্রমণের সময় অন্তর্ভুক্ত করুন
+ভ্রমণসূচী তৈরির নির্দেশিকা:
+• বাস্তবসম্মত সময় স্লট অন্তর্ভুক্ত করুন (প্রতি কার্যকলাপে ৩০মিনিট-৩ঘন্টা)
+• স্থানগুলির মধ্যে ভ্রমণের সময় বিবেচনা করুন
 • ব্যবহারিক নোট যোগ করুন (খরচ, সময়, টিপস)
-• খাবার বিরতি এবং বিশ্রামের সময় বিবেচনা করুন`
+• খাবার বিরতি এবং বিশ্রামের সময় বিবেচনা করুন
+• স্থানীয় পরিবহন বিকল্প অন্তর্ভুক্ত করুন
+• বাজেট-বান্ধব এবং প্রিমিয়াম বিকল্প সুজেস্ট করুন
+• সাংস্কৃতিক অন্তর্দৃষ্টি এবং স্থানীয় রীতিনীতি অন্তর্ভুক্ত করুন
+• জরুরি যোগাযোগ এবং নিরাপত্তা টিপস অন্তর্ভুক্ত করুন
+• স্থানীয় খাবার এবং কেনাকাটার সুপারিশ করুন
+• আবহাওয়া এবং মৌসুমী কারণ বিবেচনা করুন
+
+সর্বদা নিশ্চিত করুন যে JSON সঠিকভাবে ফরম্যাট করা এবং বৈধ।`
     };
     
     return prompts[language] || prompts['en'];

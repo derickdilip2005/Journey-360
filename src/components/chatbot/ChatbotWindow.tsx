@@ -43,7 +43,7 @@ const ChatbotWindow: React.FC<ChatbotWindowProps> = ({ onClose }) => {
     setTimeout(() => {
       let botResponse = '';
       
-      if (input.toLowerCase().includes('itinerary') || input.toLowerCase().includes('plan')) {
+      if (input.toLowerCase().includes('plan')) {
         botResponse = 'I can help you plan your trip to Jharkhand! Would you like to explore waterfalls, tribal culture, wildlife, or historical sites?';
       } else if (input.toLowerCase().includes('hotel') || input.toLowerCase().includes('stay')) {
         botResponse = 'Jharkhand offers various accommodation options from luxury hotels to eco-resorts. Which city are you planning to stay in?';

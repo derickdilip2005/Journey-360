@@ -184,8 +184,8 @@ const MarketplaceLanding: React.FC = () => {
             <Link to="/explore" className="bg-white text-primary font-bold py-3 px-8 rounded-md hover:bg-gray-100 transition-colors">
               Explore Destinations
             </Link>
-            <Link to="/itinerary" className="border-2 border-white text-white font-bold py-3 px-8 rounded-md hover:bg-white hover:text-primary transition-colors">
-              Plan Your Trip
+            <Link to="/explore" className="border-2 border-white text-white font-bold py-3 px-8 rounded-md hover:bg-white hover:text-primary transition-colors">
+              Explore Destinations
             </Link>
           </div>
         </div>

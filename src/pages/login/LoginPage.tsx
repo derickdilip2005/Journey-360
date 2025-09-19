@@ -39,8 +39,26 @@ const LoginPage: React.FC = () => {
         sessionStorage.setItem('sessionActive', 'true');
       }
       
-      // Redirect to home page or dashboard
-      navigate('/');
+      // Get selected role from localStorage and redirect accordingly
+      const selectedRole = localStorage.getItem('selectedRole');
+      
+      switch (selectedRole) {
+        case 'admin':
+          navigate('/admin/dashboard');
+          break;
+        case 'guide':
+          navigate('/guide/dashboard');
+          break;
+        case 'businessman':
+          navigate('/businessman/dashboard');
+          break;
+        default:
+          // For tourists or unknown roles, go to home
+          navigate('/home');
+      }
+      
+      // Clear the selected role after successful login
+      localStorage.removeItem('selectedRole');
     } catch (err: any) {
       setError(err.message);
     } finally {

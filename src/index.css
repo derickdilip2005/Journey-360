@@ -35,3 +35,9 @@ code {
     @apply border-2 border-primary text-primary font-medium py-2 px-6 rounded-md hover:bg-primary hover:text-white transition-colors;
   }
 }
+
+html, body, #root,
+button, a, input, textarea, select {
+  cursor: none !important;
+}
+
