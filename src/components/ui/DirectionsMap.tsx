@@ -17,7 +17,9 @@ const MapComponent: React.FC<{
   destination: { lat: number; lng: number; name: string };
   userLocation: { lat: number; lng: number } | null;
   onGetUserLocation: () => void;
-}> = ({ destination, userLocation, onGetUserLocation }) => {
+  travelMode: google.maps.TravelMode | 'DRIVING' | 'WALKING';
+  onRouteCalculated: (distance: string, duration: string) => void;
+}> = ({ destination, userLocation, onGetUserLocation, travelMode, onRouteCalculated }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<google.maps.Map | null>(null);
   const directionsServiceRef = useRef<google.maps.DirectionsService | null>(null);
@@ -70,10 +72,15 @@ const MapComponent: React.FC<{
       return;
     }
 
+    // Convert string travel mode to google.maps.TravelMode if needed
+    const googleTravelMode = typeof travelMode === 'string' 
+      ? (travelMode === 'WALKING' ? google.maps.TravelMode.WALKING : google.maps.TravelMode.DRIVING)
+      : travelMode;
+
     const request: google.maps.DirectionsRequest = {
       origin: userLocation,
       destination: destination,
-      travelMode: google.maps.TravelMode.DRIVING,
+      travelMode: googleTravelMode,
       unitSystem: google.maps.UnitSystem.METRIC,
       avoidHighways: false,
       avoidTolls: false,
@@ -82,17 +89,33 @@ const MapComponent: React.FC<{
     directionsServiceRef.current.route(request, (result, status) => {
       if (status === google.maps.DirectionsStatus.OK && result) {
         directionsRendererRef.current?.setDirections(result);
+        
+        // Extract distance and duration from the route
+        const route = result.routes[0];
+        if (route && route.legs && route.legs[0]) {
+          const leg = route.legs[0];
+          const distance = leg.distance?.text || 'N/A';
+          const duration = leg.duration?.text || 'N/A';
+          onRouteCalculated(distance, duration);
+        }
       } else {
         console.error('Directions request failed due to ' + status);
       }
     });
-  }, [userLocation, destination]);
+  }, [userLocation, destination, travelMode, onRouteCalculated]);
 
   useEffect(() => {
     if (window.google) {
       initializeMap();
     }
   }, [initializeMap]);
+
+  // Recalculate route when travel mode changes
+  useEffect(() => {
+    if (userLocation && directionsServiceRef.current && directionsRendererRef.current) {
+      calculateRoute();
+    }
+  }, [travelMode, calculateRoute]);
 
   return (
     <div className="flex h-full">
@@ -131,6 +154,8 @@ const DirectionsMap: React.FC<DirectionsMapProps> = ({ destination, isOpen, onCl
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [locationError, setLocationError] = useState<string>('');
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
+  const [travelMode, setTravelMode] = useState<google.maps.TravelMode | 'DRIVING' | 'WALKING'>('DRIVING');
+  const [routeInfo, setRouteInfo] = useState<{ distance: string; duration: string } | null>(null);
 
   const getUserLocation = useCallback(() => {
     setIsLoadingLocation(true);
@@ -206,6 +231,8 @@ const DirectionsMap: React.FC<DirectionsMapProps> = ({ destination, isOpen, onCl
             destination={destination} 
             userLocation={userLocation}
             onGetUserLocation={getUserLocation}
+            travelMode={travelMode}
+            onRouteCalculated={(distance, duration) => setRouteInfo({ distance, duration })}
           />
         );
     }
@@ -230,6 +257,51 @@ const DirectionsMap: React.FC<DirectionsMapProps> = ({ destination, isOpen, onCl
             </svg>
           </button>
         </div>
+
+        {/* Travel Mode Selector and Route Info */}
+        {userLocation && (
+          <div className="p-4 border-b border-gray-200 bg-gray-50">
+            <div className="flex items-center justify-between">
+              {/* Travel Mode Buttons */}
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => setTravelMode('DRIVING')}
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                    travelMode === 'DRIVING' || (typeof travelMode !== 'string' && travelMode === google.maps?.TravelMode?.DRIVING)
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  🚗 Driving
+                </button>
+                <button
+                  onClick={() => setTravelMode('WALKING')}
+                  className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                    travelMode === 'WALKING' || (typeof travelMode !== 'string' && travelMode === google.maps?.TravelMode?.WALKING)
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                  }`}
+                >
+                  🚶 Walking
+                </button>
+              </div>
+
+              {/* Route Information */}
+              {routeInfo && (
+                <div className="flex space-x-6 text-sm">
+                  <div className="flex items-center space-x-1">
+                    <span className="text-gray-600">Distance:</span>
+                    <span className="font-semibold text-gray-900">{routeInfo.distance}</span>
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <span className="text-gray-600">Duration:</span>
+                    <span className="font-semibold text-gray-900">{routeInfo.duration}</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Content */}
         <div className="flex-1 overflow-hidden">

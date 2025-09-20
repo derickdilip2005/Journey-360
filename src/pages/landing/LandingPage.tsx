@@ -82,7 +82,7 @@ const LandingPage: React.FC = () => {
             zIndex: -1
           }}
         >
-          <source src={landingVideo} type="video/mp4" />
+          <source src="https://www.pexels.com/download/video/2098989/" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
         {/* Dark overlay for better text readability */}

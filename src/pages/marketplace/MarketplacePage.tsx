@@ -47,29 +47,7 @@ const MarketplaceLanding: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="relative h-96 bg-gradient-to-r from-primary to-secondary">
-        <div className="absolute inset-0 bg-black opacity-40"></div>
-        <div className="container-custom relative z-10 h-full flex flex-col justify-center items-center text-center text-white">
-          <motion.h1 
-            className="text-4xl md:text-6xl font-display font-bold mb-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            Jharkhand Marketplace
-          </motion.h1>
-          <motion.p 
-            className="text-xl md:text-2xl mb-8 max-w-3xl"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            Your gateway to authentic local experiences, products, and services
-          </motion.p>
-        </div>
-      </section>
-
+      
       {/* Marketplace Sections */}
       <section className="py-16">
         <div className="container-custom">
