@@ -21,7 +21,7 @@ const LandingPage = React.lazy(() => import('./pages/landing/LandingPage'));
 const AdminDashboard = React.lazy(() => import('./pages/admin/AdminDashboard'));
 const BusinessmanDashboard = React.lazy(() => import('./pages/businessman/BusinessmanDashboard'));
 const GuideDashboard = React.lazy(() => import('./pages/guide/GuideDashboard'));
-const VRViewerPage = React.lazy(() => import('./pages/vr/VRViewerPage'));
+
 const NotFoundPage = React.lazy(() => import('./pages/admin/NotFoundPage'));
 
 function App() {
@@ -62,7 +62,6 @@ function App() {
               <Route path="/admin/dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
               <Route path="/businessman/dashboard" element={<ProtectedRoute><BusinessmanDashboard /></ProtectedRoute>} />
               <Route path="/guide/dashboard" element={<ProtectedRoute><GuideDashboard /></ProtectedRoute>} />
-              <Route path="/vr-viewer" element={<VRViewerPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </React.Suspense>

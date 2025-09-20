@@ -19,7 +19,18 @@ const StreetViewVR: React.FC<StreetViewVRProps> = ({ location, locationName, api
   useEffect(() => {
     const initializeStreetView = async () => {
       try {
-        console.log('Initializing Street View with:', { location, apiKey: apiKey ? 'Present' : 'Missing' });
+        console.log('Initializing Street View with:', { 
+          location, 
+          apiKey: apiKey ? `Present (${apiKey.substring(0, 10)}...)` : 'Missing',
+          fullApiKey: apiKey 
+        });
+        
+        if (!apiKey) {
+          console.error('No API key provided!');
+          setError('Google Maps API key is missing');
+          setIsLoading(false);
+          return;
+        }
         
         // Wait for the DOM element to be available
         if (!streetViewRef.current) {
@@ -33,12 +44,12 @@ const StreetViewVR: React.FC<StreetViewVRProps> = ({ location, locationName, api
         const loader = new Loader({
           apiKey: apiKey,
           version: 'weekly',
-          libraries: []
+          libraries: ['geometry']
         });
 
         console.log('Loading Google Maps API...');
-        await loader.load();
-        console.log('Google Maps API loaded successfully');
+        const google = await loader.load();
+        console.log('Google Maps API loaded successfully', google);
 
         console.log('Creating Street View Service...');
         const streetViewService = new google.maps.StreetViewService();
@@ -47,8 +58,7 @@ const StreetViewVR: React.FC<StreetViewVRProps> = ({ location, locationName, api
         console.log('Requesting panorama for location:', location);
         streetViewService.getPanorama({
           location: location,
-          radius: 500, // Increased radius significantly to find nearby Street View data
-          source: google.maps.StreetViewSource.OUTDOOR
+          radius: 50000,
         }, (data, status) => {
           console.log('Street View Service response:', { status, data });
           
@@ -108,13 +118,13 @@ const StreetViewVR: React.FC<StreetViewVRProps> = ({ location, locationName, api
             
             switch (status) {
               case google.maps.StreetViewStatus.ZERO_RESULTS:
-                errorMessage = 'No Street View imagery found within 500m of this location.';
+                errorMessage = 'No Street View imagery found within 50km of this location. This area may not have Street View coverage yet.';
                 break;
               case google.maps.StreetViewStatus.UNKNOWN_ERROR:
-                errorMessage = 'Unknown error occurred while loading Street View.';
+                errorMessage = 'Unknown error occurred while loading Street View. Please check your internet connection and API key.';
                 break;
               default:
-                errorMessage = `Street View unavailable. Status: ${status}`;
+                errorMessage = `Street View unavailable. Status: ${status}. This location may not have Street View coverage.`;
             }
             
             setError(errorMessage);

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import * as FaIcons from 'react-icons/fa';
 import LeafletMap from '../../components/LeafletMap';
 import DirectionsMap from '../../components/ui/DirectionsMap';
+import VREmbed from '../../components/vr/VREmbed';
 
 interface IndianState {
   id: number;
@@ -142,6 +143,8 @@ const ExplorePage: React.FC = () => {
   const [selectedSpot, setSelectedSpot] = useState<TouristSpot | null>(null);
   const [showMap, setShowMap] = useState(false);
   const [showDirections, setShowDirections] = useState(false);
+  const [showVR, setShowVR] = useState(false);
+  const [vrSpot, setVrSpot] = useState<TouristSpot | null>(null);
   const [directionsDestination, setDirectionsDestination] = useState<{lat: number; lng: number; name: string} | null>(null);
   const navigate = useNavigate();
 
@@ -212,19 +215,10 @@ const ExplorePage: React.FC = () => {
   };
 
   const handleShowVR = (spot: TouristSpot) => {
-    // Open VR experience in a new window with location parameters
-    const vrUrl = `/vr-viewer?lat=${spot.coords.lat}&lng=${spot.coords.lng}&name=${encodeURIComponent(spot.name)}`;
-    
-    // Open in a new window with specific dimensions for VR experience
-    const vrWindow = window.open(
-      vrUrl,
-      'vr-viewer',
-      'width=1200,height=800,scrollbars=no,resizable=yes,status=no,location=no,toolbar=no,menubar=no'
-    );
-    
-    if (!vrWindow) {
-      alert('Please allow pop-ups to experience VR view');
-    }
+    console.log('Opening VR for spot:', spot);
+    console.log('Environment API Key:', process.env.REACT_APP_GOOGLE_MAPS_API_KEY);
+    setVrSpot(spot);
+    setShowVR(true);
   };
 
   const handleShowAR = (spot: TouristSpot) => {
@@ -335,18 +329,20 @@ const ExplorePage: React.FC = () => {
                         </div>
                       </div>
                       
-                      <div className="flex items-center gap-2">
+                      <div className="flex gap-2">
                         <button
                           onClick={() => handleShowVR(spot)}
-                          className="text-xs bg-purple-100 text-purple-800 px-3 py-1 rounded-full flex items-center gap-1 hover:bg-purple-200 transition-colors cursor-pointer"
+                          className="flex-1 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
                         >
-                          <FaIcons.FaVrCardboard /> VR Experience
+                          <FaIcons.FaVrCardboard />
+                          VR Experience
                         </button>
                         <button
                           onClick={() => handleShowAR(spot)}
-                          className="text-xs bg-green-100 text-green-800 px-3 py-1 rounded-full flex items-center gap-1 hover:bg-green-200 transition-colors cursor-pointer"
+                          className="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
                         >
-                          <FaIcons.FaMobile /> AR Guide
+                          <FaIcons.FaMobile />
+                          AR Experience
                         </button>
                       </div>
                       
@@ -380,6 +376,31 @@ const ExplorePage: React.FC = () => {
           isOpen={showDirections}
           onClose={() => setShowDirections(false)}
         />
+      )}
+
+      {/* VR Experience Modal */}
+      {vrSpot && showVR && (
+        <div className="fixed inset-0 bg-black" style={{ zIndex: 9999 }}>
+          {/* Hide chatbot completely by targeting all possible selectors */}
+          <style>{`
+            .fixed.bottom-6.right-6 { display: none !important; }
+            .fixed.bottom-4.right-4 { display: none !important; }
+            button[class*="fixed"][class*="bottom"][class*="right"] { display: none !important; }
+            div[class*="fixed"][class*="bottom"][class*="right"][class*="z-"] { display: none !important; }
+          `}</style>
+          <div className="absolute top-4 right-4" style={{ zIndex: 10001 }}>
+            <button
+              onClick={() => setShowVR(false)}
+              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+            >
+              <FaIcons.FaTimes />
+              Close VR
+            </button>
+          </div>
+          <VREmbed
+            locationName={vrSpot.name}
+          />
+        </div>
       )}
     </div>
   );
