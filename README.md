@@ -2,7 +2,7 @@
 
 **Your Ultimate India Tourism Companion**
 
-Journey 360 is a comprehensive travel platform designed to help tourists explore the incredible diversity of India. From AI-powered itinerary planning to multilingual chatbot assistance, we provide everything you need for an unforgettable Indian adventure.
+Journey 360 is a comprehensive travel platform designed to help tourists explore the incredible diversity of India. From AI-powered travel assistance to multilingual chatbot support, we provide everything you need for an unforgettable Indian adventure.
 
 **App link**
 https://drive.google.com/file/d/1XfcvkbjTBXZh2Ityxum-Fx0MYZQfCUlR/view
@@ -20,12 +20,6 @@ https://drive.google.com/drive/folders/1kObnEjpTblSAJUmv1vVZ9xyz1f98Y9si?usp=sha
 - **Voice Interaction**: Speech recognition and text-to-speech capabilities
 - **Location-Based Recommendations**: Find nearby attractions, restaurants, hotels, and services
 - **Smart Responses**: Context-aware responses with structured information
-
-### 🗺️ Intelligent Itinerary Planning
-- **AI-Generated Itineraries**: Create personalized travel plans using Google's Gemini AI
-- **Interactive Planning**: Voice-enabled itinerary creation
-- **Downloadable Plans**: Export itineraries as PDF documents
-- **Multilingual Support**: Plan your trip in your preferred language
 
 ### 🏛️ Comprehensive Destination Explorer
 - **Interactive State Maps**: Explore all Indian states with detailed information
@@ -110,7 +104,7 @@ https://drive.google.com/drive/folders/1kObnEjpTblSAJUmv1vVZ9xyz1f98Y9si?usp=sha
 - **React Router** - Client-side routing
 
 ### AI & Services
-- **Google Gemini AI** - Advanced language model for chatbot and itinerary generation
+- **Google Gemini AI** - Advanced language model for chatbot assistance
 - **Web Speech API** - Voice recognition and text-to-speech
 - **Firebase** - Authentication and backend services
 - **Location Services** - Geolocation and nearby places API
@@ -118,14 +112,12 @@ https://drive.google.com/drive/folders/1kObnEjpTblSAJUmv1vVZ9xyz1f98Y9si?usp=sha
 ### UI Components
 - **React Icons** - Comprehensive icon library
 - **Headless UI** - Unstyled, accessible UI components
-- **jsPDF** - PDF generation for itineraries
 
 ## 📱 Key Pages
 
 - **Home** (`/`) - Landing page with featured destinations
 - **Explore** (`/explore`) - Interactive state-wise exploration
 - **Hotels** (`/hotels`) - Accommodation booking interface
-- **Itinerary** (`/itinerary`) - AI-powered trip planning
 - **Visa Assist** (`/visa-assist`) - Visa application guidance
 - **Community** (`/community`) - Travel stories and local guides
 - **Safety** (`/safety`) - Emergency contacts and safety information

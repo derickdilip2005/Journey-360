@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaRobot, FaTimes, FaPaperPlane, FaGlobeAsia, FaUser, FaSpinner, FaMicrophone, FaMicrophoneSlash, FaVolumeUp, FaMapMarkerAlt, FaDirections } from 'react-icons/fa';
 import { chatbotService, ChatbotResponse } from '../../services/chatbotService';
 import { LocationPlace } from '../../services/locationService';
+import chatbotIcon from '../../assets/main/icon.png';
 
 // Type declarations for Web Speech API
 declare global {
@@ -326,12 +327,20 @@ const MultilingualChatbot: React.FC = () => {
     <>
       {/* Chat button */}
       <motion.button
-        className="fixed bottom-6 right-6 bg-primary text-white p-4 rounded-full shadow-lg z-[9999] flex items-center justify-center"
+        className="fixed bottom-6 right-6 bg-white text-primary p-4 rounded-full shadow-lg z-[9999] flex items-center justify-center"
         onClick={toggleChat}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
       >
-        {isOpen ? <FaTimes size={24} /> : <FaRobot size={24} />}
+        {isOpen ? (
+          <FaTimes size={24} />
+        ) : (
+          <img 
+            src={chatbotIcon} 
+            alt="Chatbot" 
+            className="w-8 h-8"
+          />
+        )}
       </motion.button>
 
       {/* Chat window */}
@@ -347,7 +356,11 @@ const MultilingualChatbot: React.FC = () => {
             {/* Chat header */}
             <div className="bg-primary text-white p-4 flex justify-between items-center">
               <div className="flex items-center">
-                <FaRobot className="mr-2" size={20} />
+                <img 
+                  src={chatbotIcon} 
+                  alt="Chatbot" 
+                  className="w-5 h-5 mr-2"
+                />
                 <h3 className="font-bold">Journey 360 Assistant</h3>
               </div>
               <div className="flex items-center">
@@ -422,7 +435,15 @@ const MultilingualChatbot: React.FC = () => {
                   >
                     <div className="flex items-start mb-1">
                       <span className="mr-2">
-                        {message.sender === 'user' ? <FaUser size={14} /> : <FaRobot size={14} />}
+                        {message.sender === 'user' ? (
+                  <FaUser size={14} />
+                ) : (
+                  <img 
+                    src={chatbotIcon} 
+                    alt="Chatbot" 
+                    className="w-3.5 h-3.5"
+                  />
+                )}
                       </span>
                       <span className="font-medium">
                         {message.sender === 'user' ? 'You' : 'Assistant'}

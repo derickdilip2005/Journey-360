@@ -4,11 +4,11 @@ import { Disclosure, Menu, Transition } from '@headlessui/react';
 import { Bars3Icon as MenuIcon, XMarkIcon as XIcon } from '@heroicons/react/24/outline';
 import * as FaIcons from 'react-icons/fa';
 import { useAuth } from '../../contexts/AuthContext';
+import logo from '../../assets/main/logo.png';
 
 const navigation = [
   { name: 'Home', href: '/home' },
   { name: 'Explore', href: '/explore' },
-  { name: 'Itinerary', href: '/itinerary' },
   { name: 'Marketplace', href: '/marketplace' },
   { name: 'VISA Assist', href: '/visa-assist' },
   { name: 'Contact', href: '/contact' },
@@ -63,7 +63,11 @@ const Navbar: React.FC = () => {
               <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex-shrink-0 flex items-center">
                   <Link to="/">
-                    <span className={`text-2xl font-display font-bold ${isLandingPage ? 'text-white drop-shadow-lg' : 'text-primary'}`}>Journey 360</span>
+                    <img 
+                      src={logo} 
+                      alt="Journey 360" 
+                      className={`h-10 w-auto ${isLandingPage ? 'drop-shadow-lg' : ''}`}
+                    />
                   </Link>
                 </div>
                 {!isLandingPage && !hideNavbarFeatures && (

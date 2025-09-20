@@ -19,27 +19,27 @@ const LandingPage: React.FC = () => {
       title: 'Tourist',
       subtitle: 'Explore India',
       icon: <FaUserTie className="text-4xl" />,
-      color: 'from-blue-500 to-cyan-500',
-      bgColor: 'bg-blue-500/10',
-      borderColor: 'border-blue-500/20 hover:border-blue-500/40'
+      color: 'from-green-500 to-emerald-500',
+      bgColor: 'bg-green-500/0.5',
+      borderColor: 'border-green-500/20 hover:border-green-500/40'
     },
     {
       id: 'admin',
       title: 'Admin',
       subtitle: 'Manage Platform',
       icon: <MdAdminPanelSettings className="text-4xl" />,
-      color: 'from-purple-500 to-indigo-500',
-      bgColor: 'bg-purple-500/10',
-      borderColor: 'border-purple-500/20 hover:border-purple-500/40'
+      color: 'from-green-500 to-emerald-500',
+      bgColor: 'bg-green-500/0.5',
+      borderColor: 'border-green-500/20 hover:border-green-500/40'
     },
     {
       id: 'businessman',
       title: 'Local Business',
       subtitle: 'Grow Your Business',
       icon: <MdBusiness className="text-4xl" />,
-      color: 'from-green-500 to-emerald-500',
-      bgColor: 'bg-green-500/10',
-      borderColor: 'border-green-500/20 hover:border-green-500/40'
+      color: 'from-orange-500 to-red-500',
+      bgColor: 'bg-orange-500/0.5',
+      borderColor: 'border-orange-500/20 hover:border-orange-500/40'
     },
     {
       id: 'guide',
@@ -47,7 +47,7 @@ const LandingPage: React.FC = () => {
       subtitle: 'Share Expertise',
       icon: <FaIcons.FaMapMarkedAlt className="text-4xl" />,
       color: 'from-orange-500 to-red-500',
-      bgColor: 'bg-orange-500/10',
+      bgColor: 'bg-orange-500/0.5',
       borderColor: 'border-orange-500/20 hover:border-orange-500/40'
     }
   ];
@@ -101,7 +101,7 @@ const LandingPage: React.FC = () => {
             Journey 360
           </h1>
           <p className="text-xl md:text-3xl text-white/90 mb-4 max-w-4xl mx-auto drop-shadow-lg">
-            Your Ultimate India Tourism Companion
+            Your Ultimate Jharkhand Tourism Companion
           </p>
           <p className="text-lg text-white/80 max-w-2xl mx-auto drop-shadow-md">
             Choose your role to access personalized features

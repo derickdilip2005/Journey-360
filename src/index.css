@@ -36,8 +36,8 @@ code {
   }
 }
 
-html, body, #root,
-button, a, input, textarea, select {
+* {
   cursor: none !important;
 }
+
 

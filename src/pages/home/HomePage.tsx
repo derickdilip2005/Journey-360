@@ -128,20 +128,8 @@ const HomePage: React.FC = () => {
         <div className="container-custom">
           <h2 className="text-3xl font-display font-bold text-center mb-12">Plan Your Perfect Trip</h2>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Tile 1 - Itinerary */}
-            <Link to="/itinerary">
-              <motion.div 
-                className="bg-gradient-to-br from-blue-600 to-purple-600 text-white rounded-lg p-8 text-center h-full flex flex-col items-center justify-center"
-                whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
-              >
-                <FaIcons.FaRoute className="text-4xl mb-4" />
-                <h3 className="text-xl font-bold mb-2">Plan Itinerary</h3>
-                <p>Create personalized trip plans with AI assistance</p>
-              </motion.div>
-            </Link>
-
-            {/* Tile 2 - Marketplace */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+            {/* Tile 1 - Marketplace */}
             <Link to="/marketplace">
               <motion.div 
                 className="bg-primary text-white rounded-lg p-8 text-center h-full flex flex-col items-center justify-center"
@@ -242,9 +230,6 @@ const HomePage: React.FC = () => {
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link to="/explore" className="bg-white text-primary font-bold py-3 px-8 rounded-md hover:bg-gray-100 transition-colors">
               Browse Destinations
-            </Link>
-            <Link to="/itinerary" className="bg-transparent border-2 border-white text-white font-bold py-3 px-8 rounded-md hover:bg-white hover:text-primary transition-colors">
-              Plan Your Trip
             </Link>
           </div>
         </div>

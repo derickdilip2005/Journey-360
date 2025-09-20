@@ -219,7 +219,7 @@ const travelAdvisories: TravelAdvisory[] = [
     id: 4,
     title: 'Remote Areas Connectivity',
     level: 'low',
-    description: 'Some remote areas across India have limited mobile connectivity. Travelers planning to visit isolated regions should inform their accommodation about their itinerary and expected return time.',
+    description: 'Some remote areas across India have limited mobile connectivity. Travelers planning to visit isolated regions should inform their accommodation about their travel plans and expected return time.',
     date: 'April 10, 2023',
     areas: ['Remote tribal villages', 'Deep forest areas', 'Border regions', 'Island territories'],
   },
@@ -407,7 +407,7 @@ const SafetyPage: React.FC = () => {
                   </li>
                   <li className="flex items-start">
                     <span className="text-primary font-bold mr-2">•</span>
-                    <span>Share your itinerary with family or friends who aren't traveling with you</span>
+                    <span>Share your travel plans with family or friends who aren't traveling with you</span>
                   </li>
                   <li className="flex items-start">
                     <span className="text-primary font-bold mr-2">•</span>

@@ -74,7 +74,7 @@ const Step3GuidedApplication: React.FC<Step3Props> = ({
       tips: [
         'Approximate dates are acceptable',
         'Hotel booking confirmation (if available)',
-        'Flight itinerary (if booked)',
+        'Flight booking confirmation (if available)',
         'Contact details in India'
       ]
     },

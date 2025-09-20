@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import * as FaIcons from 'react-icons/fa';
 import LeafletMap from '../../components/LeafletMap';
+import DirectionsMap from '../../components/ui/DirectionsMap';
 
 interface IndianState {
   id: number;
@@ -58,7 +59,7 @@ const indianStates: IndianState[] = [
         timings: '6:00 AM - 6:00 PM',
         hasVR: true,
         hasAR: true,
-        coords: { lat: 23.3441, lng: 85.3096 }
+        coords: { lat: 23.4497246, lng: 85.6666868 } // Hundru Falls - Correct coordinates from Jharkhand
       },
       {
         id: 902,
@@ -94,7 +95,7 @@ const indianStates: IndianState[] = [
         timings: 'All day',
         hasVR: true,
         hasAR: false,
-        coords: { lat: 23.3441, lng: 85.3096 }
+        coords: { lat: 23.3522, lng: 85.3270 } // Updated to Ranchi city center coordinates
       },
       {
         id: 904,
@@ -112,7 +113,7 @@ const indianStates: IndianState[] = [
         timings: '6:00 AM - 6:00 PM',
         hasVR: true,
         hasAR: true,
-        coords: { lat: 23.6102, lng: 85.5917 }
+        coords: { lat: 23.6340, lng: 85.5460 } // Updated to nearby accessible road location
       },
       {
         id: 905,
@@ -130,7 +131,7 @@ const indianStates: IndianState[] = [
         timings: '5:00 AM - 9:00 PM',
         hasVR: false,
         hasAR: true,
-        coords: { lat: 23.3569, lng: 85.3350 }
+        coords: { lat: 23.3569, lng: 85.3350 } // Temple location - likely to have Street View
       }
     ]
   }
@@ -140,11 +141,17 @@ const ExplorePage: React.FC = () => {
   const [selectedState, setSelectedState] = useState<IndianState | null>(null);
   const [selectedSpot, setSelectedSpot] = useState<TouristSpot | null>(null);
   const [showMap, setShowMap] = useState(false);
+  const [showDirections, setShowDirections] = useState(false);
+  const [directionsDestination, setDirectionsDestination] = useState<{lat: number; lng: number; name: string} | null>(null);
   const navigate = useNavigate();
 
   const handleGetDirections = (spot: TouristSpot) => {
-    const url = `https://www.google.com/maps/dir/?api=1&destination=${spot.coords.lat},${spot.coords.lng}`;
-    window.open(url, '_blank');
+    setDirectionsDestination({
+      lat: spot.coords.lat,
+      lng: spot.coords.lng,
+      name: spot.name
+    });
+    setShowDirections(true);
   };
 
   const handleShowCabFare = (spot: TouristSpot) => {
@@ -205,9 +212,19 @@ const ExplorePage: React.FC = () => {
   };
 
   const handleShowVR = (spot: TouristSpot) => {
-    // This would open VR experience for the location
-    alert(`VR Experience for ${spot.name} - Opening VR viewer...`);
-    // In a real implementation, this would launch a VR viewer or redirect to VR content
+    // Open VR experience in a new window with location parameters
+    const vrUrl = `/vr-viewer?lat=${spot.coords.lat}&lng=${spot.coords.lng}&name=${encodeURIComponent(spot.name)}`;
+    
+    // Open in a new window with specific dimensions for VR experience
+    const vrWindow = window.open(
+      vrUrl,
+      'vr-viewer',
+      'width=1200,height=800,scrollbars=no,resizable=yes,status=no,location=no,toolbar=no,menubar=no'
+    );
+    
+    if (!vrWindow) {
+      alert('Please allow pop-ups to experience VR view');
+    }
   };
 
   const handleShowAR = (spot: TouristSpot) => {
@@ -373,6 +390,15 @@ const ExplorePage: React.FC = () => {
               ))}
             </div>
       </div>
+
+      {/* Directions Map Modal */}
+      {directionsDestination && (
+        <DirectionsMap
+          destination={directionsDestination}
+          isOpen={showDirections}
+          onClose={() => setShowDirections(false)}
+        />
+      )}
     </div>
   );
 };
