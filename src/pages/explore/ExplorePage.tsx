@@ -8,6 +8,7 @@ import VREmbed from '../../components/vr/VREmbed';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { Badge } from '../../components/ui/badge';
+import bgImage from '../../assets/Tourist/Explore/bg3.png';
 
 interface IndianState {
   id: number;
@@ -231,36 +232,50 @@ const ExplorePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div 
+      className="min-h-screen relative"
+      style={{
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed'
+      }}
+    >
+      {/* Background overlay for opacity */}
+      <div className="absolute inset-0 bg-white/30"></div>
       
-      {/* Map */}
-      {showMap && selectedSpot && (
-        <LeafletMap
-          destinationName={selectedSpot.name}
-          destinationCoords={selectedSpot.coords}
-          onClose={() => setShowMap(false)}
-        />
-      )}
+      {/* Content wrapper */}
+      <div className="relative z-10">
+        
+        {/* Map */}
+        {showMap && selectedSpot && (
+          <LeafletMap
+            destinationName={selectedSpot.name}
+            destinationCoords={selectedSpot.coords}
+            onClose={() => setShowMap(false)}
+          />
+        )}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div>
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Explore Jharkhand</h1>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Discover the natural beauty, rich culture, and magnificent attractions of Jharkhand. 
-              From stunning waterfalls to ancient temples, experience the heart of India.
-            </p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <div>
+            <div className="text-center mb-8">
+              <h1 className="text-4xl font-bold text-white-900 mb-4">Explore Jharkhand</h1>
+              <p className="text-lg text-white-600 max-w-3xl mx-auto">
+                Discover the natural beauty, rich culture, and magnificent attractions of Jharkhand. 
+                From stunning waterfalls to ancient temples, experience the heart of India.
+              </p>
+            </div>
           </div>
-        </div>
         {/* Tourist spots */}
-        <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Discover Amazing Places in Jharkhand</h2>
+        <h2 className="text-2xl font-bold text-white-900 mb-6 text-center">Discover Amazing Places in Jharkhand</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {indianStates[0].touristSpots.map((spot) => (
             <motion.div
               key={spot.id}
               whileHover={{ scale: 1.02 }}
             >
-              <Card className="overflow-hidden">
+              <Card className="overflow-hidden bg-white">
                 <div className="h-48 bg-cover bg-center" style={{ backgroundImage: `url(${spot.image})` }}>
                   <div className="h-full bg-black bg-opacity-30 flex items-end">
                     <div className="p-4 text-white">
@@ -456,6 +471,7 @@ const ExplorePage: React.FC = () => {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 };
