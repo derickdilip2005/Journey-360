@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import * as FaIcons from 'react-icons/fa';
+import { Button } from '../../components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
 
 const HomePage: React.FC = () => {
   return (
@@ -37,9 +39,9 @@ const HomePage: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            <Link to="/explore" className="btn-primary text-lg px-8 py-3">
-              Explore Now
-            </Link>
+            <Button asChild size="lg" className="text-lg px-8 py-3">
+              <Link to="/explore">Explore Now</Link>
+            </Button>
           </motion.div>
         </div>
         
@@ -65,59 +67,68 @@ const HomePage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Highlight 1 - Hundru Falls */}
             <motion.div 
-              className="bg-white rounded-lg shadow-md overflow-hidden"
               whileHover={{ y: -10, transition: { duration: 0.3 } }}
             >
-              <div className="h-48 overflow-hidden">
-                <img 
-                  src="https://images.unsplash.com/photo-1558451701-4662b9367fc7?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
-                  alt="Hundru Falls" 
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                />
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Hundru Falls</h3>
-                <p className="text-gray-600 mb-4">One of the highest waterfalls in Jharkhand, offering spectacular views and natural beauty perfect for photography and trekking.</p>
-                <Link to="/explore" className="text-primary font-medium hover:underline">Discover More</Link>
-              </div>
+              <Card className="overflow-hidden">
+                <div className="h-48 overflow-hidden">
+                  <img 
+                    src="https://images.unsplash.com/photo-1558451701-4662b9367fc7?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+                    alt="Hundru Falls" 
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                  />
+                </div>
+                <CardContent className="p-6">
+                  <CardTitle className="text-xl mb-2">Hundru Falls</CardTitle>
+                  <CardDescription className="mb-4">One of the highest waterfalls in Jharkhand, offering spectacular views and natural beauty perfect for photography and trekking.</CardDescription>
+                  <Button variant="link" asChild className="p-0 h-auto text-primary font-medium">
+                    <Link to="/explore">Discover More</Link>
+                  </Button>
+                </CardContent>
+              </Card>
             </motion.div>
             
             {/* Highlight 2 - Betla National Park */}
             <motion.div 
-              className="bg-white rounded-lg shadow-md overflow-hidden"
               whileHover={{ y: -10, transition: { duration: 0.3 } }}
             >
-              <div className="h-48 overflow-hidden">
-                <img 
-                  src="https://www.hindfirst.in/sortd-service/imaginary/v22-01/webp/medium/high?url=b3R0aW5kaWEtYXBwLXByb2Qtc29ydGQvbWVkaWE4M2FiNmFkMC04MDAwLTExZjAtODQ5Yi1kMTFjM2YzYjI1ZTcucG5n" 
-                  alt="Betla National Park" 
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                />
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Betla National Park</h3>
-                <p className="text-gray-600 mb-4">Experience wildlife safaris and discover diverse flora and fauna in one of Jharkhand's premier national parks.</p>
-                <Link to="/explore" className="text-primary font-medium hover:underline">Discover More</Link>
-              </div>
+              <Card className="overflow-hidden">
+                <div className="h-48 overflow-hidden">
+                  <img 
+                    src="https://www.hindfirst.in/sortd-service/imaginary/v22-01/webp/medium/high?url=b3R0aW5kaWEtYXBwLXByb2Qtc29ydGQvbWVkaWE4M2FiNmFkMC04MDAwLTExZjAtODQ5Yi1kMTFjM2YzYjI1ZTcucG5n" 
+                    alt="Betla National Park" 
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                  />
+                </div>
+                <CardContent className="p-6">
+                  <CardTitle className="text-xl mb-2">Betla National Park</CardTitle>
+                  <CardDescription className="mb-4">Experience wildlife safaris and discover diverse flora and fauna in one of Jharkhand's premier national parks.</CardDescription>
+                  <Button variant="link" asChild className="p-0 h-auto text-primary font-medium">
+                    <Link to="/explore">Discover More</Link>
+                  </Button>
+                </CardContent>
+              </Card>
             </motion.div>
             
             {/* Highlight 3 - Jagannath Temple Ranchi */}
             <motion.div 
-              className="bg-white rounded-lg shadow-md overflow-hidden"
               whileHover={{ y: -10, transition: { duration: 0.3 } }}
             >
-              <div className="h-48 overflow-hidden">
-                <img 
-                  src="https://xplro.com/wp-content/uploads/2024/06/Untitled-design-73.jpg.webp" 
-                  alt="Jagannath Temple Ranchi" 
-                  className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                />
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">Jagannath Temple Ranchi</h3>
-                <p className="text-gray-600 mb-4">A replica of the famous Puri Jagannath Temple, significant for Hindu pilgrims and showcasing beautiful architecture.</p>
-                <Link to="/explore" className="text-primary font-medium hover:underline">Discover More</Link>
-              </div>
+              <Card className="overflow-hidden">
+                <div className="h-48 overflow-hidden">
+                  <img 
+                    src="https://xplro.com/wp-content/uploads/2024/06/Untitled-design-73.jpg.webp" 
+                    alt="Jagannath Temple Ranchi" 
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                  />
+                </div>
+                <CardContent className="p-6">
+                  <CardTitle className="text-xl mb-2">Jagannath Temple Ranchi</CardTitle>
+                  <CardDescription className="mb-4">A replica of the famous Puri Jagannath Temple, significant for Hindu pilgrims and showcasing beautiful architecture.</CardDescription>
+                  <Button variant="link" asChild className="p-0 h-auto text-primary font-medium">
+                    <Link to="/explore">Discover More</Link>
+                  </Button>
+                </CardContent>
+              </Card>
             </motion.div>
           </div>
         </div>
@@ -132,24 +143,30 @@ const HomePage: React.FC = () => {
             {/* Tile 1 - Marketplace */}
             <Link to="/marketplace">
               <motion.div 
-                className="bg-primary text-white rounded-lg p-8 text-center h-full flex flex-col items-center justify-center"
                 whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
               >
-                <FaIcons.FaShoppingCart className="text-4xl mb-4" />
-                <h3 className="text-xl font-bold mb-2">Marketplace</h3>
-                <p>Book accommodations, tours, and local experiences</p>
+                <Card className="bg-primary text-white h-full">
+                  <CardContent className="p-8 text-center h-full flex flex-col items-center justify-center">
+                    <FaIcons.FaShoppingCart className="text-4xl mb-4" />
+                    <CardTitle className="text-xl mb-2 text-white">Marketplace</CardTitle>
+                    <CardDescription className="text-white/90">Book accommodations, tours, and local experiences</CardDescription>
+                  </CardContent>
+                </Card>
               </motion.div>
             </Link>
 
-            {/* Tile 3 - VR Explore */}
+            {/* Tile 2 - VR Explore */}
             <Link to="/explore">
               <motion.div 
-                className="bg-gray-800 text-white rounded-lg p-8 text-center h-full flex flex-col items-center justify-center"
                 whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
               >
-                <FaIcons.FaVrCardboard className="text-4xl mb-4" />
-                <h3 className="text-xl font-bold mb-2">Explore in VR</h3>
-                <p>Preview destinations with immersive 360° virtual tours</p>
+                <Card className="bg-gray-800 text-white h-full">
+                  <CardContent className="p-8 text-center h-full flex flex-col items-center justify-center">
+                    <FaIcons.FaVrCardboard className="text-4xl mb-4" />
+                    <CardTitle className="text-xl mb-2 text-white">Explore in VR</CardTitle>
+                    <CardDescription className="text-white/90">Preview destinations with immersive 360° virtual tours</CardDescription>
+                  </CardContent>
+                </Card>
               </motion.div>
             </Link>
           </div>
@@ -163,61 +180,67 @@ const HomePage: React.FC = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Testimonial 1 */}
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="flex items-center mb-4">
-                <div className="h-12 w-12 rounded-full bg-gray-300 mr-4"></div>
-                <div>
-                  <h4 className="font-bold">Priya Sharma</h4>
-                  <div className="flex text-yellow-400">
-                    {[...Array(5)].map((_, i) => (
-                      <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                      </svg>
-                    ))}
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center mb-4">
+                  <div className="h-12 w-12 rounded-full bg-gray-300 mr-4"></div>
+                  <div>
+                    <CardTitle className="text-base font-bold">Priya Sharma</CardTitle>
+                    <div className="flex text-yellow-400">
+                      {[...Array(5)].map((_, i) => (
+                        <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                          <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                        </svg>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-              <p className="text-gray-600 italic">"The tribal village tour was an eye-opening experience. Our local guide was knowledgeable and the cultural immersion was authentic. Highly recommend!"</p>
-            </div>
+                <CardDescription className="italic">"The tribal village tour was an eye-opening experience. Our local guide was knowledgeable and the cultural immersion was authentic. Highly recommend!"</CardDescription>
+              </CardContent>
+            </Card>
             
             {/* Testimonial 2 */}
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="flex items-center mb-4">
-                <div className="h-12 w-12 rounded-full bg-gray-300 mr-4"></div>
-                <div>
-                  <h4 className="font-bold">Rajesh Kumar</h4>
-                  <div className="flex text-yellow-400">
-                    {[...Array(5)].map((_, i) => (
-                      <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                      </svg>
-                    ))}
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center mb-4">
+                  <div className="h-12 w-12 rounded-full bg-gray-300 mr-4"></div>
+                  <div>
+                    <CardTitle className="text-base font-bold">Rajesh Kumar</CardTitle>
+                    <div className="flex text-yellow-400">
+                      {[...Array(5)].map((_, i) => (
+                        <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                          <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                        </svg>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-              <p className="text-gray-600 italic">"Journey 360 helped us discover amazing destinations and connect with local guides. The virtual tours were incredibly helpful for planning our trip!"</p>
-            </div>
+                <CardDescription className="italic">"Journey 360 helped us discover amazing destinations and connect with local guides. The virtual tours were incredibly helpful for planning our trip!"</CardDescription>
+              </CardContent>
+            </Card>
             
             {/* Testimonial 3 */}
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="flex items-center mb-4">
-                <div className="h-12 w-12 rounded-full bg-gray-300 mr-4"></div>
-                <div>
-                  <h4 className="font-bold">Amit Patel</h4>
-                  <div className="flex text-yellow-400">
-                    {[...Array(4)].map((_, i) => (
-                      <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 20 20">
+            <Card>
+              <CardContent className="p-6">
+                <div className="flex items-center mb-4">
+                  <div className="h-12 w-12 rounded-full bg-gray-300 mr-4"></div>
+                  <div>
+                    <CardTitle className="text-base font-bold">Amit Patel</CardTitle>
+                    <div className="flex text-yellow-400">
+                      {[...Array(4)].map((_, i) => (
+                        <svg key={i} className="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                          <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                        </svg>
+                      ))}
+                      <svg className="w-4 h-4 text-gray-300 fill-current" viewBox="0 0 20 20">
                         <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
                       </svg>
-                    ))}
-                    <svg className="w-4 h-4 text-gray-300 fill-current" viewBox="0 0 20 20">
-                      <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                    </svg>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <p className="text-gray-600 italic">"The VR preview helped us decide which places to visit. The national parks were amazing - we saw tigers, elephants and a variety of birds. Great wildlife experience!"</p>
-            </div>
+                <CardDescription className="italic">"The VR preview helped us decide which places to visit. The national parks were amazing - we saw tigers, elephants and a variety of birds. Great wildlife experience!"</CardDescription>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
@@ -228,9 +251,9 @@ const HomePage: React.FC = () => {
           <h2 className="text-3xl md:text-4xl font-display font-bold mb-6">Ready to Explore Jharkhand?</h2>
           <p className="text-xl mb-8 max-w-3xl mx-auto">Start planning your adventure today and discover the incredible diversity of this beautiful country.</p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link to="/explore" className="bg-white text-primary font-bold py-3 px-8 rounded-md hover:bg-gray-100 transition-colors">
-              Browse Destinations
-            </Link>
+            <Button asChild variant="secondary" size="lg" className="font-bold py-3 px-8">
+              <Link to="/explore">Browse Destinations</Link>
+            </Button>
           </div>
         </div>
       </section>

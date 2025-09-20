@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaStar, FaMapMarkerAlt, FaLanguage, FaCertificate, FaPhone, FaEnvelope, FaShieldAlt } from 'react-icons/fa';
 import { MdVerified, MdPeople, MdAccessTime } from 'react-icons/md';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '../../components/ui/avatar';
 
 interface Guide {
   id: string;

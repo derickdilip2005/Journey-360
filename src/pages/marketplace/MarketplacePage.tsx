@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, Routes, Route } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import * as FaIcons from 'react-icons/fa';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
 import HandicraftsPage from './HandicraftsPage';
 import HomestaysPage from './HomestaysPage';
 import EventsPage from './EventsPage';
@@ -110,42 +112,51 @@ const MarketplaceLanding: React.FC = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <motion.div 
-              className="text-center p-6"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <div className="w-16 h-16 bg-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FaIcons.FaShieldAlt className="text-2xl text-primary" />
-              </div>
-              <h3 className="text-xl font-bold mb-2">Verified Sellers</h3>
-              <p className="text-gray-600">All our sellers and service providers are verified through thorough background checks and authentication for your safety and trust.</p>
+              <Card className="text-center p-6 h-full">
+                <CardContent className="pt-6">
+                  <div className="w-16 h-16 bg-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <FaIcons.FaShieldAlt className="text-2xl text-primary" />
+                  </div>
+                  <CardTitle className="text-xl mb-2">Verified Sellers</CardTitle>
+                  <CardDescription>All our sellers and service providers are verified through thorough background checks and authentication for your safety and trust.</CardDescription>
+                </CardContent>
+              </Card>
             </motion.div>
 
             <motion.div 
-              className="text-center p-6"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              <div className="w-16 h-16 bg-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FaIcons.FaHeart className="text-2xl text-primary" />
-              </div>
-              <h3 className="text-xl font-bold mb-2">Authentic Experiences</h3>
-              <p className="text-gray-600">Connect directly with local communities and experience the true culture and traditions of Jharkhand.</p>
+              <Card className="text-center p-6 h-full">
+                <CardContent className="pt-6">
+                  <div className="w-16 h-16 bg-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <FaIcons.FaHeart className="text-2xl text-primary" />
+                  </div>
+                  <CardTitle className="text-xl mb-2">Authentic Experiences</CardTitle>
+                  <CardDescription>Connect directly with local communities and experience the true culture and traditions of Jharkhand.</CardDescription>
+                </CardContent>
+              </Card>
             </motion.div>
 
             <motion.div 
-              className="text-center p-6"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
             >
-              <div className="w-16 h-16 bg-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FaIcons.FaCreditCard className="text-2xl text-primary" />
-              </div>
-              <h3 className="text-xl font-bold mb-2">Secure Payments</h3>
-              <p className="text-gray-600">Safe and secure payment processing through trusted payment gateways with buyer protection.</p>
+              <Card className="text-center p-6 h-full">
+                <CardContent className="pt-6">
+                  <div className="w-16 h-16 bg-primary bg-opacity-10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <FaIcons.FaCreditCard className="text-2xl text-primary" />
+                  </div>
+                  <CardTitle className="text-xl mb-2">Secure Payments</CardTitle>
+                  <CardDescription>Safe and secure payment processing through trusted payment gateways with buyer protection.</CardDescription>
+                </CardContent>
+              </Card>
             </motion.div>
           </div>
         </div>
@@ -159,12 +170,16 @@ const MarketplaceLanding: React.FC = () => {
             Start your journey through Jharkhand's vibrant marketplace and discover authentic local experiences.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link to="/explore" className="bg-white text-primary font-bold py-3 px-8 rounded-md hover:bg-gray-100 transition-colors">
-              Explore Destinations
-            </Link>
-            <Link to="/explore" className="border-2 border-white text-white font-bold py-3 px-8 rounded-md hover:bg-white hover:text-primary transition-colors">
-              Explore Destinations
-            </Link>
+            <Button asChild variant="secondary" size="lg">
+              <Link to="/explore">
+                Explore Destinations
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-primary">
+              <Link to="/explore">
+                Explore Destinations
+              </Link>
+            </Button>
           </div>
         </div>
       </section>

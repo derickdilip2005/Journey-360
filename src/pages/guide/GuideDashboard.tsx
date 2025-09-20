@@ -1,23 +1,33 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import {
-  UserIcon,
-  MapIcon,
   CalendarIcon,
-  ChatBubbleLeftRightIcon,
+  CurrencyRupeeIcon,
+  StarIcon,
+  ClockIcon,
   CheckCircleIcon,
   XCircleIcon,
-  ClockIcon,
-  CurrencyRupeeIcon,
-  DocumentArrowUpIcon,
-  PhotoIcon,
-  LanguageIcon,
+  ChatBubbleLeftRightIcon,
   AcademicCapIcon,
-  StarIcon,
-  EyeIcon,
+  UserIcon,
+  DocumentTextIcon,
+  CameraIcon,
   ChevronLeftIcon,
-  ChevronRightIcon
+  ChevronRightIcon,
+  DocumentArrowUpIcon,
+  MapIcon,
+  PhotoIcon
 } from '@heroicons/react/24/outline';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
+import { Input } from '../../components/ui/input';
+import { Textarea } from '../../components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
+import { Checkbox } from '../../components/ui/checkbox';
+import { Label } from '../../components/ui/label';
+import { Avatar, AvatarFallback, AvatarImage } from '../../components/ui/avatar';
 
 interface GuideProfile {
   id: string;
@@ -163,11 +173,11 @@ const GuideDashboard: React.FC = () => {
     .reduce((sum, booking) => sum + booking.price, 0);
 
   const renderRegistrationForm = () => (
-    <div className="bg-white rounded-lg shadow-sm border">
+    <Card>
       {/* Progress Bar */}
-      <div className="p-6 border-b">
+      <CardHeader className="border-b">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">Guide Registration</h3>
+          <CardTitle>Guide Registration</CardTitle>
           <span className="text-sm text-gray-500">Step {registrationStep} of 4</span>
         </div>
         <div className="flex items-center space-x-4">
@@ -197,9 +207,9 @@ const GuideDashboard: React.FC = () => {
             </div>
           ))}
         </div>
-      </div>
+      </CardHeader>
 
-      <div className="p-6">
+      <CardContent className="p-6">
         {/* Step 1: Personal Details */}
         {registrationStep === 1 && (
           <div className="space-y-6">
@@ -207,34 +217,34 @@ const GuideDashboard: React.FC = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
-                <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Enter your full name" />
+                <Label htmlFor="fullName">Full Name</Label>
+                <Input id="fullName" placeholder="Enter your full name" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-                <input type="email" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Enter your email" />
+                <Label htmlFor="email">Email Address</Label>
+                <Input id="email" type="email" placeholder="Enter your email" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-                <input type="tel" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Enter your phone number" />
+                <Label htmlFor="phone">Phone Number</Label>
+                <Input id="phone" type="tel" placeholder="Enter your phone number" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
-                <input type="date" className="w-full border border-gray-300 rounded-lg px-3 py-2" />
+                <Label htmlFor="dob">Date of Birth</Label>
+                <Input id="dob" type="date" />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Address</label>
-              <textarea className="w-full border border-gray-300 rounded-lg px-3 py-2" rows={3} placeholder="Enter your complete address"></textarea>
+              <Label htmlFor="address">Address</Label>
+              <Textarea id="address" rows={3} placeholder="Enter your complete address" />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Profile Photo</label>
+              <Label>Profile Photo</Label>
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
                 <PhotoIcon className="w-12 h-12 text-gray-400 mx-auto mb-2" />
                 <p className="text-gray-500">Upload your profile photo</p>
-                <button className="mt-2 text-blue-600 hover:text-blue-800">Choose File</button>
+                <Button variant="outline" className="mt-2">Choose File</Button>
               </div>
             </div>
           </div>
@@ -246,32 +256,32 @@ const GuideDashboard: React.FC = () => {
             <h4 className="text-lg font-medium text-gray-900">Languages & Specializations</h4>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">Languages Spoken</label>
+              <Label className="mb-3">Languages Spoken</Label>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {['English', 'Hindi', 'Bengali', 'Tamil', 'Telugu', 'Marathi', 'Gujarati', 'Kannada', 'Malayalam', 'Punjabi', 'Urdu', 'Odia'].map((language) => (
-                  <label key={language} className="flex items-center">
-                    <input type="checkbox" className="mr-2" />
-                    <span className="text-sm">{language}</span>
-                  </label>
+                  <div key={language} className="flex items-center space-x-2">
+                    <Checkbox id={language} />
+                    <Label htmlFor={language} className="text-sm">{language}</Label>
+                  </div>
                 ))}
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">Specializations</label>
+              <Label className="mb-3">Specializations</Label>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 {['Cultural Tours', 'Historical Sites', 'Food Tours', 'Adventure Tours', 'Religious Sites', 'Photography Tours', 'Nature Walks', 'Shopping Tours', 'Nightlife Tours', 'Art & Craft Tours'].map((specialization) => (
-                  <label key={specialization} className="flex items-center">
-                    <input type="checkbox" className="mr-2" />
-                    <span className="text-sm">{specialization}</span>
-                  </label>
+                  <div key={specialization} className="flex items-center space-x-2">
+                    <Checkbox id={specialization} />
+                    <Label htmlFor={specialization} className="text-sm">{specialization}</Label>
+                  </div>
                 ))}
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Areas of Operation</label>
-              <textarea className="w-full border border-gray-300 rounded-lg px-3 py-2" rows={3} placeholder="List the cities/areas where you provide guide services"></textarea>
+              <Label htmlFor="areas">Areas of Operation</Label>
+              <Textarea id="areas" rows={3} placeholder="List the cities/areas where you provide guide services" />
             </div>
           </div>
         )}
@@ -283,40 +293,50 @@ const GuideDashboard: React.FC = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Years of Experience</label>
-                <select className="w-full border border-gray-300 rounded-lg px-3 py-2">
-                  <option>Less than 1 year</option>
-                  <option>1-2 years</option>
-                  <option>3-5 years</option>
-                  <option>5-10 years</option>
-                  <option>More than 10 years</option>
-                </select>
+                <Label htmlFor="experience">Years of Experience</Label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select experience" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="less-than-1">Less than 1 year</SelectItem>
+                    <SelectItem value="1-2">1-2 years</SelectItem>
+                    <SelectItem value="3-5">3-5 years</SelectItem>
+                    <SelectItem value="5-10">5-10 years</SelectItem>
+                    <SelectItem value="more-than-10">More than 10 years</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Education Level</label>
-                <select className="w-full border border-gray-300 rounded-lg px-3 py-2">
-                  <option>High School</option>
-                  <option>Bachelor's Degree</option>
-                  <option>Master's Degree</option>
-                  <option>Tourism/Hospitality Degree</option>
-                  <option>Other</option>
-                </select>
+                <Label htmlFor="education">Education Level</Label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select education level" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="high-school">High School</SelectItem>
+                    <SelectItem value="bachelors">Bachelor's Degree</SelectItem>
+                    <SelectItem value="masters">Master's Degree</SelectItem>
+                    <SelectItem value="tourism">Tourism/Hospitality Degree</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Previous Experience</label>
-              <textarea className="w-full border border-gray-300 rounded-lg px-3 py-2" rows={4} placeholder="Describe your previous experience as a guide or in tourism industry"></textarea>
+              <Label htmlFor="previousExp">Previous Experience</Label>
+              <Textarea id="previousExp" rows={4} placeholder="Describe your previous experience as a guide or in tourism industry" />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Why do you want to be a guide?</label>
-              <textarea className="w-full border border-gray-300 rounded-lg px-3 py-2" rows={3} placeholder="Tell us about your motivation and passion for guiding tourists"></textarea>
+              <Label htmlFor="motivation">Why do you want to be a guide?</Label>
+              <Textarea id="motivation" rows={3} placeholder="Tell us about your motivation and passion for guiding tourists" />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Hourly Rate (₹)</label>
-              <input type="number" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Enter your preferred hourly rate" />
+              <Label htmlFor="hourlyRate">Hourly Rate (₹)</Label>
+              <Input id="hourlyRate" type="number" placeholder="Enter your preferred hourly rate" />
             </div>
           </div>
         )}
@@ -327,103 +347,109 @@ const GuideDashboard: React.FC = () => {
             <h4 className="text-lg font-medium text-gray-900">Document Upload</h4>
             
             <div className="space-y-4">
-              <div className="border border-gray-300 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-medium text-gray-900">Government ID (Aadhar/Passport/Driving License)</span>
-                  <span className="text-red-500 text-sm">Required</span>
-                </div>
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
-                  <DocumentArrowUpIcon className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                  <p className="text-gray-500 text-sm">Upload ID document</p>
-                  <button className="mt-2 text-blue-600 hover:text-blue-800 text-sm">Choose File</button>
-                </div>
-              </div>
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-medium text-gray-900">Government ID (Aadhar/Passport/Driving License)</span>
+                    <Badge variant="destructive">Required</Badge>
+                  </div>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                    <DocumentArrowUpIcon className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                    <p className="text-gray-500 text-sm">Upload ID document</p>
+                    <Button variant="outline" size="sm" className="mt-2">Choose File</Button>
+                  </div>
+                </CardContent>
+              </Card>
 
-              <div className="border border-gray-300 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-medium text-gray-900">Tourism Guide License/Certificate</span>
-                  <span className="text-yellow-500 text-sm">Optional</span>
-                </div>
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
-                  <DocumentArrowUpIcon className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                  <p className="text-gray-500 text-sm">Upload certificate</p>
-                  <button className="mt-2 text-blue-600 hover:text-blue-800 text-sm">Choose File</button>
-                </div>
-              </div>
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-medium text-gray-900">Tourism Guide License/Certificate</span>
+                    <Badge variant="secondary">Optional</Badge>
+                  </div>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                    <DocumentArrowUpIcon className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                    <p className="text-gray-500 text-sm">Upload certificate</p>
+                    <Button variant="outline" size="sm" className="mt-2">Choose File</Button>
+                  </div>
+                </CardContent>
+              </Card>
 
-              <div className="border border-gray-300 rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="font-medium text-gray-900">Educational Certificates</span>
-                  <span className="text-yellow-500 text-sm">Optional</span>
-                </div>
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
-                  <DocumentArrowUpIcon className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                  <p className="text-gray-500 text-sm">Upload certificates</p>
-                  <button className="mt-2 text-blue-600 hover:text-blue-800 text-sm">Choose File</button>
-                </div>
-              </div>
+              <Card>
+                <CardContent className="p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-medium text-gray-900">Educational Certificates</span>
+                    <Badge variant="secondary">Optional</Badge>
+                  </div>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                    <DocumentArrowUpIcon className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                    <p className="text-gray-500 text-sm">Upload certificates</p>
+                    <Button variant="outline" size="sm" className="mt-2">Choose File</Button>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
 
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <h5 className="font-medium text-blue-900 mb-2">Verification Process</h5>
-              <ul className="text-sm text-blue-800 space-y-1">
-                <li>• Your documents will be reviewed within 2-3 business days</li>
-                <li>• You'll receive an email notification once verification is complete</li>
-                <li>• Verified guides get priority in booking recommendations</li>
-                <li>• You can start receiving bookings immediately after verification</li>
-              </ul>
-            </div>
+            <Card className="bg-blue-50 border-blue-200">
+              <CardContent className="p-4">
+                <h5 className="font-medium text-blue-900 mb-2">Verification Process</h5>
+                <ul className="text-sm text-blue-800 space-y-1">
+                  <li>• Your documents will be reviewed within 2-3 business days</li>
+                  <li>• You'll receive an email notification once verification is complete</li>
+                  <li>• Verified guides get priority in booking recommendations</li>
+                  <li>• You can start receiving bookings immediately after verification</li>
+                </ul>
+              </CardContent>
+            </Card>
           </div>
         )}
 
         {/* Navigation Buttons */}
         <div className="flex justify-between mt-8">
-          <button
+          <Button
+            variant="outline"
             onClick={() => setRegistrationStep(Math.max(1, registrationStep - 1))}
             disabled={registrationStep === 1}
-            className="flex items-center px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ChevronLeftIcon className="w-4 h-4 mr-2" />
             Previous
-          </button>
+          </Button>
           
           {registrationStep < 4 ? (
-            <button
+            <Button
               onClick={() => setRegistrationStep(Math.min(4, registrationStep + 1))}
-              className="flex items-center px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
             >
               Next
               <ChevronRightIcon className="w-4 h-4 ml-2" />
-            </button>
+            </Button>
           ) : (
-            <button className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+            <Button className="bg-green-600 hover:bg-green-700">
               Submit Registration
-            </button>
+            </Button>
           )}
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 
   const renderBookingCard = (booking: Booking) => (
-    <div key={booking.id} className="bg-white rounded-lg shadow-sm border p-6">
+    <Card key={booking.id} className="p-6">
       <div className="flex items-start space-x-4">
-        <img
-          src={booking.touristPhoto}
-          alt={booking.touristName}
-          className="w-12 h-12 rounded-full object-cover"
-        />
+        <Avatar>
+          <AvatarImage src={booking.touristPhoto} alt={booking.touristName} />
+          <AvatarFallback>{booking.touristName.charAt(0)}</AvatarFallback>
+        </Avatar>
         <div className="flex-1">
           <div className="flex items-center justify-between mb-2">
             <h4 className="text-lg font-semibold text-gray-900">{booking.touristName}</h4>
-            <span className={`px-3 py-1 text-sm font-semibold rounded-full ${
-              booking.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-              booking.status === 'accepted' ? 'bg-blue-100 text-blue-800' :
-              booking.status === 'completed' ? 'bg-green-100 text-green-800' :
-              'bg-red-100 text-red-800'
-            }`}>
+            <Badge variant={
+              booking.status === 'pending' ? 'secondary' :
+              booking.status === 'accepted' ? 'default' :
+              booking.status === 'completed' ? 'default' :
+              'destructive'
+            }>
               {booking.status}
-            </span>
+            </Badge>
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-3 text-sm text-gray-600">
@@ -447,46 +473,47 @@ const GuideDashboard: React.FC = () => {
           <p className="text-gray-600 mb-3">{booking.description}</p>
           
           {booking.specialRequests && (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
-              <p className="text-sm text-blue-800">
-                <span className="font-medium">Special Requests:</span> {booking.specialRequests}
-              </p>
-            </div>
+            <Card className="bg-blue-50 border-blue-200 mb-4">
+              <CardContent className="p-3">
+                <p className="text-sm text-blue-800">
+                  <span className="font-medium">Special Requests:</span> {booking.specialRequests}
+                </p>
+              </CardContent>
+            </Card>
           )}
           
           <div className="flex space-x-3">
             {booking.status === 'pending' && (
               <>
-                <button
+                <Button
                   onClick={() => handleAcceptBooking(booking.id)}
-                  className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center"
+                  className="bg-green-600 hover:bg-green-700"
                 >
                   <CheckCircleIcon className="w-4 h-4 mr-2" />
                   Accept
-                </button>
-                <button
+                </Button>
+                <Button
                   onClick={() => handleRejectBooking(booking.id)}
-                  className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 flex items-center"
+                  variant="destructive"
                 >
                   <XCircleIcon className="w-4 h-4 mr-2" />
                   Reject
-                </button>
+                </Button>
               </>
             )}
             
             {(booking.status === 'accepted' || booking.status === 'completed') && (
-              <button
+              <Button
                 onClick={() => handleChatWithTourist(booking.id)}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center"
               >
                 <ChatBubbleLeftRightIcon className="w-4 h-4 mr-2" />
                 Chat
-              </button>
+              </Button>
             )}
           </div>
         </div>
       </div>
-    </div>
+    </Card>
   );
 
   return (
@@ -503,40 +530,20 @@ const GuideDashboard: React.FC = () => {
         </motion.div>
 
         {/* Navigation Tabs */}
-        <div className="mb-8">
-          <div className="border-b border-gray-200">
-            <nav className="-mb-px flex space-x-8 overflow-x-auto">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                    activeTab === tab.id
-                      ? 'border-blue-500 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
-                >
-                  <tab.icon className="w-5 h-5 mr-2" />
-                  {tab.name}
-                </button>
-              ))}
-            </nav>
-          </div>
-        </div>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="registration">Registration</TabsTrigger>
+            <TabsTrigger value="bookings">Bookings</TabsTrigger>
+            <TabsTrigger value="calendar">Calendar</TabsTrigger>
+          </TabsList>
 
-        {/* Tab Content */}
-        <motion.div
-          key={activeTab}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          {/* Overview Tab */}
-          {activeTab === 'overview' && (
-            <div className="space-y-6">
-              {/* Stats Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
+          {/* Tab Content */}
+          <TabsContent value="overview" className="space-y-6">
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              <Card>
+                <CardContent className="p-6">
                   <div className="flex items-center">
                     <div className="p-2 bg-green-100 rounded-lg">
                       <CurrencyRupeeIcon className="w-6 h-6 text-green-600" />
@@ -546,9 +553,11 @@ const GuideDashboard: React.FC = () => {
                       <p className="text-2xl font-bold text-gray-900">₹{totalEarnings.toLocaleString()}</p>
                     </div>
                   </div>
-                </div>
+                </CardContent>
+              </Card>
 
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
+              <Card>
+                <CardContent className="p-6">
                   <div className="flex items-center">
                     <div className="p-2 bg-blue-100 rounded-lg">
                       <CalendarIcon className="w-6 h-6 text-blue-600" />
@@ -558,9 +567,11 @@ const GuideDashboard: React.FC = () => {
                       <p className="text-2xl font-bold text-gray-900">{guideProfile.totalBookings}</p>
                     </div>
                   </div>
-                </div>
+                </CardContent>
+              </Card>
 
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
+              <Card>
+                <CardContent className="p-6">
                   <div className="flex items-center">
                     <div className="p-2 bg-yellow-100 rounded-lg">
                       <StarIcon className="w-6 h-6 text-yellow-600" />
@@ -570,9 +581,11 @@ const GuideDashboard: React.FC = () => {
                       <p className="text-2xl font-bold text-gray-900">{guideProfile.rating}</p>
                     </div>
                   </div>
-                </div>
+                </CardContent>
+              </Card>
 
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
+              <Card>
+                <CardContent className="p-6">
                   <div className="flex items-center">
                     <div className="p-2 bg-purple-100 rounded-lg">
                       <ClockIcon className="w-6 h-6 text-purple-600" />
@@ -582,18 +595,21 @@ const GuideDashboard: React.FC = () => {
                       <p className="text-2xl font-bold text-gray-900">{getBookingsByStatus('pending').length}</p>
                     </div>
                   </div>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
+            </div>
 
-              {/* Profile Status */}
-              <div className="bg-white rounded-lg shadow-sm border p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Profile Status</h3>
+            {/* Profile Status */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Profile Status</CardTitle>
+              </CardHeader>
+              <CardContent>
                 <div className="flex items-center space-x-4">
-                  <img
-                    src={guideProfile.photo}
-                    alt={guideProfile.name}
-                    className="w-16 h-16 rounded-full object-cover"
-                  />
+                  <Avatar className="w-16 h-16">
+                    <AvatarImage src={guideProfile.photo} alt={guideProfile.name} />
+                    <AvatarFallback>{guideProfile.name.charAt(0)}</AvatarFallback>
+                  </Avatar>
                   <div className="flex-1">
                     <h4 className="text-xl font-semibold text-gray-900">{guideProfile.name}</h4>
                     <p className="text-gray-600">{guideProfile.specializations.join(', ')}</p>
@@ -601,77 +617,73 @@ const GuideDashboard: React.FC = () => {
                     <p className="text-gray-600">Experience: {guideProfile.experience} years</p>
                   </div>
                   <div>
-                    <span className={`inline-flex px-3 py-1 text-sm font-semibold rounded-full ${
-                      guideProfile.status === 'verified' ? 'bg-green-100 text-green-800' :
-                      guideProfile.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-red-100 text-red-800'
-                    }`}>
+                    <Badge variant={
+                      guideProfile.status === 'verified' ? 'default' :
+                      guideProfile.status === 'pending' ? 'secondary' :
+                      'destructive'
+                    }>
                       {guideProfile.status}
-                    </span>
+                    </Badge>
                   </div>
                 </div>
-              </div>
+              </CardContent>
+            </Card>
 
-              {/* Recent Bookings */}
-              <div className="bg-white rounded-lg shadow-sm border">
-                <div className="p-6 border-b">
-                  <h3 className="text-lg font-semibold text-gray-900">Recent Bookings</h3>
-                </div>
-                <div className="p-6 space-y-4">
-                  {bookings.slice(0, 3).map((booking) => renderBookingCard(booking))}
-                </div>
-              </div>
-            </div>
-          )}
+            {/* Recent Bookings */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent Bookings</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {bookings.slice(0, 3).map((booking) => renderBookingCard(booking))}
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           {/* Registration Tab */}
-          {activeTab === 'registration' && (
-            <div>
-              {!showRegistrationForm ? (
-                <div className="bg-white rounded-lg shadow-sm border p-6 text-center">
-                  <AcademicCapIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Complete Your Registration</h3>
-                  <p className="text-gray-600 mb-6">Fill out your profile to start receiving bookings</p>
-                  <button
-                    onClick={() => setShowRegistrationForm(true)}
-                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
-                  >
-                    Start Registration
-                  </button>
-                </div>
-              ) : (
-                renderRegistrationForm()
-              )}
-            </div>
-          )}
+          <TabsContent value="registration">
+            {!showRegistrationForm ? (
+              <div className="bg-white rounded-lg shadow-sm border p-6 text-center">
+                <AcademicCapIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Complete Your Registration</h3>
+                <p className="text-gray-600 mb-6">Fill out your profile to start receiving bookings</p>
+                <button
+                  onClick={() => setShowRegistrationForm(true)}
+                  className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700"
+                >
+                  Start Registration
+                </button>
+              </div>
+            ) : (
+              renderRegistrationForm()
+            )}
+          </TabsContent>
 
           {/* Bookings Tab */}
-          {activeTab === 'bookings' && (
-            <div className="space-y-6">
-              {/* Booking Tabs */}
-              <div className="bg-white rounded-lg shadow-sm border">
-                <div className="border-b border-gray-200">
-                  <nav className="-mb-px flex space-x-8 px-6">
-                    {['pending', 'accepted', 'rejected', 'completed'].map((status) => (
-                      <button
-                        key={status}
-                        className="py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 font-medium text-sm capitalize"
-                      >
-                        {status} ({getBookingsByStatus(status).length})
-                      </button>
-                    ))}
-                  </nav>
-                </div>
-                
-                <div className="p-6 space-y-6">
-                  {bookings.map((booking) => renderBookingCard(booking))}
-                </div>
+          <TabsContent value="bookings" className="space-y-6">
+            {/* Booking Tabs */}
+            <div className="bg-white rounded-lg shadow-sm border">
+              <div className="border-b border-gray-200">
+                <nav className="-mb-px flex space-x-8 px-6">
+                  {['pending', 'accepted', 'rejected', 'completed'].map((status) => (
+                    <button
+                      key={status}
+                      className="py-4 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 font-medium text-sm capitalize"
+                    >
+                      {status} ({getBookingsByStatus(status).length})
+                    </button>
+                  ))}
+                </nav>
+              </div>
+              
+              <div className="p-6 space-y-6">
+                {bookings.map((booking) => renderBookingCard(booking))}
               </div>
             </div>
-          )}
+          </TabsContent>
 
           {/* Calendar Tab */}
-          {activeTab === 'calendar' && (
+          <TabsContent value="calendar">
             <div className="bg-white rounded-lg shadow-sm border">
               <div className="p-6 border-b">
                 <div className="flex items-center justify-between">
@@ -695,8 +707,8 @@ const GuideDashboard: React.FC = () => {
                 </div>
               </div>
             </div>
-          )}
-        </motion.div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

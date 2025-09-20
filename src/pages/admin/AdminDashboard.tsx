@@ -1,20 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import {
-  MapIcon,
   UserGroupIcon,
-  ShoppingBagIcon,
-  UserIcon,
+  MapIcon,
+  BuildingStorefrontIcon,
   ExclamationTriangleIcon,
   ChartBarIcon,
-  EyeIcon,
   CheckCircleIcon,
   XCircleIcon,
-  PencilIcon,
+  EyeIcon,
   ClockIcon,
+  PencilIcon,
   ArrowTrendingUpIcon,
-  BuildingStorefrontIcon
+  UserIcon,
+  ShoppingBagIcon
 } from '@heroicons/react/24/outline';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../components/ui/table';
+import { Avatar, AvatarFallback, AvatarImage } from '../../components/ui/avatar';
+import { Progress } from '../../components/ui/progress';
+import { Alert, AlertDescription } from '../../components/ui/alert';
 
 interface Tourist {
   id: string;
@@ -165,363 +174,373 @@ const AdminDashboard: React.FC = () => {
         </motion.div>
 
         {/* Navigation Tabs */}
-        <div className="mb-8">
-          <div className="border-b border-gray-200">
-            <nav className="-mb-px flex space-x-8 overflow-x-auto">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                    activeTab === tab.id
-                      ? 'border-blue-500 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
-                >
-                  <tab.icon className="w-5 h-5 mr-2" />
-                  {tab.name}
-                </button>
-              ))}
-            </nav>
-          </div>
-        </div>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList className="grid w-full grid-cols-6">
+            <TabsTrigger value="overview" className="flex items-center gap-2">
+              <MapIcon className="w-4 h-4" />
+              Overview
+            </TabsTrigger>
+            <TabsTrigger value="tourists" className="flex items-center gap-2">
+              <UserIcon className="w-4 h-4" />
+              Tourists
+            </TabsTrigger>
+            <TabsTrigger value="marketplace" className="flex items-center gap-2">
+              <ShoppingBagIcon className="w-4 h-4" />
+              Marketplace
+            </TabsTrigger>
+            <TabsTrigger value="guides" className="flex items-center gap-2">
+              <UserGroupIcon className="w-4 h-4" />
+              Guides
+            </TabsTrigger>
+            <TabsTrigger value="complaints" className="flex items-center gap-2">
+              <ExclamationTriangleIcon className="w-4 h-4" />
+              Complaints
+            </TabsTrigger>
+            <TabsTrigger value="analytics" className="flex items-center gap-2">
+              <ChartBarIcon className="w-4 h-4" />
+              Analytics
+            </TabsTrigger>
+          </TabsList>
 
-        {/* Tab Content */}
-        <motion.div
-          key={activeTab}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.3 }}
-        >
           {/* Overview Tab */}
-          {activeTab === 'overview' && (
+          <TabsContent value="overview" className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <div className="bg-white p-6 rounded-lg shadow-sm border">
-                <div className="flex items-center">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <UserGroupIcon className="w-6 h-6 text-blue-600" />
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center">
+                    <div className="p-2 bg-blue-100 rounded-lg">
+                      <UserGroupIcon className="w-6 h-6 text-blue-600" />
+                    </div>
+                    <div className="ml-4">
+                      <p className="text-sm font-medium text-gray-600">Active Tourists</p>
+                      <p className="text-2xl font-bold text-gray-900">1,234</p>
+                    </div>
                   </div>
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600">Active Tourists</p>
-                    <p className="text-2xl font-bold text-gray-900">1,234</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center">
+                    <div className="p-2 bg-green-100 rounded-lg">
+                      <BuildingStorefrontIcon className="w-6 h-6 text-green-600" />
+                    </div>
+                    <div className="ml-4">
+                      <p className="text-sm font-medium text-gray-600">Marketplace Items</p>
+                      <p className="text-2xl font-bold text-gray-900">567</p>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-sm border">
-                <div className="flex items-center">
-                  <div className="p-2 bg-green-100 rounded-lg">
-                    <BuildingStorefrontIcon className="w-6 h-6 text-green-600" />
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center">
+                    <div className="p-2 bg-purple-100 rounded-lg">
+                      <MapIcon className="w-6 h-6 text-purple-600" />
+                    </div>
+                    <div className="ml-4">
+                      <p className="text-sm font-medium text-gray-600">Active Guides</p>
+                      <p className="text-2xl font-bold text-gray-900">89</p>
+                    </div>
                   </div>
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600">Marketplace Items</p>
-                    <p className="text-2xl font-bold text-gray-900">567</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center">
+                    <div className="p-2 bg-red-100 rounded-lg">
+                      <ExclamationTriangleIcon className="w-6 h-6 text-red-600" />
+                    </div>
+                    <div className="ml-4">
+                      <p className="text-sm font-medium text-gray-600">Open Complaints</p>
+                      <p className="text-2xl font-bold text-gray-900">12</p>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-sm border">
-                <div className="flex items-center">
-                  <div className="p-2 bg-purple-100 rounded-lg">
-                    <MapIcon className="w-6 h-6 text-purple-600" />
-                  </div>
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600">Active Guides</p>
-                    <p className="text-2xl font-bold text-gray-900">89</p>
-                  </div>
-                </div>
-              </div>
-              <div className="bg-white p-6 rounded-lg shadow-sm border">
-                <div className="flex items-center">
-                  <div className="p-2 bg-red-100 rounded-lg">
-                    <ExclamationTriangleIcon className="w-6 h-6 text-red-600" />
-                  </div>
-                  <div className="ml-4">
-                    <p className="text-sm font-medium text-gray-600">Open Complaints</p>
-                    <p className="text-2xl font-bold text-gray-900">12</p>
-                  </div>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             </div>
-          )}
+          </TabsContent>
 
           {/* Tourist Monitoring Tab */}
-          {activeTab === 'tourists' && (
-            <div className="space-y-6">
-              <div className="bg-white rounded-lg shadow-sm border">
-                <div className="p-6 border-b">
-                  <h3 className="text-lg font-semibold text-gray-900">Tourist Activity Map</h3>
-                  <p className="text-gray-600">Heatmap of tourist check-ins and popular destinations</p>
-                </div>
-                <div className="p-6">
-                  <div className="bg-gray-100 rounded-lg h-64 flex items-center justify-center">
-                    <p className="text-gray-500">Interactive Map Component (Google Maps API integration)</p>
-                  </div>
-                </div>
-              </div>
+          <TabsContent value="tourists" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Tourist Activity Monitoring</CardTitle>
+                <CardDescription>Real-time tracking of tourist locations and activities</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Tourist</TableHead>
+                      <TableHead>Location</TableHead>
+                      <TableHead>Last Activity</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {tourists.map((tourist) => (
+                      <TableRow key={tourist.id}>
+                        <TableCell className="font-medium">{tourist.name}</TableCell>
+                        <TableCell>{tourist.location}</TableCell>
+                        <TableCell>{tourist.lastActivity}</TableCell>
+                        <TableCell>
+                          <Badge variant={tourist.status === 'active' ? 'default' : 'secondary'}>
+                            {tourist.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <Button variant="outline" size="sm">
+                            <EyeIcon className="w-4 h-4 mr-1" />
+                            View
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
 
-              <div className="bg-white rounded-lg shadow-sm border">
-                <div className="p-6 border-b">
-                  <h3 className="text-lg font-semibold text-gray-900">Recent Tourist Activities</h3>
+            <Card>
+              <CardHeader>
+                <CardTitle>Tourist Activity Map</CardTitle>
+                <CardDescription>Heatmap of tourist check-ins and popular destinations</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="bg-gray-100 rounded-lg h-64 flex items-center justify-center">
+                  <p className="text-gray-500">Interactive Map Component (Google Maps API integration)</p>
                 </div>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tourist</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Activity</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
-                      {tourists.map((tourist) => (
-                        <tr key={tourist.id}>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{tourist.name}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{tourist.location}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{tourist.lastActivity}</td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                              tourist.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-                            }`}>
-                              {tourist.status}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                            <button className="text-blue-600 hover:text-blue-900 mr-3">
-                              <EyeIcon className="w-4 h-4" />
-                            </button>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          )}
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           {/* Marketplace Management Tab */}
-          {activeTab === 'marketplace' && (
-            <div className="bg-white rounded-lg shadow-sm border">
-              <div className="p-6 border-b">
-                <h3 className="text-lg font-semibold text-gray-900">Marketplace Items</h3>
-                <p className="text-gray-600">Manage handicrafts, homestays, and events</p>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item Name</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Seller</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
+          <TabsContent value="marketplace" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Marketplace Items</CardTitle>
+                <CardDescription>Manage handicrafts, homestays, and events</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Item Name</TableHead>
+                      <TableHead>Category</TableHead>
+                      <TableHead>Seller</TableHead>
+                      <TableHead>Price</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
                     {marketplaceItems.map((item) => (
-                      <tr key={item.id}>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.name}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.category}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.seller}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹{item.price}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                            item.status === 'approved' ? 'bg-green-100 text-green-800' :
-                            item.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-red-100 text-red-800'
-                          }`}>
+                      <TableRow key={item.id}>
+                        <TableCell className="font-medium">{item.name}</TableCell>
+                        <TableCell>{item.category}</TableCell>
+                        <TableCell>{item.seller}</TableCell>
+                        <TableCell>₹{item.price}</TableCell>
+                        <TableCell>
+                          <Badge variant={
+                            item.status === 'approved' ? 'default' :
+                            item.status === 'pending' ? 'secondary' :
+                            'destructive'
+                          }>
                             {item.status}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                          <button
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="space-x-2">
+                          <Button
                             onClick={() => handleApproveItem(item.id)}
-                            className="text-green-600 hover:text-green-900"
+                            variant="outline"
+                            size="sm"
                           >
                             <CheckCircleIcon className="w-4 h-4" />
-                          </button>
-                          <button
+                          </Button>
+                          <Button
                             onClick={() => handleRejectItem(item.id)}
-                            className="text-red-600 hover:text-red-900"
+                            variant="outline"
+                            size="sm"
                           >
                             <XCircleIcon className="w-4 h-4" />
-                          </button>
-                          <button className="text-blue-600 hover:text-blue-900">
-                            <PencilIcon className="w-4 h-4" />
-                          </button>
-                        </td>
-                      </tr>
+                          </Button>
+                        </TableCell>
+                      </TableRow>
                     ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           {/* Guide Applications Tab */}
-          {activeTab === 'guides' && (
-            <div className="bg-white rounded-lg shadow-sm border">
-              <div className="p-6 border-b">
-                <h3 className="text-lg font-semibold text-gray-900">Guide Applications</h3>
-                <p className="text-gray-600">Review and approve guide registrations</p>
-              </div>
-              <div className="p-6 space-y-6">
+          <TabsContent value="guides" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Guide Applications</CardTitle>
+                <CardDescription>Review and approve guide registrations</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
                 {guideApplications.map((guide) => (
-                  <div key={guide.id} className="border rounded-lg p-6">
-                    <div className="flex items-start space-x-4">
-                      <img
-                        src={guide.photo}
-                        alt={guide.name}
-                        className="w-16 h-16 rounded-full object-cover"
-                      />
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2">
-                          <h4 className="text-lg font-semibold text-gray-900">{guide.name}</h4>
-                          {guide.blockchainVerified && (
-                            <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
-                              Blockchain Verified
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-gray-600 mb-2">Experience: {guide.experience} years</p>
-                        <p className="text-gray-600 mb-2">Languages: {guide.languages.join(', ')}</p>
-                        <p className="text-gray-600 mb-4">Certificate: {guide.certificate}</p>
-                        <div className="flex space-x-3">
-                          <button
-                            onClick={() => handleApproveGuide(guide.id)}
-                            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center"
-                          >
-                            <CheckCircleIcon className="w-4 h-4 mr-2" />
-                            Approve
-                          </button>
-                          <button
-                            onClick={() => handleRejectGuide(guide.id)}
-                            className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 flex items-center"
-                          >
-                            <XCircleIcon className="w-4 h-4 mr-2" />
-                            Reject
-                          </button>
+                  <Card key={guide.id}>
+                    <CardContent className="p-6">
+                      <div className="flex items-start space-x-4">
+                        <Avatar className="w-16 h-16">
+                          <AvatarImage src={guide.photo} alt={guide.name} />
+                          <AvatarFallback>{guide.name.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-2 mb-2">
+                            <h4 className="text-lg font-semibold text-gray-900">{guide.name}</h4>
+                            {guide.blockchainVerified && (
+                              <Badge variant="secondary">
+                                Blockchain Verified
+                              </Badge>
+                            )}
+                          </div>
+                          <p className="text-gray-600 mb-2">Experience: {guide.experience} years</p>
+                          <p className="text-gray-600 mb-2">Languages: {guide.languages.join(', ')}</p>
+                          <p className="text-gray-600 mb-4">Certificate: {guide.certificate}</p>
+                          <div className="flex space-x-3">
+                            <Button
+                              onClick={() => handleApproveGuide(guide.id)}
+                              variant="default"
+                              size="sm"
+                            >
+                              <CheckCircleIcon className="w-4 h-4 mr-2" />
+                              Approve
+                            </Button>
+                            <Button
+                              onClick={() => handleRejectGuide(guide.id)}
+                              variant="destructive"
+                              size="sm"
+                            >
+                              <XCircleIcon className="w-4 h-4 mr-2" />
+                              Reject
+                            </Button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
                 ))}
-              </div>
-            </div>
-          )}
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           {/* Complaints Tab */}
-          {activeTab === 'complaints' && (
-            <div className="bg-white rounded-lg shadow-sm border">
-              <div className="p-6 border-b">
-                <h3 className="text-lg font-semibold text-gray-900">Complaints & Feedback</h3>
-                <p className="text-gray-600">Manage user complaints and issues</p>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ticket ID</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priority</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
+          <TabsContent value="complaints" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Complaints & Feedback</CardTitle>
+                <CardDescription>Manage user complaints and issues</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Ticket ID</TableHead>
+                      <TableHead>User</TableHead>
+                      <TableHead>Category</TableHead>
+                      <TableHead>Description</TableHead>
+                      <TableHead>Priority</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
                     {complaints.map((complaint) => (
-                      <tr key={complaint.id}>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{complaint.ticketId}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{complaint.userName}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{complaint.category}</td>
-                        <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{complaint.description}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                            complaint.priority === 'high' ? 'bg-red-100 text-red-800' :
-                            complaint.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-green-100 text-green-800'
-                          }`}>
+                      <TableRow key={complaint.id}>
+                        <TableCell className="font-medium">{complaint.ticketId}</TableCell>
+                        <TableCell>{complaint.userName}</TableCell>
+                        <TableCell>{complaint.category}</TableCell>
+                        <TableCell className="max-w-xs truncate">{complaint.description}</TableCell>
+                        <TableCell>
+                          <Badge variant={
+                            complaint.priority === 'high' ? 'destructive' :
+                            complaint.priority === 'medium' ? 'secondary' :
+                            'default'
+                          }>
                             {complaint.priority}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                            complaint.status === 'open' ? 'bg-red-100 text-red-800' :
-                            complaint.status === 'assigned' ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-green-100 text-green-800'
-                          }`}>
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant={
+                            complaint.status === 'open' ? 'destructive' :
+                            complaint.status === 'assigned' ? 'secondary' :
+                            'default'
+                          }>
                             {complaint.status}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                          <button
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="space-x-2">
+                          <Button
                             onClick={() => handleAssignComplaint(complaint.id)}
-                            className="text-blue-600 hover:text-blue-900"
+                            variant="outline"
+                            size="sm"
                           >
                             <ClockIcon className="w-4 h-4" />
-                          </button>
-                          <button
+                          </Button>
+                          <Button
                             onClick={() => handleResolveComplaint(complaint.id)}
-                            className="text-green-600 hover:text-green-900"
+                            variant="outline"
+                            size="sm"
                           >
                             <CheckCircleIcon className="w-4 h-4" />
-                          </button>
-                        </td>
-                      </tr>
+                          </Button>
+                        </TableCell>
+                      </TableRow>
                     ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
           {/* Analytics Tab */}
-          {activeTab === 'analytics' && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div className="bg-white rounded-lg shadow-sm border p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Sentiment Analysis</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Positive</span>
-                      <span className="text-sm font-medium text-green-600">{sentimentData.positive}%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className="bg-green-500 h-2 rounded-full" style={{ width: `${sentimentData.positive}%` }}></div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Neutral</span>
-                      <span className="text-sm font-medium text-yellow-600">{sentimentData.neutral}%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className="bg-yellow-500 h-2 rounded-full" style={{ width: `${sentimentData.neutral}%` }}></div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Negative</span>
-                      <span className="text-sm font-medium text-red-600">{sentimentData.negative}%</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className="bg-red-500 h-2 rounded-full" style={{ width: `${sentimentData.negative}%` }}></div>
-                    </div>
+          <TabsContent value="analytics" className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Sentiment Analysis</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-600">Positive</span>
+                    <span className="text-sm font-medium text-green-600">{sentimentData.positive}%</span>
                   </div>
-                </div>
+                  <Progress value={sentimentData.positive} className="h-2" />
+                  
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-600">Neutral</span>
+                    <span className="text-sm font-medium text-yellow-600">{sentimentData.neutral}%</span>
+                  </div>
+                  <Progress value={sentimentData.neutral} className="h-2" />
+                  
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-gray-600">Negative</span>
+                    <span className="text-sm font-medium text-red-600">{sentimentData.negative}%</span>
+                  </div>
+                  <Progress value={sentimentData.negative} className="h-2" />
+                </CardContent>
+              </Card>
 
-                <div className="bg-white rounded-lg shadow-sm border p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Feedback Trends</h3>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Feedback Trends</CardTitle>
+                </CardHeader>
+                <CardContent>
                   <div className="bg-gray-100 rounded-lg h-64 flex items-center justify-center">
                     <p className="text-gray-500">Line Chart Component (Sentiment trends over time)</p>
                   </div>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
+            </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <Card>
+                <CardContent className="p-6">
                   <div className="flex items-center">
                     <ArrowTrendingUpIcon className="w-8 h-8 text-green-500" />
                     <div className="ml-4">
@@ -530,9 +549,11 @@ const AdminDashboard: React.FC = () => {
                       <p className="text-sm text-green-600">+5% from last month</p>
                     </div>
                   </div>
-                </div>
+                </CardContent>
+              </Card>
 
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
+              <Card>
+                <CardContent className="p-6">
                   <div className="flex items-center">
                     <ChartBarIcon className="w-8 h-8 text-blue-500" />
                     <div className="ml-4">
@@ -541,9 +562,11 @@ const AdminDashboard: React.FC = () => {
                       <p className="text-sm text-blue-600">+12% from last month</p>
                     </div>
                   </div>
-                </div>
+                </CardContent>
+              </Card>
 
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
+              <Card>
+                <CardContent className="p-6">
                   <div className="flex items-center">
                     <ArrowTrendingUpIcon className="w-8 h-8 text-red-500" />
                     <div className="ml-4">
@@ -552,11 +575,11 @@ const AdminDashboard: React.FC = () => {
                       <p className="text-sm text-red-600">-15% from last month</p>
                     </div>
                   </div>
-                </div>
-              </div>
+                </CardContent>
+              </Card>
             </div>
-          )}
-        </motion.div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

@@ -5,6 +5,9 @@ import * as FaIcons from 'react-icons/fa';
 import LeafletMap from '../../components/LeafletMap';
 import DirectionsMap from '../../components/ui/DirectionsMap';
 import VREmbed from '../../components/vr/VREmbed';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
 
 interface IndianState {
   id: number;
@@ -253,120 +256,125 @@ const ExplorePage: React.FC = () => {
         <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">Discover Amazing Places in Jharkhand</h2>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {indianStates[0].touristSpots.map((spot) => (
-                <motion.div
-                  key={spot.id}
-                  whileHover={{ scale: 1.02 }}
-                  className="bg-white rounded-xl shadow-lg overflow-hidden"
-                >
-                  <div className="h-48 bg-cover bg-center" style={{ backgroundImage: `url(${spot.image})` }}>
-                    <div className="h-full bg-black bg-opacity-30 flex items-end">
-                      <div className="p-4 text-white">
-                        <h3 className="text-xl font-bold">{spot.name}</h3>
-                        <span className="text-sm opacity-90 capitalize">{spot.category}</span>
-                      </div>
+            <motion.div
+              key={spot.id}
+              whileHover={{ scale: 1.02 }}
+            >
+              <Card className="overflow-hidden">
+                <div className="h-48 bg-cover bg-center" style={{ backgroundImage: `url(${spot.image})` }}>
+                  <div className="h-full bg-black bg-opacity-30 flex items-end">
+                    <div className="p-4 text-white">
+                      <h3 className="text-xl font-bold">{spot.name}</h3>
+                      <span className="text-sm opacity-90 capitalize">{spot.category}</span>
                     </div>
                   </div>
-                  <div className="p-6">
-                    <p className="text-gray-600 mb-4">{spot.description}</p>
+                </div>
+                <CardContent className="p-6">
+                  <p className="text-gray-600 mb-4">{spot.description}</p>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-2">Key Activities</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {spot.activities.map((activity, index) => (
+                          <Badge key={index} variant="secondary" className="bg-blue-100 text-blue-800">
+                            {activity}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
                     
-                    <div className="space-y-4">
-                      <div>
-                        <h4 className="font-semibold text-gray-900 mb-2">Key Activities</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {spot.activities.map((activity, index) => (
-                            <span key={index} className="text-xs bg-blue-100 text-blue-800 px-3 py-1 rounded-full">
-                              {activity}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <h4 className="font-semibold text-gray-900 mb-2">Local Delicacies</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {spot.localFood.map((food, index) => (
-                            <span key={index} className="text-xs bg-orange-100 text-orange-800 px-3 py-1 rounded-full">
-                              {food}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div>
-                        <h4 className="font-semibold text-gray-900 mb-2">Travel Tips</h4>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                          <div>
-                            <h5 className="text-sm font-medium text-green-700 mb-1">Do's</h5>
-                            <ul className="text-xs text-gray-600 space-y-1">
-                              {spot.dosAndDonts.dos.map((item, index) => (
-                                <li key={index} className="flex items-start gap-1">
-                                  <span className="text-green-500 mt-0.5">✓</span>
-                                  {item}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                          <div>
-                            <h5 className="text-sm font-medium text-red-700 mb-1">Don'ts</h5>
-                            <ul className="text-xs text-gray-600 space-y-1">
-                              {spot.dosAndDonts.donts.map((item, index) => (
-                                <li key={index} className="flex items-start gap-1">
-                                  <span className="text-red-500 mt-0.5">✗</span>
-                                  {item}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center justify-between text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
-                        <div>
-                          <span className="font-medium">Best Time:</span> {spot.bestTime}
-                        </div>
-                        <div>
-                          <span className="font-medium">Timings:</span> {spot.timings}
-                        </div>
-                      </div>
-                      
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => handleShowVR(spot)}
-                          className="flex-1 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
-                        >
-                          <FaIcons.FaVrCardboard />
-                          VR Experience
-                        </button>
-                        <button
-                          onClick={() => handleShowAR(spot)}
-                          className="flex-1 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
-                        >
-                          <FaIcons.FaMobile />
-                          AR Experience
-                        </button>
-                      </div>
-                      
-                      <div className="flex gap-2 pt-2">
-                        <button
-                          onClick={() => handleGetDirections(spot)}
-                          className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
-                        >
-                          <FaIcons.FaDirections />
-                          Get Directions
-                        </button>
-                        <button
-                          onClick={() => handleShowCabFare(spot)}
-                          className="flex-1 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2 text-sm font-medium"
-                        >
-                          <FaIcons.FaTaxi />
-                          Cab Fare
-                        </button>
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-2">Local Delicacies</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {spot.localFood.map((food, index) => (
+                          <Badge key={index} variant="secondary" className="bg-orange-100 text-orange-800">
+                            {food}
+                          </Badge>
+                        ))}
                       </div>
                     </div>
+
+                    <div>
+                      <h4 className="font-semibold text-gray-900 mb-2">Travel Tips</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div>
+                          <h5 className="text-sm font-medium text-green-700 mb-1">Do's</h5>
+                          <ul className="text-xs text-gray-600 space-y-1">
+                            {spot.dosAndDonts.dos.map((item, index) => (
+                              <li key={index} className="flex items-start gap-1">
+                                <span className="text-green-500 mt-0.5">✓</span>
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div>
+                          <h5 className="text-sm font-medium text-red-700 mb-1">Don'ts</h5>
+                          <ul className="text-xs text-gray-600 space-y-1">
+                            {spot.dosAndDonts.donts.map((item, index) => (
+                              <li key={index} className="flex items-start gap-1">
+                                <span className="text-red-500 mt-0.5">✗</span>
+                                {item}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center justify-between text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
+                      <div>
+                        <span className="font-medium">Best Time:</span> {spot.bestTime}
+                      </div>
+                      <div>
+                        <span className="font-medium">Timings:</span> {spot.timings}
+                      </div>
+                    </div>
+                    
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={() => handleShowVR(spot)}
+                        className="flex-1 bg-purple-600 hover:bg-purple-700"
+                        size="sm"
+                      >
+                        <FaIcons.FaVrCardboard className="mr-2" />
+                        VR Experience
+                      </Button>
+                      <Button
+                        onClick={() => handleShowAR(spot)}
+                        className="flex-1 bg-indigo-600 hover:bg-indigo-700"
+                        size="sm"
+                      >
+                        <FaIcons.FaMobile className="mr-2" />
+                        AR Experience
+                      </Button>
+                    </div>
+                    
+                    <div className="flex gap-2 pt-2">
+                      <Button
+                        onClick={() => handleGetDirections(spot)}
+                        className="flex-1 bg-blue-600 hover:bg-blue-700"
+                        size="sm"
+                      >
+                        <FaIcons.FaDirections className="mr-2" />
+                        Get Directions
+                      </Button>
+                      <Button
+                        onClick={() => handleShowCabFare(spot)}
+                        className="flex-1 bg-green-600 hover:bg-green-700"
+                        size="sm"
+                      >
+                        <FaIcons.FaTaxi className="mr-2" />
+                        Cab Fare
+                      </Button>
+                    </div>
                   </div>
-                </motion.div>
-              ))}
-            </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
       </div>
 
       {/* Directions Map Modal */}
@@ -388,18 +396,64 @@ const ExplorePage: React.FC = () => {
             button[class*="fixed"][class*="bottom"][class*="right"] { display: none !important; }
             div[class*="fixed"][class*="bottom"][class*="right"][class*="z-"] { display: none !important; }
           `}</style>
+          
+          {/* Top Exit Button */}
           <div className="absolute top-4 right-4" style={{ zIndex: 10001 }}>
-            <button
+            <Button
               onClick={() => setShowVR(false)}
-              className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+              variant="destructive"
+              size="lg"
+              className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-3 shadow-lg"
             >
-              <FaIcons.FaTimes />
-              Close VR
-            </button>
+              <FaIcons.FaTimes className="text-lg" />
+              Exit VR
+            </Button>
           </div>
-          <VREmbed
-            locationName={vrSpot.name}
-          />
+
+          {/* Top Left Exit Button (Alternative) */}
+          <div className="absolute top-4 left-4" style={{ zIndex: 10001 }}>
+            <Button
+              onClick={() => setShowVR(false)}
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2 bg-black/50 border-white/30 text-white hover:bg-white/20"
+            >
+              <FaIcons.FaArrowLeft />
+              Back
+            </Button>
+          </div>
+
+          {/* Bottom Exit Instructions */}
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2" style={{ zIndex: 10001 }}>
+            <div className="bg-black/70 text-white px-4 py-2 rounded-lg text-sm text-center">
+              <p className="mb-2">Press <kbd className="bg-white/20 px-2 py-1 rounded text-xs">ESC</kbd> or click Exit VR to close</p>
+              <Button
+                onClick={() => setShowVR(false)}
+                variant="secondary"
+                size="sm"
+                className="bg-white/20 hover:bg-white/30 text-white border-none"
+              >
+                Exit VR Experience
+              </Button>
+            </div>
+          </div>
+
+          {/* Keyboard Event Listener for ESC key */}
+          <div
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') {
+                setShowVR(false);
+              }
+            }}
+            className="w-full h-full outline-none"
+            autoFocus
+          >
+            <VREmbed
+              locationName={vrSpot.name}
+              onExit={() => setShowVR(false)}
+            />
+          </div>
         </div>
       )}
     </div>

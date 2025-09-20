@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaCalendarAlt, FaMapMarkerAlt, FaClock, FaTicketAlt, FaUsers, FaList, FaCalendarDay } from 'react-icons/fa';
 import { MdEvent, MdFestival } from 'react-icons/md';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
 
 interface Event {
   id: string;

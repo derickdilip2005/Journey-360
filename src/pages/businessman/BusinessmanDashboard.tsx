@@ -17,6 +17,16 @@ import {
   ArrowDownTrayIcon,
   ClockIcon
 } from '@heroicons/react/24/outline';
+import { Card, CardContent, CardHeader, CardTitle } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/tabs';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../components/ui/table';
+import { Input } from '../../components/ui/input';
+import { Textarea } from '../../components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
+import { Checkbox } from '../../components/ui/checkbox';
+import { Label } from '../../components/ui/label';
 
 interface Business {
   id: string;
@@ -157,244 +167,268 @@ const BusinessmanDashboard: React.FC = () => {
   };
 
   const renderBusinessRegistrationForm = () => (
-    <div className="bg-white rounded-lg shadow-sm border p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-6">Register Your Business</h3>
-      
-      {/* Business Type Selection */}
-      <div className="mb-6">
-        <label className="block text-sm font-medium text-gray-700 mb-3">Business Type</label>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {(['Handicraft', 'Homestay', 'Event Organizer'] as const).map((type) => (
-            <label key={type} className="relative">
-              <input
-                type="radio"
-                name="businessType"
-                value={type}
-                checked={businessType === type}
-                onChange={(e) => setBusinessType(e.target.value as typeof businessType)}
-                className="sr-only"
-              />
-              <div className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
-                businessType === type ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
-              }`}>
-                <div className="text-center">
-                  <div className="text-2xl mb-2">
-                    {type === 'Handicraft' && '🎨'}
-                    {type === 'Homestay' && '🏠'}
-                    {type === 'Event Organizer' && '🎉'}
-                  </div>
-                  <div className="font-medium text-gray-900">{type}</div>
-                </div>
-              </div>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {/* Dynamic Form Fields Based on Business Type */}
-      <div className="space-y-6">
-        {businessType === 'Handicraft' && (
-          <>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Shop Name</label>
-              <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Enter shop name" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Product Categories</label>
-              <select multiple className="w-full border border-gray-300 rounded-lg px-3 py-2 h-32">
-                <option>Textiles</option>
-                <option>Pottery</option>
-                <option>Wood Work</option>
-                <option>Jewelry</option>
-                <option>Paintings</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Product Images</label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                <PhotoIcon className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                <p className="text-gray-500">Upload product images</p>
-              </div>
-            </div>
-          </>
-        )}
-
-        {businessType === 'Homestay' && (
-          <>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Property Name</label>
-              <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Enter property name" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Address</label>
-              <textarea className="w-full border border-gray-300 rounded-lg px-3 py-2" rows={3} placeholder="Enter complete address"></textarea>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Rooms Available</label>
-                <input type="number" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Number of rooms" />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Price per Night</label>
-                <input type="number" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Price in ₹" />
-              </div>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Amenities</label>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                {['WiFi', 'AC', 'TV', 'Kitchen', 'Parking', 'Garden'].map((amenity) => (
-                  <label key={amenity} className="flex items-center">
-                    <input type="checkbox" className="mr-2" />
-                    <span className="text-sm">{amenity}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-          </>
-        )}
-
-        {businessType === 'Event Organizer' && (
-          <>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Organization Name</label>
-              <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Enter organization name" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Event Types</label>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                {['Cultural Shows', 'Workshops', 'Tours', 'Festivals', 'Conferences', 'Exhibitions'].map((type) => (
-                  <label key={type} className="flex items-center">
-                    <input type="checkbox" className="mr-2" />
-                    <span className="text-sm">{type}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Typical Event Duration</label>
-                <select className="w-full border border-gray-300 rounded-lg px-3 py-2">
-                  <option>1-2 hours</option>
-                  <option>Half day</option>
-                  <option>Full day</option>
-                  <option>Multiple days</option>
-                </select>
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Capacity</label>
-                <input type="number" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Max participants" />
-              </div>
-            </div>
-          </>
-        )}
-
-        {/* Common Fields */}
+    <Card>
+      <CardHeader>
+        <CardTitle>Register Your Business</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        {/* Business Type Selection */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Upload Documents</label>
-          <div className="space-y-3">
-            <div className="border border-gray-300 rounded-lg p-3 flex items-center justify-between">
-              <span className="text-sm text-gray-600">GST Certificate</span>
-              <button className="text-blue-600 hover:text-blue-800">
-                <DocumentArrowUpIcon className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="border border-gray-300 rounded-lg p-3 flex items-center justify-between">
-              <span className="text-sm text-gray-600">ID Proof</span>
-              <button className="text-blue-600 hover:text-blue-800">
-                <DocumentArrowUpIcon className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="border border-gray-300 rounded-lg p-3 flex items-center justify-between">
-              <span className="text-sm text-gray-600">Business License</span>
-              <button className="text-blue-600 hover:text-blue-800">
-                <DocumentArrowUpIcon className="w-5 h-5" />
-              </button>
-            </div>
+          <Label className="text-sm font-medium text-gray-700 mb-3 block">Business Type</Label>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {(['Handicraft', 'Homestay', 'Event Organizer'] as const).map((type) => (
+              <Label key={type} className="relative">
+                <input
+                  type="radio"
+                  name="businessType"
+                  value={type}
+                  checked={businessType === type}
+                  onChange={(e) => setBusinessType(e.target.value as typeof businessType)}
+                  className="sr-only"
+                />
+                <div className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${
+                  businessType === type ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'
+                }`}>
+                  <div className="text-center">
+                    <div className="text-2xl mb-2">
+                      {type === 'Handicraft' && '🎨'}
+                      {type === 'Homestay' && '🏠'}
+                      {type === 'Event Organizer' && '🎉'}
+                    </div>
+                    <div className="font-medium text-gray-900">{type}</div>
+                  </div>
+                </div>
+              </Label>
+            ))}
           </div>
         </div>
 
-        <div className="flex justify-end space-x-3">
-          <button
-            onClick={() => setShowRegistrationForm(false)}
-            className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
-          >
-            Cancel
-          </button>
-          <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-            Submit Registration
-          </button>
+        {/* Dynamic Form Fields Based on Business Type */}
+        <div className="space-y-6">
+          {businessType === 'Handicraft' && (
+            <>
+              <div>
+                <Label htmlFor="shopName">Shop Name</Label>
+                <Input id="shopName" placeholder="Enter shop name" />
+              </div>
+              <div>
+                <Label htmlFor="categories">Product Categories</Label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select categories" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="textiles">Textiles</SelectItem>
+                    <SelectItem value="pottery">Pottery</SelectItem>
+                    <SelectItem value="woodwork">Wood Work</SelectItem>
+                    <SelectItem value="jewelry">Jewelry</SelectItem>
+                    <SelectItem value="paintings">Paintings</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label>Product Images</Label>
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                  <PhotoIcon className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+                  <p className="text-gray-500">Upload product images</p>
+                </div>
+              </div>
+            </>
+          )}
+
+          {businessType === 'Homestay' && (
+            <>
+              <div>
+                <Label htmlFor="propertyName">Property Name</Label>
+                <Input id="propertyName" placeholder="Enter property name" />
+              </div>
+              <div>
+                <Label htmlFor="address">Address</Label>
+                <Textarea id="address" rows={3} placeholder="Enter complete address" />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="rooms">Rooms Available</Label>
+                  <Input id="rooms" type="number" placeholder="Number of rooms" />
+                </div>
+                <div>
+                  <Label htmlFor="price">Price per Night</Label>
+                  <Input id="price" type="number" placeholder="Price in ₹" />
+                </div>
+              </div>
+              <div>
+                <Label>Amenities</Label>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                  {['WiFi', 'AC', 'TV', 'Kitchen', 'Parking', 'Garden'].map((amenity) => (
+                    <div key={amenity} className="flex items-center space-x-2">
+                      <Checkbox id={amenity} />
+                      <Label htmlFor={amenity} className="text-sm">{amenity}</Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+          {businessType === 'Event Organizer' && (
+            <>
+              <div>
+                <Label htmlFor="orgName">Organization Name</Label>
+                <Input id="orgName" placeholder="Enter organization name" />
+              </div>
+              <div>
+                <Label>Event Types</Label>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                  {['Cultural Shows', 'Workshops', 'Tours', 'Festivals', 'Conferences', 'Exhibitions'].map((type) => (
+                    <div key={type} className="flex items-center space-x-2">
+                      <Checkbox id={type} />
+                      <Label htmlFor={type} className="text-sm">{type}</Label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="duration">Typical Event Duration</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select duration" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1-2hours">1-2 hours</SelectItem>
+                      <SelectItem value="halfday">Half day</SelectItem>
+                      <SelectItem value="fullday">Full day</SelectItem>
+                      <SelectItem value="multipledays">Multiple days</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="capacity">Capacity</Label>
+                  <Input id="capacity" type="number" placeholder="Max participants" />
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Common Fields */}
+          <div>
+            <Label>Upload Documents</Label>
+            <div className="space-y-3">
+              <div className="border border-gray-300 rounded-lg p-3 flex items-center justify-between">
+                <span className="text-sm text-gray-600">GST Certificate</span>
+                <Button variant="ghost" size="sm">
+                  <DocumentArrowUpIcon className="w-5 h-5" />
+                </Button>
+              </div>
+              <div className="border border-gray-300 rounded-lg p-3 flex items-center justify-between">
+                <span className="text-sm text-gray-600">ID Proof</span>
+                <Button variant="ghost" size="sm">
+                  <DocumentArrowUpIcon className="w-5 h-5" />
+                </Button>
+              </div>
+              <div className="border border-gray-300 rounded-lg p-3 flex items-center justify-between">
+                <span className="text-sm text-gray-600">Business License</span>
+                <Button variant="ghost" size="sm">
+                  <DocumentArrowUpIcon className="w-5 h-5" />
+                </Button>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex justify-end space-x-3">
+            <Button
+              variant="outline"
+              onClick={() => setShowRegistrationForm(false)}
+            >
+              Cancel
+            </Button>
+            <Button>
+              Submit Registration
+            </Button>
+          </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 
   const renderListingForm = () => (
-    <div className="bg-white rounded-lg shadow-sm border p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-6">Add New Listing</h3>
-      
-      <div className="space-y-6">
+    <Card>
+      <CardHeader>
+        <CardTitle>Add New Listing</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
-          <input type="text" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Enter listing title" />
+          <Label htmlFor="title">Title</Label>
+          <Input id="title" placeholder="Enter listing title" />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
-          <textarea className="w-full border border-gray-300 rounded-lg px-3 py-2" rows={4} placeholder="Describe your product/service"></textarea>
+          <Label htmlFor="description">Description</Label>
+          <Textarea id="description" rows={4} placeholder="Describe your product/service" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Price (₹)</label>
-            <input type="number" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Enter price" />
+            <Label htmlFor="listingPrice">Price (₹)</Label>
+            <Input id="listingPrice" type="number" placeholder="Enter price" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
-            <select className="w-full border border-gray-300 rounded-lg px-3 py-2">
-              <option>Textiles</option>
-              <option>Pottery</option>
-              <option>Wood Work</option>
-              <option>Jewelry</option>
-            </select>
+            <Label htmlFor="category">Category</Label>
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Select category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="textiles">Textiles</SelectItem>
+                <SelectItem value="pottery">Pottery</SelectItem>
+                <SelectItem value="woodwork">Wood Work</SelectItem>
+                <SelectItem value="jewelry">Jewelry</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Stock/Availability</label>
-            <input type="number" className="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="Available quantity" />
+            <Label htmlFor="stock">Stock/Availability</Label>
+            <Input id="stock" type="number" placeholder="Available quantity" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
-            <select className="w-full border border-gray-300 rounded-lg px-3 py-2">
-              <option value="draft">Draft</option>
-              <option value="published">Published</option>
-            </select>
+            <Label htmlFor="status">Status</Label>
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Select status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="draft">Draft</SelectItem>
+                <SelectItem value="published">Published</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Images</label>
+          <Label>Images</Label>
           <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
             <PhotoIcon className="w-12 h-12 text-gray-400 mx-auto mb-2" />
             <p className="text-gray-500">Upload product images</p>
-            <button className="mt-2 text-blue-600 hover:text-blue-800">Choose Files</button>
+            <Button variant="ghost" className="mt-2">Choose Files</Button>
           </div>
         </div>
 
         <div className="flex justify-end space-x-3">
-          <button
+          <Button
+            variant="outline"
             onClick={() => setShowListingForm(false)}
-            className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
           >
             Cancel
-          </button>
-          <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+          </Button>
+          <Button>
             Save Listing
-          </button>
+          </Button>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 
   return (
@@ -411,144 +445,142 @@ const BusinessmanDashboard: React.FC = () => {
         </motion.div>
 
         {/* Navigation Tabs */}
-        <div className="mb-8">
-          <div className="border-b border-gray-200">
-            <nav className="-mb-px flex space-x-8 overflow-x-auto">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center py-2 px-1 border-b-2 font-medium text-sm whitespace-nowrap ${
-                    activeTab === tab.id
-                      ? 'border-blue-500 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                  }`}
-                >
-                  <tab.icon className="w-5 h-5 mr-2" />
-                  {tab.name}
-                </button>
-              ))}
-            </nav>
-          </div>
-        </div>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
+          <TabsList className="grid w-full grid-cols-4">
+            {tabs.map((tab) => (
+              <TabsTrigger key={tab.id} value={tab.id} className="flex items-center">
+                <tab.icon className="w-5 h-5 mr-2" />
+                {tab.name}
+              </TabsTrigger>
+            ))}
+          </TabsList>
 
-        {/* Tab Content */}
-        <motion.div
-          key={activeTab}
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          {/* Overview Tab */}
-          {activeTab === 'overview' && (
-            <div className="space-y-6">
+          {/* Tab Content */}
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            {/* Overview Tab */}
+            <TabsContent value="overview" className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
-                  <div className="flex items-center">
-                    <div className="p-2 bg-green-100 rounded-lg">
-                      <CurrencyRupeeIcon className="w-6 h-6 text-green-600" />
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center">
+                      <div className="p-2 bg-green-100 rounded-lg">
+                        <CurrencyRupeeIcon className="w-6 h-6 text-green-600" />
+                      </div>
+                      <div className="ml-4">
+                        <p className="text-sm font-medium text-gray-600">Total Revenue</p>
+                        <p className="text-2xl font-bold text-gray-900">₹{totalRevenue.toLocaleString()}</p>
+                      </div>
                     </div>
-                    <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Total Revenue</p>
-                      <p className="text-2xl font-bold text-gray-900">₹{totalRevenue.toLocaleString()}</p>
-                    </div>
-                  </div>
-                </div>
+                  </CardContent>
+                </Card>
 
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
-                  <div className="flex items-center">
-                    <div className="p-2 bg-yellow-100 rounded-lg">
-                      <ClockIcon className="w-6 h-6 text-yellow-600" />
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center">
+                      <div className="p-2 bg-yellow-100 rounded-lg">
+                        <ClockIcon className="w-6 h-6 text-yellow-600" />
+                      </div>
+                      <div className="ml-4">
+                        <p className="text-sm font-medium text-gray-600">Pending Amount</p>
+                        <p className="text-2xl font-bold text-gray-900">₹{pendingAmount.toLocaleString()}</p>
+                      </div>
                     </div>
-                    <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Pending Amount</p>
-                      <p className="text-2xl font-bold text-gray-900">₹{pendingAmount.toLocaleString()}</p>
-                    </div>
-                  </div>
-                </div>
+                  </CardContent>
+                </Card>
 
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
-                  <div className="flex items-center">
-                    <div className="p-2 bg-blue-100 rounded-lg">
-                      <ClipboardDocumentListIcon className="w-6 h-6 text-blue-600" />
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center">
+                      <div className="p-2 bg-blue-100 rounded-lg">
+                        <ClipboardDocumentListIcon className="w-6 h-6 text-blue-600" />
+                      </div>
+                      <div className="ml-4">
+                        <p className="text-sm font-medium text-gray-600">Total Listings</p>
+                        <p className="text-2xl font-bold text-gray-900">{listings.length}</p>
+                      </div>
                     </div>
-                    <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Total Listings</p>
-                      <p className="text-2xl font-bold text-gray-900">{listings.length}</p>
-                    </div>
-                  </div>
-                </div>
+                  </CardContent>
+                </Card>
 
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
-                  <div className="flex items-center">
-                    <div className="p-2 bg-purple-100 rounded-lg">
-                      <UserGroupIcon className="w-6 h-6 text-purple-600" />
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center">
+                      <div className="p-2 bg-purple-100 rounded-lg">
+                        <UserGroupIcon className="w-6 h-6 text-purple-600" />
+                      </div>
+                      <div className="ml-4">
+                        <p className="text-sm font-medium text-gray-600">Total Orders</p>
+                        <p className="text-2xl font-bold text-gray-900">{transactions.length}</p>
+                      </div>
                     </div>
-                    <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Total Orders</p>
-                      <p className="text-2xl font-bold text-gray-900">{transactions.length}</p>
-                    </div>
-                  </div>
-                </div>
+                  </CardContent>
+                </Card>
               </div>
 
               {/* Business Status */}
-              <div className="bg-white rounded-lg shadow-sm border p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Business Status</h3>
-                <div className="flex items-center space-x-4">
-                  <div className="flex-1">
-                    <p className="text-sm text-gray-600">Business Name: <span className="font-medium text-gray-900">{business.name}</span></p>
-                    <p className="text-sm text-gray-600">Type: <span className="font-medium text-gray-900">{business.type}</span></p>
-                    <p className="text-sm text-gray-600">Registration Date: <span className="font-medium text-gray-900">{business.registrationDate}</span></p>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Business Status</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex items-center space-x-4">
+                    <div className="flex-1">
+                      <p className="text-sm text-gray-600">Business Name: <span className="font-medium text-gray-900">{business.name}</span></p>
+                      <p className="text-sm text-gray-600">Type: <span className="font-medium text-gray-900">{business.type}</span></p>
+                      <p className="text-sm text-gray-600">Registration Date: <span className="font-medium text-gray-900">{business.registrationDate}</span></p>
+                    </div>
+                    <div>
+                      <Badge variant={
+                        business.status === 'approved' ? 'default' :
+                        business.status === 'pending' ? 'secondary' :
+                        'destructive'
+                      }>
+                        {business.status}
+                      </Badge>
+                    </div>
                   </div>
-                  <div>
-                    <span className={`inline-flex px-3 py-1 text-sm font-semibold rounded-full ${
-                      business.status === 'approved' ? 'bg-green-100 text-green-800' :
-                      business.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-red-100 text-red-800'
-                    }`}>
-                      {business.status}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+                </CardContent>
+              </Card>
+            </TabsContent>
 
-          {/* Registration Tab */}
-          {activeTab === 'registration' && (
-            <div>
+            {/* Registration Tab */}
+            <TabsContent value="registration">
               {!showRegistrationForm ? (
-                <div className="bg-white rounded-lg shadow-sm border p-6 text-center">
-                  <BuildingStorefrontIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">Register Your Business</h3>
-                  <p className="text-gray-600 mb-6">Start by registering your business to begin selling on our platform</p>
-                  <button
-                    onClick={() => setShowRegistrationForm(true)}
-                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 flex items-center mx-auto"
-                  >
-                    <PlusIcon className="w-5 h-5 mr-2" />
-                    Register Business
-                  </button>
-                </div>
+                <Card className="text-center">
+                  <CardContent className="p-6">
+                    <BuildingStorefrontIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+                    <CardTitle className="mb-2">Register Your Business</CardTitle>
+                    <p className="text-gray-600 mb-6">Start by registering your business to begin selling on our platform</p>
+                    <Button
+                      onClick={() => setShowRegistrationForm(true)}
+                      className="flex items-center mx-auto"
+                    >
+                      <PlusIcon className="w-5 h-5 mr-2" />
+                      Register Business
+                    </Button>
+                  </CardContent>
+                </Card>
               ) : (
                 renderBusinessRegistrationForm()
               )}
-            </div>
-          )}
+            </TabsContent>
 
-          {/* Listings Tab */}
-          {activeTab === 'listings' && (
-            <div className="space-y-6">
+            {/* Listings Tab */}
+            <TabsContent value="listings" className="space-y-6">
               <div className="flex justify-between items-center">
                 <h3 className="text-lg font-semibold text-gray-900">Product Listings</h3>
-                <button
+                <Button
                   onClick={() => setShowListingForm(true)}
-                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center"
+                  className="flex items-center"
                 >
                   <PlusIcon className="w-5 h-5 mr-2" />
                   Add New Listing
-                </button>
+                </Button>
               </div>
 
               {showListingForm && (
@@ -559,127 +591,135 @@ const BusinessmanDashboard: React.FC = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {listings.map((listing) => (
-                  <div key={listing.id} className="bg-white rounded-lg shadow-sm border overflow-hidden">
+                  <Card key={listing.id} className="overflow-hidden">
                     <img
                       src={listing.images[0]}
                       alt={listing.title}
                       className="w-full h-48 object-cover"
                     />
-                    <div className="p-4">
+                    <CardContent className="p-4">
                       <div className="flex justify-between items-start mb-2">
                         <h4 className="text-lg font-semibold text-gray-900">{listing.title}</h4>
-                        <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                          listing.status === 'published' ? 'bg-green-100 text-green-800' :
-                          listing.status === 'draft' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-gray-100 text-gray-800'
-                        }`}>
+                        <Badge variant={
+                          listing.status === 'published' ? 'default' :
+                          listing.status === 'draft' ? 'secondary' :
+                          'outline'
+                        }>
                           {listing.status}
-                        </span>
+                        </Badge>
                       </div>
                       <p className="text-gray-600 text-sm mb-2">{listing.description}</p>
                       <p className="text-lg font-bold text-gray-900 mb-2">₹{listing.price}</p>
                       <p className="text-sm text-gray-500 mb-4">Stock: {listing.stock}</p>
                       
                       <div className="flex space-x-2">
-                        <button
+                        <Button
+                          variant="outline"
+                          size="sm"
                           onClick={() => handleEditListing(listing.id)}
-                          className="flex-1 bg-blue-600 text-white py-2 px-3 rounded text-sm hover:bg-blue-700 flex items-center justify-center"
+                          className="flex-1"
                         >
                           <PencilIcon className="w-4 h-4 mr-1" />
                           Edit
-                        </button>
+                        </Button>
                         {listing.status === 'draft' && (
-                          <button
+                          <Button
+                            size="sm"
                             onClick={() => handlePublishListing(listing.id)}
-                            className="flex-1 bg-green-600 text-white py-2 px-3 rounded text-sm hover:bg-green-700"
+                            className="flex-1"
                           >
                             Publish
-                          </button>
+                          </Button>
                         )}
-                        <button
+                        <Button
+                          variant="destructive"
+                          size="sm"
                           onClick={() => handleDeleteListing(listing.id)}
-                          className="bg-red-600 text-white py-2 px-3 rounded text-sm hover:bg-red-700"
                         >
                           <TrashIcon className="w-4 h-4" />
-                        </button>
+                        </Button>
                       </div>
-                    </div>
-                  </div>
+                    </CardContent>
+                  </Card>
                 ))}
               </div>
-            </div>
-          )}
+            </TabsContent>
 
-          {/* Transactions Tab */}
-          {activeTab === 'transactions' && (
-            <div className="space-y-6">
+            {/* Transactions Tab */}
+            <TabsContent value="transactions" className="space-y-6">
               <div className="flex justify-between items-center">
                 <h3 className="text-lg font-semibold text-gray-900">Transaction History</h3>
-                <button
+                <Button
                   onClick={handleExportTransactions}
-                  className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center"
+                  className="flex items-center"
                 >
                   <ArrowDownTrayIcon className="w-5 h-5 mr-2" />
                   Export
-                </button>
+                </Button>
               </div>
 
               {/* Payout Summary */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
-                  <h4 className="text-sm font-medium text-gray-600 mb-2">Available Balance</h4>
-                  <p className="text-2xl font-bold text-green-600">₹{totalRevenue.toLocaleString()}</p>
-                </div>
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
-                  <h4 className="text-sm font-medium text-gray-600 mb-2">Pending Clearance</h4>
-                  <p className="text-2xl font-bold text-yellow-600">₹{pendingAmount.toLocaleString()}</p>
-                </div>
-                <div className="bg-white p-6 rounded-lg shadow-sm border">
-                  <h4 className="text-sm font-medium text-gray-600 mb-2">Total Earnings</h4>
-                  <p className="text-2xl font-bold text-blue-600">₹{(totalRevenue + pendingAmount).toLocaleString()}</p>
-                </div>
+                <Card>
+                  <CardContent className="p-6">
+                    <h4 className="text-sm font-medium text-gray-600 mb-2">Available Balance</h4>
+                    <p className="text-2xl font-bold text-green-600">₹{totalRevenue.toLocaleString()}</p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-6">
+                    <h4 className="text-sm font-medium text-gray-600 mb-2">Pending Clearance</h4>
+                    <p className="text-2xl font-bold text-yellow-600">₹{pendingAmount.toLocaleString()}</p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-6">
+                    <h4 className="text-sm font-medium text-gray-600 mb-2">Total Earnings</h4>
+                    <p className="text-2xl font-bold text-blue-600">₹{(totalRevenue + pendingAmount).toLocaleString()}</p>
+                  </CardContent>
+                </Card>
               </div>
 
               {/* Transactions Table */}
-              <div className="bg-white rounded-lg shadow-sm border">
-                <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
-                      <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Buyer</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+              <Card>
+                <CardContent className="p-0">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Order ID</TableHead>
+                        <TableHead>Buyer</TableHead>
+                        <TableHead>Product</TableHead>
+                        <TableHead>Amount</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Date</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
                       {transactions.map((transaction) => (
-                        <tr key={transaction.id}>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{transaction.orderId}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{transaction.buyer}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{transaction.product}</td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">₹{transaction.amount}</td>
-                          <td className="px-6 py-4 whitespace-nowrap">
-                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                              transaction.status === 'paid' ? 'bg-green-100 text-green-800' :
-                              transaction.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                              'bg-red-100 text-red-800'
-                            }`}>
+                        <TableRow key={transaction.id}>
+                          <TableCell className="font-medium">{transaction.orderId}</TableCell>
+                          <TableCell>{transaction.buyer}</TableCell>
+                          <TableCell>{transaction.product}</TableCell>
+                          <TableCell>₹{transaction.amount}</TableCell>
+                          <TableCell>
+                            <Badge variant={
+                              transaction.status === 'paid' ? 'default' :
+                              transaction.status === 'pending' ? 'secondary' :
+                              'destructive'
+                            }>
                               {transaction.status}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{transaction.date}</td>
-                        </tr>
+                            </Badge>
+                          </TableCell>
+                          <TableCell>{transaction.date}</TableCell>
+                        </TableRow>
                       ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          )}
-        </motion.div>
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </motion.div>
+        </Tabs>
       </div>
     </div>
   );

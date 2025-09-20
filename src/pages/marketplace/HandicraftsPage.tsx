@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaShoppingCart, FaCreditCard, FaShieldAlt, FaStar, FaMapMarkerAlt } from 'react-icons/fa';
 import { MdVerified } from 'react-icons/md';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
+import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
 
 interface Product {
   id: string;
@@ -173,17 +176,15 @@ const HandicraftsPage: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-wrap justify-center gap-4 mb-8">
           {categories.map((category) => (
-            <button
+            <Button
               key={category.id}
               onClick={() => setSelectedCategory(category.id)}
-              className={`px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-                selectedCategory === category.id
-                  ? 'bg-orange-600 text-white shadow-lg'
-                  : 'bg-white text-gray-700 hover:bg-orange-100 border border-gray-300'
-              }`}
+              variant={selectedCategory === category.id ? "default" : "outline"}
+              size="lg"
+              className={selectedCategory === category.id ? "bg-orange-600 hover:bg-orange-700" : ""}
             >
               {category.name}
-            </button>
+            </Button>
           ))}
         </div>
 
@@ -195,113 +196,109 @@ const HandicraftsPage: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
             >
-              <div className="relative">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-64 object-cover"
-                />
-                {!product.inStock && (
-                  <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                    <span className="text-white font-bold text-lg">Out of Stock</span>
-                  </div>
-                )}
-              </div>
-              
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{product.name}</h3>
-                <p className="text-gray-600 mb-4">{product.description}</p>
-                
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-2xl font-bold text-orange-600">₹{product.price}</span>
-                  {product.inStock && (
-                    <span className="text-green-600 font-medium">In Stock</span>
+              <Card className="overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <div className="relative">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-64 object-cover"
+                  />
+                  {!product.inStock && (
+                    <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                      <Badge variant="secondary" className="text-lg">Out of Stock</Badge>
+                    </div>
                   )}
                 </div>
+                
+                <CardContent className="p-6">
+                  <CardTitle className="text-xl mb-2">{product.name}</CardTitle>
+                  <CardDescription className="mb-4">{product.description}</CardDescription>
+                  
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-2xl font-bold text-orange-600">₹{product.price}</span>
+                    {product.inStock && (
+                      <Badge variant="outline" className="text-green-600 border-green-600">In Stock</Badge>
+                    )}
+                  </div>
 
-                {/* Seller Info */}
-                <div className="border-t pt-4 mb-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center">
-                      <span className="font-medium text-gray-900">{product.seller.name}</span>
-                      {product.seller.verified && (
-                        <MdVerified className="ml-2 text-blue-500" title="Verified Seller" />
-                      )}
+                  {/* Seller Info */}
+                  <div className="border-t pt-4 mb-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center">
+                        <span className="font-medium text-gray-900">{product.seller.name}</span>
+                        {product.seller.verified && (
+                          <MdVerified className="ml-2 text-blue-500" title="Verified Seller" />
+                        )}
+                      </div>
+                      <div className="flex items-center">
+                        <FaStar className="text-yellow-400 mr-1" />
+                        <span className="text-gray-700">{product.seller.rating}</span>
+                      </div>
                     </div>
-                    <div className="flex items-center">
-                      <FaStar className="text-yellow-400 mr-1" />
-                      <span className="text-gray-700">{product.seller.rating}</span>
+                    <div className="flex items-center text-gray-600">
+                      <FaMapMarkerAlt className="mr-1" />
+                      <span className="text-sm">{product.seller.location}</span>
                     </div>
                   </div>
-                  <div className="flex items-center text-gray-600">
-                    <FaMapMarkerAlt className="mr-1" />
-                    <span className="text-sm">{product.seller.location}</span>
-                  </div>
-                </div>
 
-                {/* Action Buttons */}
-                <div className="flex space-x-3">
-                  <button
-                    onClick={() => addToCart(product.id)}
-                    disabled={!product.inStock}
-                    className={`flex-1 flex items-center justify-center py-3 px-4 rounded-lg font-medium transition-colors duration-300 ${
-                      product.inStock
-                        ? 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                        : 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                    }`}
-                  >
-                    <FaShoppingCart className="mr-2" />
-                    Add to Cart
-                  </button>
-                  <button
-                    onClick={() => handleBuyNow(product)}
-                    disabled={!product.inStock}
-                    className={`flex-1 flex items-center justify-center py-3 px-4 rounded-lg font-medium transition-colors duration-300 ${
-                      product.inStock
-                        ? 'bg-orange-600 text-white hover:bg-orange-700'
-                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    }`}
-                  >
-                    <FaCreditCard className="mr-2" />
-                    Buy Now
-                  </button>
-                </div>
-              </div>
+                  {/* Action Buttons */}
+                  <div className="flex space-x-3">
+                    <Button
+                      onClick={() => addToCart(product.id)}
+                      disabled={!product.inStock}
+                      variant="outline"
+                      className="flex-1"
+                    >
+                      <FaShoppingCart className="mr-2" />
+                      Add to Cart
+                    </Button>
+                    <Button
+                      onClick={() => handleBuyNow(product)}
+                      disabled={!product.inStock}
+                      className="flex-1 bg-orange-600 hover:bg-orange-700"
+                    >
+                      <FaCreditCard className="mr-2" />
+                      Buy Now
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
             </motion.div>
           ))}
         </div>
 
         {/* Features Section */}
-        <div className="mt-16 bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-3xl font-bold text-center text-gray-900 mb-8">
-            Why Choose Our Marketplace?
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <MdVerified className="text-4xl text-blue-500 mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Verified Sellers</h3>
-              <p className="text-gray-600">
-                All our sellers are verified through thorough background checks and authentication
-              </p>
+        <Card className="mt-16 p-8">
+          <CardHeader className="text-center">
+            <CardTitle className="text-3xl">Why Choose Our Marketplace?</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="text-center">
+                <MdVerified className="text-4xl text-blue-500 mx-auto mb-4" />
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Verified Sellers</h3>
+                <p className="text-gray-600">
+                  All our sellers are verified through thorough background checks and authentication
+                </p>
+              </div>
+              <div className="text-center">
+                <FaShieldAlt className="text-4xl text-green-500 mx-auto mb-4" />
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Secure Payments</h3>
+                <p className="text-gray-600">
+                  Safe and secure payment processing with multiple payment options
+                </p>
+              </div>
+              <div className="text-center">
+                <FaStar className="text-4xl text-yellow-500 mx-auto mb-4" />
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Quality Assured</h3>
+                <p className="text-gray-600">
+                  Authentic products with quality guarantee and customer reviews
+                </p>
+              </div>
             </div>
-            <div className="text-center">
-              <FaShieldAlt className="text-4xl text-green-500 mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Secure Payments</h3>
-              <p className="text-gray-600">
-                Safe and secure payment processing with multiple payment options
-              </p>
-            </div>
-            <div className="text-center">
-              <FaStar className="text-4xl text-yellow-500 mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Quality Assured</h3>
-              <p className="text-gray-600">
-                Authentic products with quality guarantee and customer reviews
-              </p>
-            </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
