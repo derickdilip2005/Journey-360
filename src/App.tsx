@@ -14,7 +14,7 @@ const MarketplacePage = React.lazy(() => import('./pages/marketplace/Marketplace
 
 
 const SafetyPage = React.lazy(() => import('./pages/safety/SafetyPage'));
-const ContactPage = React.lazy(() => import('./pages/admin/ContactPage'));
+const FeedbackPage = React.lazy(() => import('./pages/admin/FeedbackPage'));
 const LoginPage = React.lazy(() => import('./pages/login/LoginPage'));
 const SignUpPage = React.lazy(() => import('./pages/auth/SignUpPage'));
 const LandingPage = React.lazy(() => import('./pages/landing/LandingPage'));
@@ -56,7 +56,7 @@ function App() {
               <Route path="/marketplace/*" element={<MarketplacePage />} />
               <Route path="/visa-assist" element={<VisaAssistPage />} />
               <Route path="/safety" element={<SafetyPage />} />
-              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/feedback" element={<FeedbackPage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignUpPage />} />
               <Route path="/admin/dashboard" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />

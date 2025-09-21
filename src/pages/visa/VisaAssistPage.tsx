@@ -9,6 +9,7 @@ import Step1VisaSelection from './components/Step1VisaSelection';
 import Step2RecommendationQuiz from './components/Step2RecommendationQuiz';
 import Step3GuidedApplication from './components/Step3GuidedApplication';
 import Step4ExtraHelp from './components/Step4ExtraHelp';
+import bgImage from '../../assets/Tourist/visa/visa-bg1.png';
 
 interface VisaType {
   id: string;
@@ -152,9 +153,17 @@ const VisaAssistPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+    <div 
+      className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50"
+      style={{
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-white/80 backdrop-blur-sm shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-gray-900 mb-2">

@@ -8,6 +8,7 @@ import HandicraftsPage from './HandicraftsPage';
 import HomestaysPage from './HomestaysPage';
 import EventsPage from './EventsPage';
 import LocalGuidesPage from './LocalGuidesPage';
+import bgImage from '../../assets/Tourist/Market/bg1.png';
 
 const MarketplaceLanding: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string | null>(null);
@@ -48,14 +49,26 @@ const MarketplaceLanding: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div 
+      className="min-h-screen relative"
+      style={{
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed'
+      }}
+    >
+    
+    <div className="absolute inset-0 bg-white/30"></div>
+    
       
       {/* Marketplace Sections */}
       <section className="py-16">
         <div className="container-custom">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-display font-bold text-gray-900 mb-4">Explore Our Marketplace</h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold text-black mb-4">Explore Our Marketplace</h1>
+            <p className="text-lg text-black-700 max-w-3xl mx-auto">
               Discover the best of Jharkhand through our curated marketplace featuring local artisans, 
               homestay hosts, cultural events, and experienced guides.
             </p>
@@ -158,28 +171,6 @@ const MarketplaceLanding: React.FC = () => {
                 </CardContent>
               </Card>
             </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Call to Action */}
-      <section className="py-16 bg-gradient-to-r from-primary to-secondary text-white">
-        <div className="container-custom text-center">
-          <h2 className="text-3xl font-display font-bold mb-4">Ready to Explore?</h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Start your journey through Jharkhand's vibrant marketplace and discover authentic local experiences.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Button asChild variant="secondary" size="lg">
-              <Link to="/explore">
-                Explore Destinations
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="border-white text-white hover:bg-white hover:text-primary">
-              <Link to="/explore">
-                Explore Destinations
-              </Link>
-            </Button>
           </div>
         </div>
       </section>

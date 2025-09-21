@@ -8,7 +8,13 @@ import VREmbed from '../../components/vr/VREmbed';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { Badge } from '../../components/ui/badge';
-import bgImage from '../../assets/Tourist/Explore/bg3.png';
+import bgImage from '../../assets/Tourist/Explore/bg.png';
+import hundruImage from '../../assets/Tourist/Explore/hundru.png';
+import betlaImage from '../../assets/Tourist/Explore/Betla.png';
+import ranchiImage from '../../assets/Tourist/Explore/ranchi.png';
+import dassamImage from '../../assets/Tourist/Explore/dassam.png';
+import jagannathImage from '../../assets/Tourist/Explore/jagannath.png';
+
 
 interface IndianState {
   id: number;
@@ -53,7 +59,7 @@ const indianStates: IndianState[] = [
         name: 'Hundru Falls',
         category: 'nature',
         description: 'One of the highest waterfalls in Jharkhand, offering spectacular views and natural beauty.',
-        image: 'https://images.unsplash.com/photo-1558451701-4662b9367fc7?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        image: hundruImage,
         activities: ['Waterfall Viewing', 'Photography', 'Trekking', 'Picnicking'],
         localFood: ['Litti Chokha', 'Dhuska', 'Rugra', 'Handia'],
         dosAndDonts: {
@@ -71,7 +77,7 @@ const indianStates: IndianState[] = [
         name: 'Betla National Park',
         category: 'nature',
         description: 'Wildlife sanctuary known for tigers, elephants, and diverse flora and fauna.',
-        image: 'https://plus.unsplash.com/premium_photo-1733493684000-9e32eaf89c60?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        image: betlaImage,
         activities: ['Wildlife Safari', 'Bird Watching', 'Photography', 'Nature Walks'],
         localFood: ['Tribal Cuisine', 'Bamboo Shoot Curry', 'Mahua', 'Forest Honey'],
         dosAndDonts: {
@@ -89,7 +95,7 @@ const indianStates: IndianState[] = [
         name: 'Ranchi Hill Station',
         category: 'nature',
         description: 'Capital city surrounded by hills, waterfalls, and pleasant climate.',
-        image: 'https://images.unsplash.com/photo-1751815562767-2adcf527820c?q=80&w=1175&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        image: ranchiImage,
         activities: ['Hill Trekking', 'Temple Visits', 'Lake Boating', 'Photography'],
         localFood: ['Thekua', 'Pittha', 'Arsa', 'Kheer Mohan'],
         dosAndDonts: {
@@ -107,7 +113,7 @@ const indianStates: IndianState[] = [
         name: 'Dassam Falls',
         category: 'nature',
         description: 'A beautiful waterfall cascading from a height of 144 feet, perfect for nature lovers.',
-        image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+        image: dassamImage,
         activities: ['Waterfall Viewing', 'Photography', 'Rock Climbing', 'Nature Walks'],
         localFood: ['Chilka Roti', 'Malpua', 'Anarsa', 'Pitha'],
         dosAndDonts: {
@@ -125,7 +131,7 @@ const indianStates: IndianState[] = [
         name: 'Jagannath Temple Ranchi',
         category: 'spiritual',
         description: 'A replica of the famous Puri Jagannath Temple, significant for Hindu pilgrims.',
-        image: 'https://xplro.com/wp-content/uploads/2024/06/Untitled-design-73.jpg.webp',
+        image: jagannathImage,
         activities: ['Temple Visits', 'Prayer Services', 'Festival Celebrations', 'Cultural Programs'],
         localFood: ['Prasadam', 'Kheer', 'Laddu', 'Puri Sabji'],
         dosAndDonts: {

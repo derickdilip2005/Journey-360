@@ -11,7 +11,7 @@ const navigation = [
   { name: 'Explore', href: '/explore' },
   { name: 'Marketplace', href: '/marketplace' },
   { name: 'VISA Assist', href: '/visa-assist' },
-  { name: 'Contact', href: '/contact' },
+  { name: 'Feedback', href: '/feedback' },
 ];
 
 function classNames(...classes: string[]) {
