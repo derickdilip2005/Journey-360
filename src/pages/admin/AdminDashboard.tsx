@@ -129,9 +129,9 @@ const AdminDashboard: React.FC = () => {
 
   const tabs = [
     { id: 'overview', name: 'Overview', icon: MapIcon },
-    { id: 'tourists', name: 'Tourist Monitoring', icon: UserIcon },
+    { id: 'tourists', name: 'Tourists', icon: UserIcon },
     { id: 'marketplace', name: 'Marketplace', icon: ShoppingBagIcon },
-    { id: 'guides', name: 'Guide Applications', icon: UserGroupIcon },
+    { id: 'guides', name: 'Guides', icon: UserGroupIcon },
     { id: 'complaints', name: 'Complaints', icon: ExclamationTriangleIcon },
     { id: 'analytics', name: 'Analytics', icon: ChartBarIcon },
   ];
@@ -262,46 +262,6 @@ const AdminDashboard: React.FC = () => {
 
           {/* Tourist Monitoring Tab */}
           <TabsContent value="tourists" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Tourist Activity Monitoring</CardTitle>
-                <CardDescription>Real-time tracking of tourist locations and activities</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Tourist</TableHead>
-                      <TableHead>Location</TableHead>
-                      <TableHead>Last Activity</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {tourists.map((tourist) => (
-                      <TableRow key={tourist.id}>
-                        <TableCell className="font-medium">{tourist.name}</TableCell>
-                        <TableCell>{tourist.location}</TableCell>
-                        <TableCell>{tourist.lastActivity}</TableCell>
-                        <TableCell>
-                          <Badge variant={tourist.status === 'active' ? 'default' : 'secondary'}>
-                            {tourist.status}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <Button variant="outline" size="sm">
-                            <EyeIcon className="w-4 h-4 mr-1" />
-                            View
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-
             <Card>
               <CardHeader>
                 <CardTitle>Tourist Activity Map</CardTitle>
@@ -538,46 +498,6 @@ const AdminDashboard: React.FC = () => {
               </Card>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center">
-                    <ArrowTrendingUpIcon className="w-8 h-8 text-green-500" />
-                    <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Satisfaction Rate</p>
-                      <p className="text-2xl font-bold text-gray-900">92%</p>
-                      <p className="text-sm text-green-600">+5% from last month</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center">
-                    <ChartBarIcon className="w-8 h-8 text-blue-500" />
-                    <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Total Reviews</p>
-                      <p className="text-2xl font-bold text-gray-900">2,847</p>
-                      <p className="text-sm text-blue-600">+12% from last month</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center">
-                    <ArrowTrendingUpIcon className="w-8 h-8 text-red-500" />
-                    <div className="ml-4">
-                      <p className="text-sm font-medium text-gray-600">Response Time</p>
-                      <p className="text-2xl font-bold text-gray-900">2.4h</p>
-                      <p className="text-sm text-red-600">-15% from last month</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
           </TabsContent>
         </Tabs>
       </div>

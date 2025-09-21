@@ -199,17 +199,18 @@ const FeedbackPage: React.FC = () => {
 
               {/* Experience Category */}
                <div className="space-y-2">
-                 <Label htmlFor="experienceCategory">What did you use our platform for? *</Label>
+                 <Label htmlFor="experienceCategory">Categories *</Label>
                  <Select onValueChange={(value) => handleSelectChange('experienceCategory', value)}>
                    <SelectTrigger className="bg-white">
-                     <SelectValue placeholder="Select your primary use" />
+                     <SelectValue placeholder="Select your Category" />
                    </SelectTrigger>
                    <SelectContent className="bg-white border shadow-lg">
-                     <SelectItem value="explore">Exploring destinations</SelectItem>
+                     <SelectItem value="explore">Website</SelectItem>
+                     <SelectItem value="explore">App</SelectItem>
                      <SelectItem value="visa">Visa assistance</SelectItem>
-                     <SelectItem value="marketplace">Marketplace (guides, homestays)</SelectItem>
+                     <SelectItem value="marketplace">Vendor</SelectItem>
+                      <SelectItem value="marketplace">Guide</SelectItem>
                      <SelectItem value="safety">Safety information</SelectItem>
-                     <SelectItem value="general">General browsing</SelectItem>
                      <SelectItem value="other">Other</SelectItem>
                    </SelectContent>
                  </Select>

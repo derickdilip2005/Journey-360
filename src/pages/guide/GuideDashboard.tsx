@@ -298,7 +298,7 @@ const GuideDashboard: React.FC = () => {
                   <SelectTrigger>
                     <SelectValue placeholder="Select experience" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-white border shadow-lg">
                     <SelectItem value="less-than-1">Less than 1 year</SelectItem>
                     <SelectItem value="1-2">1-2 years</SelectItem>
                     <SelectItem value="3-5">3-5 years</SelectItem>
@@ -313,7 +313,7 @@ const GuideDashboard: React.FC = () => {
                   <SelectTrigger>
                     <SelectValue placeholder="Select education level" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-white border shadow-lg">
                     <SelectItem value="high-school">High School</SelectItem>
                     <SelectItem value="bachelors">Bachelor's Degree</SelectItem>
                     <SelectItem value="masters">Master's Degree</SelectItem>
